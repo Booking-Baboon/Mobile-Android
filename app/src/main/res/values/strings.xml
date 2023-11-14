@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">BookingAppTim4</string>
+    <string name="splash">Booking Baboon</string>
+    <string name="login">Log In</string>
+    <string name="username">Enter your username:</string>
+    <string name="password">Enter your password:</string>
+    <string name="loginButton">Log In</string>
+    <string name="registerButton">Register</string>
+    <string name="home">Home</string>
+    <string name="emailHint">Enter your email:</string>
+    <string name="phoneHint">Enter your phone:</string>
+    <string name="passHint">Enter your password:</string>
+    <string name="register">Register</string>
+    <string name="language">Language</string>
+    <string name="settings">Settings</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="filters">filter</string>
+    <string name="sort">sort\n</string>
+    <string name="category">Category</string>
+    <string name="addressHint">Enter your address:</string>
+    <string name="confirmPassHint">Confirm your password:</string>
+    <string name="nameHint">Enter your first name:</string>
+    <string name="lastNameHint">Enter your last name:</string>
 </resources>
