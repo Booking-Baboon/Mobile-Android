@@ -20,6 +20,7 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_splash_screen);
         if (isConnectedToInternet()) {
             int SPLASH_TIME_OUT = 5000;
