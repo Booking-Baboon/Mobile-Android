@@ -19,70 +19,78 @@
         android:textColor="@color/cardview_dark_background"
         android:textSize="60sp"
         android:textStyle="italic"
-        android:layout_weight="0"/>
+        android:layout_weight="0"
+        android:layout_marginBottom="20dp"/>
 
     <EditText
         android:id="@+id/firstNameRegister"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:ems="10"
         android:hint="@string/nameHint"
         android:inputType="textEmailAddress"
-        android:layout_weight="0"/>
+        android:layout_weight="0"
+        android:layout_marginBottom="10dp"/>
 
     <EditText
         android:id="@+id/lastNameRegister"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:ems="10"
         android:hint="@string/lastNameHint"
         android:inputType="textEmailAddress"
-        android:layout_weight="0"/>
+        android:layout_weight="0"
+        android:layout_marginBottom="10dp"/>
 
     <EditText
         android:id="@+id/emailRegister"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:ems="10"
         android:hint="@string/emailHint"
         android:inputType="textEmailAddress"
-        android:layout_weight="0"/>
+        android:layout_weight="0"
+        android:layout_marginBottom="10dp"/>
 
     <EditText
         android:id="@+id/editTextPhone"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:ems="10"
         android:hint="@string/phoneHint"
         android:inputType="phone"
-        android:layout_weight="0"/>
+        android:layout_weight="0"
+        android:layout_marginBottom="10dp"/>
 
     <EditText
         android:id="@+id/editTextAddress"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:ems="10"
         android:hint="@string/addressHint"
         android:inputType="textPassword"
-        android:layout_weight="0"/>
+        android:layout_weight="0"
+        android:layout_marginBottom="10dp"/>
 
     <EditText
         android:id="@+id/editTextTextPassword"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:ems="10"
         android:hint="@string/passHint"
         android:inputType="textPassword"
-        android:layout_weight="0"/>
+        android:layout_weight="0"
+        android:layout_marginBottom="10dp"/>
 
     <EditText
         android:id="@+id/editTextTextPassword2"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:ems="10"
         android:hint="@string/confirmPassHint"
         android:inputType="textPassword"
-        android:layout_weight="0"/>
+        android:layout_weight="0"
+        android:layout_marginBottom="10dp"/>
 
     <View
         android:layout_width="match_parent"
