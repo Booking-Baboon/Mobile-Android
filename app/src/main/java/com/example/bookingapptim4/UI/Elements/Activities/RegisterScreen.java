@@ -14,7 +14,6 @@ public class RegisterScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getSupportActionBar().hide();
         setContentView(R.layout.activity_register_screen);
         Button registerButton = findViewById(R.id.registerConfirmButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
