@@ -15,16 +15,16 @@
         android:theme="@style/Theme.BookingAppTim4"
         tools:targetApi="31">
         <activity
-            android:name=".RegisterScreen"
+            android:name=".UI.Elements.Activities.RegisterScreen"
             android:exported="false" />
         <activity
-            android:name=".GuestMainScreen"
+            android:name=".UI.Elements.Activities.GuestMainScreen"
             android:exported="false" />
         <activity
-            android:name=".LoginScreen"
+            android:name=".UI.Elements.Activities.LoginScreen"
             android:exported="false" />
         <activity
-            android:name=".SplashScreen"
+            android:name=".UI.Elements.Activities.SplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

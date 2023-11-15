@@ -1,4 +1,4 @@
-package com.example.bookingapptim4;
+package com.example.bookingapptim4.UI.Elements.Activities;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +10,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.Settings;
+
+import com.example.bookingapptim4.R;
 
 import java.util.Timer;
 import java.util.TimerTask;

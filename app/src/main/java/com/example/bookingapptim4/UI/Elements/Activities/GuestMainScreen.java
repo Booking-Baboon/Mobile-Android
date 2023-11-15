@@ -1,8 +1,10 @@
-package com.example.bookingapptim4;
+package com.example.bookingapptim4.UI.Elements.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.bookingapptim4.R;
 
 public class GuestMainScreen extends AppCompatActivity {
 
