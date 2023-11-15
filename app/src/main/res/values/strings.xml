@@ -33,4 +33,5 @@
     <string name="currentPassword">Current Password</string>
     <string name="newPassword">New Password</string>
     <string name="confirmPassword">Confirm Password</string>
+    <string name="deleteAccount">Delete Account</string>
 </resources>
