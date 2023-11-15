@@ -29,4 +29,5 @@
     <string name="show_accommodation_button">Show more</string>
     <string name="accommodation_total_price">1000e</string>
     <string name="accommodation_price_per_night">100e/night</string>
+    <string name="accommodation_location">Switzerland</string>
 </resources>

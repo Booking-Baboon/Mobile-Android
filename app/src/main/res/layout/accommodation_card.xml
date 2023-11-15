@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/product_card_item"
+    android:id="@+id/accommodation_card"
     android:layout_width="match_parent"
     android:layout_height="250dp"
     android:layout_marginVertical="10dp"
@@ -71,6 +71,14 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/accommodation_location"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:text="@string/accommodation_location"
+            android:textSize="14sp"
+            android:textStyle="italic" />
 
         <TextView
             android:id="@+id/accommodation_description"
@@ -115,18 +123,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/show_accommodation_button"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:layout_weight="1"
-                android:paddingLeft="8dp"
-                android:paddingTop="2dp"
-                android:paddingRight="8dp"
-                android:paddingBottom="2dp"
-                android:text="@string/show_accommodation_button"
-                android:textSize="10sp" />
 
             <View
                 android:layout_width="0dp"
