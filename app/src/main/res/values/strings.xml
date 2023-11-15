@@ -21,4 +21,16 @@
     <string name="confirmPassHint">Confirm your password:</string>
     <string name="nameHint">Enter your first name:</string>
     <string name="lastNameHint">Enter your last name:</string>
+    <string name="textPhone">Phone number</string>
+    <string name="textAddress">Address</string>
+    <string name="firstName">First Name</string>
+    <string name="lastName">Last Name</string>
+    <string name="email">E-mail</string>
+    <string name="logout">Logout</string>
+    <string name="saveChanges">Save Changes</string>
+    <string name="account">Account</string>
+    <string name="passwordTitle">Password</string>
+    <string name="currentPassword">Current Password</string>
+    <string name="newPassword">New Password</string>
+    <string name="confirmPassword">Confirm Password</string>
 </resources>

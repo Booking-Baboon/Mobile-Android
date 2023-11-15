@@ -1,5 +1,6 @@
 package com.example.bookingapptim4.UI.Elements.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,8 +8,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.bookingapptim4.R;
+import com.example.bookingapptim4.UI.Elements.Activities.GuestMainScreen;
+import com.example.bookingapptim4.UI.Elements.Activities.LoginScreen;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +65,19 @@ public class AccountScreen extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_account_screen, container, false);
+        View view = inflater.inflate(R.layout.fragment_account_screen, container, false);
+
+        Button logoutButton = view.findViewById(R.id.logoutButton);
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle button click, open the LoginScreen activity
+                Intent intent = new Intent(getActivity(), LoginScreen.class);
+                startActivity(intent);
+            }
+        });
+
+        return view;
     }
 }
