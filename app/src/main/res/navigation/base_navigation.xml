@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/base_navigation"
+    app:startDestination="@+id/nav_main"
+    >
+    <fragment
+        android:id="@+id/nav_notifications"
+        android:name="com.example.bookingapptim4.UI.Elements.Fragments.NotificationsScreen"
+        android:label="Notifications"
+        tools:layout="@layout/fragment_notifications_screen"
+        app:popUpTo="@+id/nav_main"
+        app:popUpToInclusive="true"
+        />
+
+
+    <fragment
+        android:id="@+id/nav_reservations"
+        android:name="com.example.bookingapptim4.UI.Elements.Fragments.GuestReservationsScreen"
+        android:label="Reservations"
+        tools:layout="@layout/fragment_guest_reservations_screen"
+        app:popUpTo="@+id/nav_main"
+        app:popUpToInclusive="true"
+        />
+
+    <fragment
+        android:id="@+id/nav_main"
+        android:name="com.example.bookingapptim4.UI.Elements.Fragments.GuestMainScreen"
+        android:label="Main"
+        tools:layout="@layout/fragment_guest_main_screen"
+        />
+
+    <fragment
+        android:id="@+id/nav_account"
+        android:name="com.example.bookingapptim4.UI.Elements.Fragments.AccountScreen"
+        android:label="Account"
+        tools:layout="@layout/fragment_account_screen"
+        app:popUpTo="@+id/nav_main"
+        app:popUpToInclusive="true"
+        />
+
+
+</navigation>
