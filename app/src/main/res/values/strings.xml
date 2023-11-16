@@ -38,4 +38,18 @@
     <string name="amenities_example_2">Air conditioning</string>
     <string name="amenities_example_3">Swimming pool</string>
     <string name="amenities_example_4">Free parking</string>
+    <string name="textPhone">Phone number</string>
+    <string name="textAddress">Address</string>
+    <string name="firstName">First Name</string>
+    <string name="lastName">Last Name</string>
+    <string name="email">E-mail</string>
+    <string name="logout">Logout</string>
+    <string name="saveChanges">Save Changes</string>
+    <string name="account">Account</string>
+    <string name="passwordTitle">Password</string>
+    <string name="currentPassword">Current Password</string>
+    <string name="newPassword">New Password</string>
+    <string name="confirmPassword">Confirm Password</string>
+    <string name="deleteAccount">Delete Account</string>
+
 </resources>
