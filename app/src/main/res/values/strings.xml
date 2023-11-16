@@ -21,6 +21,23 @@
     <string name="confirmPassHint">Confirm your password:</string>
     <string name="nameHint">Enter your first name:</string>
     <string name="lastNameHint">Enter your last name:</string>
+    <string name="accommodation_image">Accommodation image</string>
+    <string name="accommodation_title">accommodation title</string>
+    <string name="accommodation_description">accommodation_description</string>
+    <string name="accommodation_rating">4.5</string>
+    <string name="favoriteButton">favoriteButton</string>
+    <string name="show_accommodation_button">Show more</string>
+    <string name="accommodation_total_price">1000e</string>
+    <string name="accommodation_price_per_night">100e/night</string>
+    <string name="accommodation_location">Switzerland</string>
+    <string name="category_example_1">Hotel</string>
+    <string name="category_example_2">Campsite</string>
+    <string name="category_example_3">Apartment</string>
+    <string name="Amenities">Amenities</string>
+    <string name="amenities_example_1">Free wifi</string>
+    <string name="amenities_example_2">Air conditioning</string>
+    <string name="amenities_example_3">Swimming pool</string>
+    <string name="amenities_example_4">Free parking</string>
     <string name="textPhone">Phone number</string>
     <string name="textAddress">Address</string>
     <string name="firstName">First Name</string>
@@ -34,4 +51,5 @@
     <string name="newPassword">New Password</string>
     <string name="confirmPassword">Confirm Password</string>
     <string name="deleteAccount">Delete Account</string>
+
 </resources>
