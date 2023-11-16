@@ -1,6 +1,11 @@
 package com.example.bookingapptim4.UI.Elements.Adapters;
 
+import androidx.fragment.app.Fragment;
+
+import static android.app.PendingIntent.getActivity;
+
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +19,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.bookingapptim4.R;
+import com.example.bookingapptim4.UI.Elements.Activities.GuestMainScreen;
+import com.example.bookingapptim4.UI.Elements.Activities.LoginScreen;
+import com.example.bookingapptim4.UI.Elements.Fragments.AccommodationDetailsScreen;
+import com.example.bookingapptim4.UI.Elements.Fragments.FragmentAccommodationList;
+import com.example.bookingapptim4.UI.Elements.Fragments.FragmentTransition;
 import com.example.bookingapptim4.UI.Elements.Models.Accommodation;
 
 import java.util.ArrayList;
@@ -85,7 +95,6 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
             accommodationRating.setText("4.5");
             accommodationCard.setOnClickListener(v -> {
                 // Handle click on the item at 'position'
-                Log.i("ShopApp", "Clicked: " + accommodation.getName());
                 Toast.makeText(getContext(), "Clicked: " + accommodation.getName()  , Toast.LENGTH_SHORT).show();
             });
         }

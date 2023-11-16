@@ -30,4 +30,12 @@
     <string name="accommodation_total_price">1000e</string>
     <string name="accommodation_price_per_night">100e/night</string>
     <string name="accommodation_location">Switzerland</string>
+    <string name="category_example_1">Hotel</string>
+    <string name="category_example_2">Campsite</string>
+    <string name="category_example_3">Apartment</string>
+    <string name="Amenities">Amenities</string>
+    <string name="amenities_example_1">Free wifi</string>
+    <string name="amenities_example_2">Air conditioning</string>
+    <string name="amenities_example_3">Swimming pool</string>
+    <string name="amenities_example_4">Free parking</string>
 </resources>

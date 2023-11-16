@@ -25,6 +25,7 @@ import com.example.bookingapptim4.UI.Elements.Activities.GuestMainScreen;
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.UI.Elements.Models.Accommodation;
 import com.example.bookingapptim4.UI.Elements.ViewModels.AccommodationViewModel;
+import com.example.bookingapptim4.databinding.BottomSheetFilterBinding;
 import com.example.bookingapptim4.databinding.FragmentGuestMainScreenBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -58,11 +59,18 @@ public class FragmentGuestMainScreen extends Fragment {
 
         Button btnFilters = binding.btnFilters;
         btnFilters.setOnClickListener(v -> {
-//            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity(), 0);
-//            View dialogView = getLayoutInflater().inflate(R.layout.bottom_sheet_filter, null);
-//            bottomSheetDialog.setContentView(dialogView);
-//            bottomSheetDialog.show();
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity(), 0);
+            View dialogView = getLayoutInflater().inflate(R.layout.bottom_sheet_filter, null);
+            bottomSheetDialog.setContentView(dialogView);
+            Button applyFilterButton = dialogView.findViewById(R.id.apply_filter_button);
+            applyFilterButton.setOnClickListener(a ->{
+//                Apply filters
+                bottomSheetDialog.dismiss();
+            });
+            bottomSheetDialog.show();
         });
+
+
 
         Spinner spinner = binding.btnSort;
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -76,23 +84,7 @@ public class FragmentGuestMainScreen extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                dialog.setMessage("Change the sort option?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                Log.v("ShopApp", (String) parent.getItemAtPosition(position));
-                                ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                AlertDialog alert = dialog.create();
-                alert.show();
+//                Sort implementation
             }
 
 
