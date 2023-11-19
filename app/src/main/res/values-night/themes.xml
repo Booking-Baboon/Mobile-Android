@@ -1,16 +1,33 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <!-- Base application theme. -->
-    <style name="Theme.BookingAppTim4" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.BookingAppTim4" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">#FEA31A</item>
+        <item name="colorPrimaryVariant">#FE1A1A</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondary">#FFFFFF</item>
+        <item name="colorSecondaryVariant">#FEA31A</item>
+        <item name="colorOnSecondary">@android:color/black</item>
+
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+
+        <item name="materialButtonStyle">@style/Button.CurvedEdges</item>
+
     </style>
+    <style name="Button.CurvedEdges" parent="Widget.MaterialComponents.Button">
+        <item name="android:background">@drawable/curved_buttons</item>
+    </style>
+
+    <style name="Button.RedCurved" parent="Widget.MaterialComponents.Button">
+        <item name="colorPrimary">#FE1A1A</item>
+    </style>
+
+    <style name="Button.GreenCurved" parent="Widget.MaterialComponents.Button">
+        <item name="colorPrimary">#16D329</item>
+    </style>
+
 </resources>
