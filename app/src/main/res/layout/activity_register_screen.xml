@@ -28,7 +28,7 @@
         android:layout_height="60dp"
         android:ems="10"
         android:hint="@string/nameHint"
-        android:inputType="textEmailAddress"
+        android:inputType="text"
         android:layout_weight="0"
         android:layout_marginBottom="10dp"/>
 
@@ -38,7 +38,7 @@
         android:layout_height="60dp"
         android:ems="10"
         android:hint="@string/lastNameHint"
-        android:inputType="textEmailAddress"
+        android:inputType="text"
         android:layout_weight="0"
         android:layout_marginBottom="10dp"/>
 
@@ -68,7 +68,7 @@
         android:layout_height="60dp"
         android:ems="10"
         android:hint="@string/addressHint"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:layout_weight="0"
         android:layout_marginBottom="10dp"/>
 
