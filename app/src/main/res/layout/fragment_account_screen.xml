@@ -255,14 +255,33 @@
             android:layout_marginTop="15dp"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/saveChangesButton"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:theme="@style/Button.GreenCurved"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                android:text="@string/saveChanges" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/saveChangesButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:text="@string/saveChanges"
+                    android:theme="@style/Button.GreenCurved" />
+
+                <Button
+                    android:id="@+id/discardChangesButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_weight="1"
+                    android:text="@string/discardChanges"
+                    android:theme="@style/Button.RedCurved" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/logoutButton"
@@ -270,7 +289,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginBottom="10dp"
-                android:backgroundTint="#FE1A1A"
                 android:text="@string/logout" />
 
             <Button
