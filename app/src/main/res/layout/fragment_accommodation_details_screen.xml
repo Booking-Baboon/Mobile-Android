@@ -1,0 +1,118 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/accommodation_details_screen">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+                <!-- Image View for the Accommodation Picture -->
+                <ImageView
+                    android:id="@+id/imageViewAccommodation"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/accommodation_image_example"
+                    android:contentDescription="@string/accommodation_image"/>
+
+                <!-- Linear Layout for other content -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                        <!-- Accommodation Title -->
+                        <TextView
+                            android:id="@+id/textViewTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Accommodation Title"
+                            android:textSize="24sp"
+                            android:textStyle="bold"/>
+
+
+                        <!-- RatingBar for Accommodation Rating -->
+                        <RatingBar
+                            android:id="@+id/ratingBarAccommodation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:numStars="5"
+                            android:stepSize="0.5"
+                            android:progressDrawable="@drawable/custom_rating_bar"/>
+
+                        <!-- Description -->
+                        <TextView
+                            android:id="@+id/textViewDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Description:Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et lectus nulla. Vestibulum sit amet eros vulputate, porttitor tortor volutpat, rhoncus nulla. Suspendisse in lectus lacinia neque pulvinar auctor. Duis augue dolor, aliquam eget rutrum vitae, pulvinar et urna. Morbi ut auctor nibh. Cras lacus ex, venenatis a diam sed."
+                            android:layout_marginBottom="10dp"/>
+
+
+                        <!-- Location Fragment -->
+                        <TextView
+                            android:id="@+id/textViewLocation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Location: location details"/>
+
+                        <fragment
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            xmlns:map="http://schemas.android.com/apk/res-auto"
+                            xmlns:tools="http://schemas.android.com/tools"
+                            android:id="@+id/maps"
+                            android:name="com.google.android.gms.maps.SupportMapFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="300dp"
+                            tools:context="com.example.bookingapptim4.UI.Elements.Fragments.NotificationsScreen" />
+
+                        <!-- Pricing Details -->
+                        <TextView
+                            android:id="@+id/textViewPricing"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Pricing: Pricing Details"/>
+
+                        <!-- Min and Max Guests -->
+                        <TextView
+                            android:id="@+id/textViewGuests"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Guests: Min 2 - Max 4"/>
+
+                        <!-- Amenities -->
+                        <TextView
+                            android:id="@+id/textViewAmenities"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Amenities: Amenities List"/>
+
+                        <!-- Host Username -->
+                        <TextView
+                            android:id="@+id/textViewHostUsername"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Host: HostUsername"/>
+
+                        <!-- Button for Making a Reservation -->
+                        <Button
+                            android:id="@+id/buttonMakeReservation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Make Reservation"/>
+                </LinearLayout>
+        </LinearLayout>
+</ScrollView>
