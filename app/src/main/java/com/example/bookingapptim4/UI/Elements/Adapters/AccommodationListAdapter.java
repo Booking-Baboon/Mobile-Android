@@ -6,6 +6,7 @@ import static android.app.PendingIntent.getActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.navigation.Navigation;
 
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.UI.Elements.Activities.GuestMainScreen;
@@ -72,6 +74,7 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+
         Accommodation accommodation = getItem(position);
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.accommodation_card,
@@ -93,10 +96,16 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
             accommodationTotalPrice.setText(Integer.toString(accommodation.getPrice())  + "e");
             accommodationPricePerNight.setText(Integer.toString(accommodation.getPrice()) + "e/night");
             accommodationRating.setText("4.5");
+
+
             accommodationCard.setOnClickListener(v -> {
                 // Handle click on the item at 'position'
-                Toast.makeText(getContext(), "Clicked: " + accommodation.getName()  , Toast.LENGTH_SHORT).show();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("selectedAccommodation", accommodation);
+
+                Navigation.findNavController(v).navigate(R.id.nav_accommodation_details, bundle);
             });
+
         }
 
         return convertView;

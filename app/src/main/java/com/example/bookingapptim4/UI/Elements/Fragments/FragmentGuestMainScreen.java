@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -36,7 +37,7 @@ import java.util.ArrayList;
  * Use the {@link FragmentGuestMainScreen#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentGuestMainScreen extends Fragment {
+public class FragmentGuestMainScreen extends Fragment{
 
     public static ArrayList<Accommodation> accommodations = new ArrayList<Accommodation>();
     private AccommodationViewModel accommodationViewModel;
@@ -111,4 +112,5 @@ public class FragmentGuestMainScreen extends Fragment {
         accommodations.add(new Accommodation("Sweet home", "Feels like a home", "Switzerland",30));
         accommodations.add(new Accommodation("Sweet home", "Feels like a home", "Switzerland", 80));
     }
+
 }
