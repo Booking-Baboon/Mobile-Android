@@ -1,7 +1,14 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
 }
-
+fun getProperty(name: String): String? {
+    val localPropsFile = rootProject.file("local.properties")
+    val localProps = Properties()
+    localPropsFile.inputStream().use { localProps.load(it) }
+    return localProps.getProperty(name)
+}
 android {
     namespace = "com.example.bookingapptim4"
     compileSdk = 34
@@ -12,14 +19,20 @@ android {
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "IP_ADDR", "\"${getProperty("IP_ADDR")}\"")
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            android.buildFeatures.buildConfig = true
+
+        }
+        debug {
+            android.buildFeatures.buildConfig = true
+
         }
     }
     compileOptions {
@@ -40,7 +53,11 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment:2.7.5")
     implementation("androidx.navigation:navigation-ui:2.7.5")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation ("com.squareup.retrofit2:retrofit:2.3.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.3.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:3.12.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
 }

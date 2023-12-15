@@ -1,36 +1,25 @@
 package com.example.bookingapptim4.UI.Elements.Fragments;
 
 
-import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
-import com.example.bookingapptim4.UI.Elements.Activities.GuestMainScreen;
 import com.example.bookingapptim4.R;
-import com.example.bookingapptim4.UI.Elements.Models.Accommodation;
 import com.example.bookingapptim4.UI.Elements.ViewModels.AccommodationViewModel;
-import com.example.bookingapptim4.databinding.BottomSheetFilterBinding;
 import com.example.bookingapptim4.databinding.FragmentGuestMainScreenBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,8 +27,6 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class FragmentGuestMainScreen extends Fragment{
-
-    public static ArrayList<Accommodation> accommodations = new ArrayList<Accommodation>();
     private AccommodationViewModel accommodationViewModel;
     private FragmentGuestMainScreenBinding binding;
 
@@ -53,7 +40,6 @@ public class FragmentGuestMainScreen extends Fragment{
         binding = FragmentGuestMainScreenBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        prepareAccommodationsList(accommodations);
 
         SearchView searchView = binding.searchText;
         accommodationViewModel.getText().observe(getViewLifecycleOwner(), searchView::setQueryHint);
@@ -95,7 +81,7 @@ public class FragmentGuestMainScreen extends Fragment{
             }
         });
 
-        FragmentTransition.to(FragmentAccommodationList.newInstance(accommodations), getActivity(), false, R.id.scroll_accommodations_list);
+        FragmentTransition.to(FragmentAccommodationList.newInstance(), getActivity(), false, R.id.scroll_accommodations_list);
 
         return root;
     }
@@ -106,11 +92,5 @@ public class FragmentGuestMainScreen extends Fragment{
         binding = null;
     }
 
-    private void prepareAccommodationsList(ArrayList<Accommodation> accommodations){
-        accommodations.add(new Accommodation("Sweet home", "Feels like a home", "Switzerland", 100));
-        accommodations.add(new Accommodation("Sweet home", "Feels like a home", "Switzerland", 150));
-        accommodations.add(new Accommodation("Sweet home", "Feels like a home", "Switzerland",30));
-        accommodations.add(new Accommodation("Sweet home", "Feels like a home", "Switzerland", 80));
-    }
 
 }

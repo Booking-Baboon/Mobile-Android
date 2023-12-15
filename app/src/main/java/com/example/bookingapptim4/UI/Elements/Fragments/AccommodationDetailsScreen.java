@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.bookingapptim4.R;
-import com.example.bookingapptim4.UI.Elements.Models.Accommodation;
+import com.example.bookingapptim4.UI.Elements.Models.accommodation_handling.Accommodation;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;

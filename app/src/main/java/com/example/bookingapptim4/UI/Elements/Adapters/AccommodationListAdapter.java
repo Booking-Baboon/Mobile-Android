@@ -1,32 +1,22 @@
 package com.example.bookingapptim4.UI.Elements.Adapters;
 
-import androidx.fragment.app.Fragment;
-
 import static android.app.PendingIntent.getActivity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.navigation.Navigation;
 
 import com.example.bookingapptim4.R;
-import com.example.bookingapptim4.UI.Elements.Activities.GuestMainScreen;
-import com.example.bookingapptim4.UI.Elements.Activities.LoginScreen;
-import com.example.bookingapptim4.UI.Elements.Fragments.AccommodationDetailsScreen;
-import com.example.bookingapptim4.UI.Elements.Fragments.FragmentAccommodationList;
-import com.example.bookingapptim4.UI.Elements.Fragments.FragmentTransition;
-import com.example.bookingapptim4.UI.Elements.Models.Accommodation;
+import com.example.bookingapptim4.UI.Elements.Models.accommodation_handling.Accommodation;
 
 import java.util.ArrayList;
 
@@ -75,6 +65,7 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
+
         Accommodation accommodation = getItem(position);
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.accommodation_card,
@@ -89,14 +80,19 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
         TextView accommodationRating = convertView.findViewById(R.id.accommodation_rating);
 
 
-        if(accommodation != null){
+        if (accommodation != null) {
             accommodationName.setText(accommodation.getName());
             accommodationDescription.setText(accommodation.getDescription());
-            accommodationLocation.setText(accommodation.getLocation());
-            accommodationTotalPrice.setText(Integer.toString(accommodation.getPrice())  + "e");
-            accommodationPricePerNight.setText(Integer.toString(accommodation.getPrice()) + "e/night");
-            accommodationRating.setText("4.5");
 
+            String locationText = String.format("%s, %s, %s",
+                    accommodation.getLocation().getCountry(),
+                    accommodation.getLocation().getCity(),
+                    accommodation.getLocation().getAddress());
+            accommodationLocation.setText(locationText);
+
+            accommodationTotalPrice.setText(Integer.toString(100) + "e");
+            accommodationPricePerNight.setText(Integer.toString(20) + "e/night");
+            accommodationRating.setText("4.5");
 
             accommodationCard.setOnClickListener(v -> {
                 // Handle click on the item at 'position'
@@ -105,7 +101,6 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
 
                 Navigation.findNavController(v).navigate(R.id.nav_accommodation_details, bundle);
             });
-
         }
 
         return convertView;

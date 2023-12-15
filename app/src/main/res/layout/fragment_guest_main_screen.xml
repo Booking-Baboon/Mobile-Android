@@ -66,6 +66,7 @@
             android:layout_margin="10dp"
             android:id="@+id/scroll_accommodations_list"
             />
+
     </LinearLayout>
 
 </FrameLayout>
