@@ -8,7 +8,7 @@
     >
     <fragment
         android:id="@+id/nav_notifications"
-        android:name="com.example.bookingapptim4.UI.Elements.Fragments.NotificationsScreen"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.NotificationsScreen"
         android:label="Notifications"
         tools:layout="@layout/fragment_notifications_screen"
         app:popUpTo="@+id/nav_main"
@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/nav_reservations"
-        android:name="com.example.bookingapptim4.UI.Elements.Fragments.GuestReservationsScreen"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.GuestReservationsScreen"
         android:label="Reservations"
         tools:layout="@layout/fragment_guest_reservations_screen"
         app:popUpTo="@+id/nav_main"
@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/nav_accommodation_details"
-        android:name="com.example.bookingapptim4.UI.Elements.Fragments.AccommodationDetailsScreen"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.AccommodationDetailsScreen"
         android:label="AccommodationDetails"
         tools:layout="@layout/fragment_accommodation_details_screen"
         app:popUpTo="@+id/nav_main"
@@ -36,14 +36,14 @@
 
     <fragment
         android:id="@+id/nav_main"
-        android:name="com.example.bookingapptim4.UI.Elements.Fragments.FragmentGuestMainScreen"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.FragmentGuestMainScreen"
         android:label="Main"
         tools:layout="@layout/fragment_guest_main_screen"
         />
 
     <fragment
         android:id="@+id/nav_account"
-        android:name="com.example.bookingapptim4.UI.Elements.Fragments.AccountScreen"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.AccountScreen"
         android:label="Account"
         tools:layout="@layout/fragment_account_screen"
         app:popUpTo="@+id/nav_main"

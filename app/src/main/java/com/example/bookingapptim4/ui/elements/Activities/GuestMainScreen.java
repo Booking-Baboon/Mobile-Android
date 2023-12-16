@@ -1,4 +1,4 @@
-package com.example.bookingapptim4.UI.Elements.Activities;
+package com.example.bookingapptim4.ui.elements.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -8,7 +8,6 @@ import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;

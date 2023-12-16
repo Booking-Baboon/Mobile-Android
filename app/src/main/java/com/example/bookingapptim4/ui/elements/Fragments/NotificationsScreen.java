@@ -1,4 +1,4 @@
-package com.example.bookingapptim4.UI.Elements.Fragments;
+package com.example.bookingapptim4.ui.elements.Fragments;
 
 import android.os.Bundle;
 

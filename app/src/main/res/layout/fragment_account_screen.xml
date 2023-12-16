@@ -10,7 +10,7 @@
         android:orientation="vertical"
         android:layout_marginLeft = "15dp"
         android:layout_marginRight = "15dp"
-        tools:context=".UI.Elements.Fragments.AccountScreen">
+        tools:context=".ui.elements.Fragments.AccountScreen">
 
 
         <!-- TODO: Update blank fragment layout -->

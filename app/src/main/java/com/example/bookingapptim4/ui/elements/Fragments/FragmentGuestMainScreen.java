@@ -1,33 +1,25 @@
-package com.example.bookingapptim4.UI.Elements.Fragments;
+package com.example.bookingapptim4.ui.elements.Fragments;
 
 
-import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
-import com.example.bookingapptim4.UI.Elements.Activities.GuestMainScreen;
 import com.example.bookingapptim4.R;
-import com.example.bookingapptim4.UI.Elements.Models.Accommodation;
-import com.example.bookingapptim4.UI.Elements.ViewModels.AccommodationViewModel;
-import com.example.bookingapptim4.databinding.BottomSheetFilterBinding;
 import com.example.bookingapptim4.databinding.FragmentGuestMainScreenBinding;
+import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
+import com.example.bookingapptim4.ui.state_holders.view_models.AccommodationViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;

@@ -1,32 +1,22 @@
-package com.example.bookingapptim4.UI.Elements.Adapters;
-
-import androidx.fragment.app.Fragment;
+package com.example.bookingapptim4.ui.state_holders.adapters;
 
 import static android.app.PendingIntent.getActivity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.navigation.Navigation;
 
 import com.example.bookingapptim4.R;
-import com.example.bookingapptim4.UI.Elements.Activities.GuestMainScreen;
-import com.example.bookingapptim4.UI.Elements.Activities.LoginScreen;
-import com.example.bookingapptim4.UI.Elements.Fragments.AccommodationDetailsScreen;
-import com.example.bookingapptim4.UI.Elements.Fragments.FragmentAccommodationList;
-import com.example.bookingapptim4.UI.Elements.Fragments.FragmentTransition;
-import com.example.bookingapptim4.UI.Elements.Models.Accommodation;
+import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 
 import java.util.ArrayList;
 

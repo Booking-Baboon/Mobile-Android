@@ -1,4 +1,4 @@
-package com.example.bookingapptim4.UI.Elements.Activities;
+package com.example.bookingapptim4.ui.elements.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 

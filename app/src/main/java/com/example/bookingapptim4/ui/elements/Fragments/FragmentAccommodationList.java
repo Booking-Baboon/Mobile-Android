@@ -1,13 +1,11 @@
-package com.example.bookingapptim4.UI.Elements.Fragments;
+package com.example.bookingapptim4.ui.elements.Fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.ListFragment;
-import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,10 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.example.bookingapptim4.R;
-import com.example.bookingapptim4.UI.Elements.Adapters.AccommodationListAdapter;
 import com.example.bookingapptim4.databinding.FragmentAccommodationListBinding;
-import com.example.bookingapptim4.UI.Elements.Models.Accommodation;
+import com.example.bookingapptim4.ui.state_holders.adapters.AccommodationListAdapter;
+import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 
 import java.util.ArrayList;
 

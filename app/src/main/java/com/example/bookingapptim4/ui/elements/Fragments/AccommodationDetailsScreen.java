@@ -1,4 +1,4 @@
-package com.example.bookingapptim4.UI.Elements.Fragments;
+package com.example.bookingapptim4.ui.elements.Fragments;
 
 import android.os.Bundle;
 
@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.bookingapptim4.R;
-import com.example.bookingapptim4.UI.Elements.Models.Accommodation;
+import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;

@@ -1,4 +1,4 @@
-package com.example.bookingapptim4.UI.Elements.Models;
+package com.example.bookingapptim4.domain.models.accommodations;
 
 import android.os.Parcel;
 import android.os.Parcelable;

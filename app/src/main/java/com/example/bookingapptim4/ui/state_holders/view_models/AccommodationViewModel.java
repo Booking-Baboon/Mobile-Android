@@ -1,4 +1,4 @@
-package com.example.bookingapptim4.UI.Elements.ViewModels;
+package com.example.bookingapptim4.ui.state_holders.view_models;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
