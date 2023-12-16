@@ -29,7 +29,11 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
 
     @Override
     public int getCount() {
-        return accommodations.size();
+        if (accommodations != null) {
+            return accommodations.size();
+        } else {
+            return 0;
+        }
     }
 
     /*

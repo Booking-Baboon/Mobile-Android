@@ -60,12 +60,12 @@
         </LinearLayout>
 
 
-        <RelativeLayout
+        <ListView
+            android:id="@+id/scroll_accommodations_list"
+            android:layout_margin="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:id="@+id/scroll_accommodations_list"
-            />
+            tools:listitem="@layout/accommodation_card"/>
 
     </LinearLayout>
 

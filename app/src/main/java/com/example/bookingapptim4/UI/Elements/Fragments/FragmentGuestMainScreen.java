@@ -8,18 +8,29 @@ import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.example.bookingapptim4.R;
+import com.example.bookingapptim4.UI.Elements.Accommodations.AccommodationUtils;
+import com.example.bookingapptim4.UI.Elements.Adapters.AccommodationListAdapter;
+import com.example.bookingapptim4.UI.Elements.Models.accommodation_handling.Accommodation;
 import com.example.bookingapptim4.UI.Elements.ViewModels.AccommodationViewModel;
 import com.example.bookingapptim4.databinding.FragmentGuestMainScreenBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +38,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
  * create an instance of this fragment.
  */
 public class FragmentGuestMainScreen extends Fragment{
+
+    private ArrayList<Accommodation> accommodations = new ArrayList<>();
+    ListView accommodationListView;
     private AccommodationViewModel accommodationViewModel;
     private FragmentGuestMainScreenBinding binding;
 
@@ -39,6 +53,8 @@ public class FragmentGuestMainScreen extends Fragment{
 
         binding = FragmentGuestMainScreenBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        accommodationListView = root.findViewById(R.id.scroll_accommodations_list);
 
 
         SearchView searchView = binding.searchText;
@@ -81,7 +97,11 @@ public class FragmentGuestMainScreen extends Fragment{
             }
         });
 
-        FragmentTransition.to(FragmentAccommodationList.newInstance(), getActivity(), false, R.id.scroll_accommodations_list);
+        //Loading accommodations
+        loadAccommodations();
+
+
+//        FragmentTransition.to(FragmentAccommodationList.newInstance(), getActivity(), false, R.id.scroll_accommodations_list);
 
         return root;
     }
@@ -92,5 +112,39 @@ public class FragmentGuestMainScreen extends Fragment{
         binding = null;
     }
 
+    private void loadAccommodations(){
+        /*
+         * Poziv REST servisa se odvija u pozadini i mi ne moramo da vodimo racuna o tome
+         * Samo je potrebno da registrujemo sta da se desi kada odgovor stigne od nas
+         * Taj deo treba da implementiramo dodavajuci Callback<List<Event>> unutar enqueue metode
+         *
+         * Servis koji pozivamo izgleda:
+         * http://<service_ip_adress>:<service_port>/api/product
+         * */
+        Call<ArrayList<Accommodation>> call = AccommodationUtils.accommodationService.getAll();
+        call.enqueue(new Callback<ArrayList<Accommodation>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Accommodation>> call, Response<ArrayList<Accommodation>> response) {
+                if (response.code() == 200){
+                    Log.d("REZ","Meesage recieved");
+                    System.out.println(response.body());
+                    accommodations = response.body();
+
+                    AccommodationListAdapter accommodationListAdapter = new AccommodationListAdapter(getActivity(), accommodations);
+                    accommodationListView.setAdapter(accommodationListAdapter);
+                    accommodationListAdapter.notifyDataSetChanged();
+
+                }else{
+                    Log.d("REZ","Meesage recieved: "+response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Accommodation>> call, Throwable t) {
+                Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
+
+    }
 
 }
