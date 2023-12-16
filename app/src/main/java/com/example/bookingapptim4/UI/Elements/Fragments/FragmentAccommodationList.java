@@ -46,7 +46,7 @@ public class FragmentAccommodationList extends ListFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.i("BookingBaboon", "onCreateView Amenities List Fragment");
+        Log.i("BookingBaboon", "onCreateView Accommodation List Fragment");
         binding = FragmentAccommodationListBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         return root;
@@ -55,14 +55,14 @@ public class FragmentAccommodationList extends ListFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i("ShopApp", "onCreate Products List Fragment");
+        Log.i("ShopApp", "onCreate Accommodation List Fragment");
         getDataFromAccommodation();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i("BookingBaboon", "onCreate Amenities List Fragment");
+        Log.i("BookingBaboon", "onCreate Accommodation List Fragment");
 
 //        if (getArguments() != null) {
 //            accommodations = getArguments().getParcelableArrayList(ARG_PARAM);

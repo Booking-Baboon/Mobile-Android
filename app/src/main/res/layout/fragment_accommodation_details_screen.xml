@@ -96,7 +96,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="Amenities: Amenities List"/>
+                            android:text="Amenities:"/>
+                        
+                        <ListView
+                            android:id="@+id/amenityList"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            tools:listitem="@layout/amenity_item"/>
 
                         <!-- Host Username -->
                         <TextView

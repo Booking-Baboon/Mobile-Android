@@ -8,10 +8,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.example.bookingapptim4.R;
+import com.example.bookingapptim4.UI.Elements.Adapters.AmenityListAdapter;
 import com.example.bookingapptim4.UI.Elements.Models.accommodation_handling.Accommodation;
 
+import com.example.bookingapptim4.UI.Elements.Models.accommodation_handling.Amenity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -19,12 +22,16 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AccommodationDetailsScreen#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCallback{
+
+    ListView amenitiesListView;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -64,6 +71,8 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
 
 
         }
+
+
     }
 
 //    @Override
@@ -80,6 +89,16 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
         View view = inflater.inflate(R.layout.fragment_accommodation_details_screen, container, false);
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById((R.id.maps));
         mapFragment.getMapAsync(this);
+
+
+        //AMENITIES
+        ArrayList<Amenity> amenities = new ArrayList<Amenity>();
+
+        amenitiesListView=(ListView)view.findViewById(R.id.amenityList);
+
+        AmenityListAdapter amenityListAdapter=new AmenityListAdapter(getActivity(),amenities);
+        amenitiesListView.setAdapter(amenityListAdapter);//sets the adapter for listView
+
         return view;
     }
 
