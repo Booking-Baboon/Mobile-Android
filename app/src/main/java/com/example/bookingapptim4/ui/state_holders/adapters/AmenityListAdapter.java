@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -68,7 +69,7 @@ public class AmenityListAdapter extends ArrayAdapter<Amenity> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.amenity_item,
                     parent, false);
         }
-        LinearLayout amenityItem = convertView.findViewById(R.id.amenity_item);
+        RelativeLayout amenityItem = convertView.findViewById(R.id.amenity_item);
         TextView amenityName = convertView.findViewById(R.id.amenity_name);
 
         if (amenity != null) {

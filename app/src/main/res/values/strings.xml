@@ -52,5 +52,7 @@
     <string name="confirmPassword">Confirm Password</string>
     <string name="deleteAccount">Delete Account</string>
     <string name="discardChanges">Discard Changes</string>
+    <string name="priceFrom">from</string>
+    <string name="priceTo">to</string>
 
 </resources>

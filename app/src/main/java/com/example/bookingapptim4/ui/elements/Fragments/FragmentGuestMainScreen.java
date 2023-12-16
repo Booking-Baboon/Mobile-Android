@@ -15,11 +15,18 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.data_layer.repositories.accommodations.AccommodationUtils;
+import com.example.bookingapptim4.data_layer.repositories.accommodations.AmenityUtils;
+import com.example.bookingapptim4.domain.models.accommodations.AccommodationType;
+import com.example.bookingapptim4.domain.models.accommodations.Amenity;
 import com.example.bookingapptim4.ui.state_holders.adapters.AccommodationListAdapter;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 import com.example.bookingapptim4.ui.state_holders.view_models.AccommodationViewModel;
@@ -40,6 +47,7 @@ import retrofit2.Response;
 public class FragmentGuestMainScreen extends Fragment{
 
     private ArrayList<Accommodation> accommodations = new ArrayList<>();
+    private ArrayList<Amenity> allAmenities = new ArrayList<>();
     ListView accommodationListView;
     private AccommodationViewModel accommodationViewModel;
     private FragmentGuestMainScreenBinding binding;
@@ -54,8 +62,11 @@ public class FragmentGuestMainScreen extends Fragment{
         binding = FragmentGuestMainScreenBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        accommodationListView = root.findViewById(R.id.scroll_accommodations_list);
+        //Loading...
+        loadAmenities();
+        loadAccommodations();
 
+        accommodationListView = root.findViewById(R.id.scroll_accommodations_list);
 
         SearchView searchView = binding.searchText;
         accommodationViewModel.getText().observe(getViewLifecycleOwner(), searchView::setQueryHint);
@@ -64,12 +75,18 @@ public class FragmentGuestMainScreen extends Fragment{
         btnFilters.setOnClickListener(v -> {
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity(), 0);
             View dialogView = getLayoutInflater().inflate(R.layout.bottom_sheet_filter, null);
+
+            //Fill
+            fillAccommodationTypeCheckboxes(dialogView);
+            fillAmenitiesCheckboxes(dialogView);
+
             bottomSheetDialog.setContentView(dialogView);
             Button applyFilterButton = dialogView.findViewById(R.id.apply_filter_button);
             applyFilterButton.setOnClickListener(a ->{
 //                Apply filters
                 bottomSheetDialog.dismiss();
             });
+
             bottomSheetDialog.show();
         });
 
@@ -97,8 +114,6 @@ public class FragmentGuestMainScreen extends Fragment{
             }
         });
 
-        //Loading accommodations
-        loadAccommodations();
 
 
 //        FragmentTransition.to(FragmentAccommodationList.newInstance(), getActivity(), false, R.id.scroll_accommodations_list);
@@ -147,4 +162,63 @@ public class FragmentGuestMainScreen extends Fragment{
 
     }
 
+    private void loadAmenities(){
+        /*
+         * Poziv REST servisa se odvija u pozadini i mi ne moramo da vodimo racuna o tome
+         * Samo je potrebno da registrujemo sta da se desi kada odgovor stigne od nas
+         * Taj deo treba da implementiramo dodavajuci Callback<List<Event>> unutar enqueue metode
+         *
+         * Servis koji pozivamo izgleda:
+         * http://<service_ip_adress>:<service_port>/api/product
+         * */
+        Call<ArrayList<Amenity>> call = AmenityUtils.amenityService.getAll();
+        call.enqueue(new Callback<ArrayList<Amenity>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Amenity>> call, Response<ArrayList<Amenity>> response) {
+                if (response.code() == 200){
+                    Log.d("REZ","Meesage recieved");
+                    System.out.println(response.body());
+                    allAmenities = response.body();
+
+                }else{
+                    Log.d("REZ","Meesage recieved: "+response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Amenity>> call, Throwable t) {
+                Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
+
+    }
+
+    private void fillAccommodationTypeCheckboxes(View view){
+
+        LinearLayout checkboxContainer = view.findViewById(R.id.accommodationTypeCheckboxes);
+
+        // Get the values from the AccommodationType enum
+        AccommodationType[] values = AccommodationType.values();
+
+        // Dynamically add CheckBoxes to the LinearLayout
+        for (AccommodationType type : values) {
+            CheckBox checkBox = new CheckBox(requireContext());
+            checkBox.setText(type.toString()); // Assuming toString() gives the text representation of the enum
+            checkBox.setId(View.generateViewId());
+            checkboxContainer.addView(checkBox);
+        }
+    }
+
+    private void fillAmenitiesCheckboxes(View view){
+        // Find the LinearLayout container for amenities checkboxes
+        LinearLayout amenitiesCheckboxesContainer = view.findViewById(R.id.amenitiesCheckboxes);
+
+        // Dynamically add CheckBoxes for each amenity
+        for (Amenity amenity : allAmenities) {
+            CheckBox checkBox = new CheckBox(requireContext());
+            checkBox.setText(amenity.getName()); // Assuming 'getName()' returns the amenity name
+            checkBox.setId(View.generateViewId());
+            amenitiesCheckboxesContainer.addView(checkBox);
+        }
+    }
 }

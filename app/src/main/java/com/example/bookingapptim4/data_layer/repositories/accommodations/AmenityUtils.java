@@ -9,8 +9,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class AccommodationUtils {
-
+public class AmenityUtils {
     public static final String SERVICE_API_PATH = "http://"+ BuildConfig.IP_ADDR +":8080/api/v1/";
 
     public static OkHttpClient test(){
@@ -32,5 +31,6 @@ public class AccommodationUtils {
             .client(test())
             .build();
 
-    public static AccommodationService accommodationService = retrofit.create(AccommodationService.class);
+    public static AmenityService amenityService = retrofit.create(AmenityService.class);
+
 }

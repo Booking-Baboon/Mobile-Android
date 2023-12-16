@@ -9,5 +9,5 @@ public enum AccommodationType {
     Apartment,
     House,
     Room,
-    Tent
+    Tent;
 }

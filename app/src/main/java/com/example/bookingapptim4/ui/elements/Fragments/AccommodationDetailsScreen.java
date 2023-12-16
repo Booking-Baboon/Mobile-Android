@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.bookingapptim4.R;
@@ -33,14 +34,7 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
 
     ListView amenitiesListView;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    Accommodation accommodation;
 
     public AccommodationDetailsScreen() {
         // Required empty public constructor
@@ -66,7 +60,7 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
 
         Bundle args = getArguments();
         if (args != null && args.containsKey("selectedAccommodation")) {
-            Accommodation selectedAccommodation = args.getParcelable("selectedAccommodation");
+            accommodation = args.getParcelable("selectedAccommodation");
             //populate detailed screen ...
 
 
@@ -92,9 +86,10 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
 
 
         //AMENITIES
-        ArrayList<Amenity> amenities = new ArrayList<Amenity>();
+        ArrayList<Amenity> amenities = (ArrayList<Amenity>) accommodation.getAmenities();
 
         amenitiesListView=(ListView)view.findViewById(R.id.amenityList);
+//        ArrayAdapter amenityListAdapter = new ArrayAdapter(getActivity(),R.layout.amenity_item,amenities);
 
         AmenityListAdapter amenityListAdapter=new AmenityListAdapter(getActivity(),amenities);
         amenitiesListView.setAdapter(amenityListAdapter);//sets the adapter for listView

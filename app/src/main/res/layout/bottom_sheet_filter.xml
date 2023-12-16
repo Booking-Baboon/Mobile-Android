@@ -37,40 +37,44 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="2dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="From" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="To" />
-    </LinearLayout>
-
+<!--    PRICE-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
         android:orientation="horizontal">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/priceFromTextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:hint="@string/priceFrom">
 
-        <EditText
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"
+                android:layout_marginRight="10px" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/priceToTextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:hint="@string/priceTo">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"
+                android:layout_marginRight="10px" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
     </LinearLayout>
 
 
@@ -80,28 +84,21 @@
         android:orientation="vertical"
         android:layout_margin="2dp">
 
+<!--        CATEGORY-->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/category"
             android:textSize="16sp"
             android:textStyle="bold" />
-        <RadioGroup
+        <LinearLayout
+            android:id="@+id/accommodationTypeCheckboxes"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/category_example_1"/>
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/category_example_2"/>
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/category_example_3"/>
-        </RadioGroup>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        </LinearLayout>
+
+
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
@@ -109,28 +106,19 @@
             android:layout_margin="2dp"
             />
 
+        <!--        AMENITIES-->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/Amenities"
             android:textSize="16sp"
             android:textStyle="bold" />
-        <CheckBox
+        <LinearLayout
+            android:id="@+id/amenitiesCheckboxes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/amenities_example_1"/>
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/amenities_example_2"/>
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/amenities_example_3"/>
-        <CheckBox
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/amenities_example_4"/>
+            android:orientation="vertical">
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
