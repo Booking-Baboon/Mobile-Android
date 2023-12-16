@@ -28,16 +28,16 @@
             android:value="AIzaSyDoFs8L_jEmhms2uOme0Gqq72RwkwaUiRA"></meta-data>
 
         <activity
-            android:name=".UI.Elements.Activities.RegisterScreen"
+            android:name=".ui.elements.Activities.RegisterScreen"
             android:exported="false" />
         <activity
-            android:name=".UI.Elements.Activities.GuestMainScreen"
+            android:name=".ui.elements.Activities.GuestMainScreen"
             android:exported="false" />
         <activity
-            android:name=".UI.Elements.Activities.LoginScreen"
+            android:name=".ui.elements.Activities.LoginScreen"
             android:exported="false" />
         <activity
-            android:name=".UI.Elements.Activities.SplashScreen"
+            android:name=".ui.elements.Activities.SplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
