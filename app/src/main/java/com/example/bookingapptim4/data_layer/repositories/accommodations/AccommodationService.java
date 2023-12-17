@@ -13,6 +13,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface AccommodationService {
     @Headers({
@@ -49,4 +50,21 @@ public interface AccommodationService {
     })
     @PUT("accommodations")
     Call<Accommodation> edit(@Body Accommodation accommodation);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/filter")
+    Call<ArrayList<Accommodation>> search(
+            @Query("city") String city,
+            @Query("checkin") String checkin,
+            @Query("checkout") String checkout,
+            @Query("guest-num") Integer guestNum,
+            @Query("min-price") Double minPrice,
+            @Query("max-price") Double maxPrice,
+            @Query("amenities") String amenities,
+            @Query("property-type") String propertyType,
+            @Query("min-rating") Double minRating
+    );
 }
