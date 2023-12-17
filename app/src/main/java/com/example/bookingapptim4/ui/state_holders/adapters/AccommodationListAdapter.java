@@ -29,7 +29,11 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
 
     @Override
     public int getCount() {
-        return accommodations.size();
+        if (accommodations != null) {
+            return accommodations.size();
+        } else {
+            return 0;
+        }
     }
 
     /*
@@ -65,6 +69,7 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
+
         Accommodation accommodation = getItem(position);
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.accommodation_card,
@@ -79,14 +84,19 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
         TextView accommodationRating = convertView.findViewById(R.id.accommodation_rating);
 
 
-        if(accommodation != null){
+        if (accommodation != null) {
             accommodationName.setText(accommodation.getName());
             accommodationDescription.setText(accommodation.getDescription());
-            accommodationLocation.setText(accommodation.getLocation());
-            accommodationTotalPrice.setText(Integer.toString(accommodation.getPrice())  + "e");
-            accommodationPricePerNight.setText(Integer.toString(accommodation.getPrice()) + "e/night");
-            accommodationRating.setText("4.5");
 
+            String locationText = String.format("%s, %s, %s",
+                    accommodation.getLocation().getCountry(),
+                    accommodation.getLocation().getCity(),
+                    accommodation.getLocation().getAddress());
+            accommodationLocation.setText(locationText);
+
+            accommodationTotalPrice.setText(Integer.toString(100) + "e");
+            accommodationPricePerNight.setText(Integer.toString(20) + "e/night");
+            accommodationRating.setText("4.5");
 
             accommodationCard.setOnClickListener(v -> {
                 // Handle click on the item at 'position'
@@ -95,7 +105,6 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
 
                 Navigation.findNavController(v).navigate(R.id.nav_accommodation_details, bundle);
             });
-
         }
 
         return convertView;

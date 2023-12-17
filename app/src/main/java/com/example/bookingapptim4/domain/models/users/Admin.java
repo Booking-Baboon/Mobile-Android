@@ -1,4 +1,9 @@
 package com.example.bookingapptim4.domain.models.users;
 
-public class Admin  extends User{
+import android.os.Parcel;
+
+public class Admin extends User{
+    protected Admin(Parcel in) {
+        super(in);
+    }
 }

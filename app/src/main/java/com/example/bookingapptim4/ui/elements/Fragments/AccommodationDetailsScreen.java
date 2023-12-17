@@ -8,9 +8,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.example.bookingapptim4.R;
+import com.example.bookingapptim4.ui.state_holders.adapters.AmenityListAdapter;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
+import com.example.bookingapptim4.domain.models.accommodations.Amenity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,6 +23,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AccommodationDetailsScreen#newInstance} factory method to
@@ -26,14 +32,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
  */
 public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCallback{
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    ListView amenitiesListView;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    Accommodation accommodation;
 
     public AccommodationDetailsScreen() {
         // Required empty public constructor
@@ -59,11 +60,13 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
 
         Bundle args = getArguments();
         if (args != null && args.containsKey("selectedAccommodation")) {
-            Accommodation selectedAccommodation = args.getParcelable("selectedAccommodation");
+            accommodation = args.getParcelable("selectedAccommodation");
             //populate detailed screen ...
 
 
         }
+
+
     }
 
 //    @Override
@@ -80,6 +83,17 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
         View view = inflater.inflate(R.layout.fragment_accommodation_details_screen, container, false);
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById((R.id.maps));
         mapFragment.getMapAsync(this);
+
+
+        //AMENITIES
+        ArrayList<Amenity> amenities = (ArrayList<Amenity>) accommodation.getAmenities();
+
+        amenitiesListView=(ListView)view.findViewById(R.id.amenityList);
+//        ArrayAdapter amenityListAdapter = new ArrayAdapter(getActivity(),R.layout.amenity_item,amenities);
+
+        AmenityListAdapter amenityListAdapter=new AmenityListAdapter(getActivity(),amenities);
+        amenitiesListView.setAdapter(amenityListAdapter);//sets the adapter for listView
+
         return view;
     }
 

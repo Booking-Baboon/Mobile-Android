@@ -5,116 +5,149 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.example.bookingapptim4.domain.models.shared.Image;
+import com.example.bookingapptim4.domain.models.users.Host;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Accommodation implements Parcelable {
 
-    private String Name;
-    private String Description;
-    private String Location;
-    private boolean PricingPerPerson;
-    private int MinGuests;
-    private int MaxGuests;
-    private List<String> Amenities;
-    private String HostUsername;
-    private int Price;
+    private Long id;
+    private String name;
+    private String description;
+    private Host host;
+    private Location location;
+    private List<Amenity> amenities;
+    private List<AvailablePeriod> availablePeriods;
+    private Integer minGuests;
+    private Integer maxGuests;
+    private Boolean pricingPerPerson;
+    private AccommodationType type;
+    private boolean isAutomaticallyAccepted;
+    private List<Image> images;
 
-    public Accommodation(String name, String description, String location, int price) {
-        Name = name;
-        Description = description;
-        Location = location;
-        Price = price;
-    }
-
-    public Accommodation(String name, String description, String location, boolean pricingPerPerson, int minGuests, int maxGuests, List<String> amenities, String hostUsername, int price) {
-        Name = name;
-        Description = description;
-        Location = location;
-        PricingPerPerson = pricingPerPerson;
-        MinGuests = minGuests;
-        MaxGuests = maxGuests;
-        Amenities = amenities;
-        HostUsername = hostUsername;
-        Price = price;
+    public Accommodation(Long id, String name, String description, Host host, Location location, List<Amenity> amenities, List<AvailablePeriod> availablePeriods, Integer minGuests, Integer maxGuests, Boolean pricingPerPerson, AccommodationType type, boolean isAutomaticallyAccepted, List<Image> images) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.host = host;
+        this.location = location;
+        this.amenities = amenities;
+        this.availablePeriods = availablePeriods;
+        this.minGuests = minGuests;
+        this.maxGuests = maxGuests;
+        this.pricingPerPerson = pricingPerPerson;
+        this.type = type;
+        this.isAutomaticallyAccepted = isAutomaticallyAccepted;
+        this.images = images;
     }
 
     protected Accommodation(Parcel in) {
-        Name = in.readString();
-        Description = in.readString();
-        Location = in.readString();
-        Price =Integer.getInteger(in.readString()) ;
+        id = in.readLong();
+        name = in.readString();
+        description = in.readString();
+        host = in.readParcelable(Host.class.getClassLoader());
+        location = in.readParcelable(Location.class.getClassLoader());
+
+        // Read ArrayList instead of List
+        amenities = new ArrayList<>();
+        in.readList(amenities, Amenity.class.getClassLoader());
+
+        // Read ArrayList instead of List
+        availablePeriods = new ArrayList<>();
+        in.readList(availablePeriods, AvailablePeriod.class.getClassLoader());
+
+        minGuests = in.readInt();
+        maxGuests = in.readInt();
+        pricingPerPerson = in.readByte() != 0;
+        type = (AccommodationType) in.readSerializable();
+        isAutomaticallyAccepted = in.readByte() != 0;
+
+        // Read ArrayList instead of List
+        images = new ArrayList<>();
+        in.readList(images, Image.class.getClassLoader());
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
-        return Name;
-    }
-
-    public void setName(String name) {
-        Name = name;
+        return name;
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
-    public void setDescription(String description) {
-        Description = description;
+    public Host getHost() {
+        return host;
     }
 
-    public String getLocation() {
-        return Location;
+    public Location getLocation() {
+        return location;
     }
 
-    public void setLocation(String location) {
-        Location = location;
+    public List<Amenity> getAmenities() {
+        return amenities;
     }
 
-    public boolean isPricingPerPerson() {
-        return PricingPerPerson;
+    public List<AvailablePeriod> getAvailablePeriods() {
+        return availablePeriods;
     }
 
-    public void setPricingPerPerson(boolean pricingPerPerson) {
-        PricingPerPerson = pricingPerPerson;
+    public Integer getMinGuests() {
+        return minGuests;
     }
 
-    public int getMinGuests() {
-        return MinGuests;
+    public Integer getMaxGuests() {
+        return maxGuests;
     }
 
-    public void setMinGuests(int minGuests) {
-        MinGuests = minGuests;
+    public Boolean getPricingPerPerson() {
+        return pricingPerPerson;
     }
 
-    public int getMaxGuests() {
-        return MaxGuests;
+    public AccommodationType getType() {
+        return type;
     }
 
-    public void setMaxGuests(int maxGuests) {
-        MaxGuests = maxGuests;
+    public boolean isAutomaticallyAccepted() {
+        return isAutomaticallyAccepted;
     }
 
-    public List<String> getAmenities() {
-        return Amenities;
+    public List<Image> getImages() {
+        return images;
     }
 
-    public void setAmenities(List<String> amenities) {
-        Amenities = amenities;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public String getHostUsername() {
-        return HostUsername;
-    }
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeParcelable(host, flags);
+        dest.writeParcelable(location, flags);
 
-    public void setHostUsername(String hostUsername) {
-        HostUsername = hostUsername;
-    }
+        // Convert List to ArrayList before writing
+        dest.writeList(new ArrayList<>(amenities));
 
-    public int getPrice() {
-        return Price;
-    }
+        // Convert List to ArrayList before writing
+        dest.writeList(new ArrayList<>(availablePeriods));
 
-    public void setPrice(int price) {
-        Price = price;
+        dest.writeInt(minGuests);
+        dest.writeInt(maxGuests);
+        dest.writeByte((byte) (pricingPerPerson ? 1 : 0));
+        dest.writeSerializable(type);
+        dest.writeByte((byte) (isAutomaticallyAccepted ? 1 : 0));
+
+        // Convert List to ArrayList before writing
+        dest.writeList(new ArrayList<>(images));
     }
 
     public static final Creator<Accommodation> CREATOR = new Creator<Accommodation>() {
@@ -128,17 +161,4 @@ public class Accommodation implements Parcelable {
             return new Accommodation[size];
         }
     };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeString(Name);
-        dest.writeString(Description);
-        dest.writeString(Location);
-        dest.writeString(Integer.toString(Price));
-    }
 }
