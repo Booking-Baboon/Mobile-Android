@@ -11,23 +11,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".fragments.MainScreen">
-        <LinearLayout
-            android:id="@+id/linear1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp">
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/search_text"
-                app:queryHint="Search"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
-                />
-        </LinearLayout>
         <LinearLayout
             android:id="@+id/linear2"
             android:layout_width="match_parent"
@@ -47,17 +31,7 @@
                 tools:ignore="TextContrastCheck" />
 
 
-            <Spinner
-                android:id="@+id/btnSort"
-                android:layout_width="169dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_weight="0.3"
-                android:contentDescription="@string/sort"
-                android:text="@string/sort"
-                android:tooltipText="@string/sort" />
-            <!--            android:background="?android:attr/colorPrimary"-->
-        </LinearLayout>
+            </LinearLayout>
 
 
         <ListView

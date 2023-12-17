@@ -4,23 +4,30 @@ package com.example.bookingapptim4.ui.elements.Fragments;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.data_layer.repositories.accommodations.AccommodationUtils;
@@ -32,6 +39,10 @@ import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 import com.example.bookingapptim4.ui.state_holders.view_models.AccommodationViewModel;
 import com.example.bookingapptim4.databinding.FragmentGuestMainScreenBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 
@@ -68,55 +79,39 @@ public class FragmentGuestMainScreen extends Fragment{
 
         accommodationListView = root.findViewById(R.id.scroll_accommodations_list);
 
-        SearchView searchView = binding.searchText;
-        accommodationViewModel.getText().observe(getViewLifecycleOwner(), searchView::setQueryHint);
-
         Button btnFilters = binding.btnFilters;
         btnFilters.setOnClickListener(v -> {
-            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity(), 0);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             View dialogView = getLayoutInflater().inflate(R.layout.bottom_sheet_filter, null);
 
-            //Fill
+            // Fill
             fillAccommodationTypeCheckboxes(dialogView);
             fillAmenitiesCheckboxes(dialogView);
+            loadDateRangePicker(dialogView);
 
-            bottomSheetDialog.setContentView(dialogView);
-            Button applyFilterButton = dialogView.findViewById(R.id.apply_filter_button);
-            applyFilterButton.setOnClickListener(a ->{
-//                Apply filters
-                bottomSheetDialog.dismiss();
+            builder.setView(dialogView);
+            AlertDialog alertDialog = builder.create();
+
+            // Find the close button and set an OnClickListener to dismiss the dialog
+            ImageButton btnClose = dialogView.findViewById(R.id.btnClose);
+            btnClose.setOnClickListener(closeView -> {
+                alertDialog.dismiss();
             });
 
-            bottomSheetDialog.show();
+            Button applySearchFormButton = dialogView.findViewById(R.id.applySearchFormButton);
+            applySearchFormButton.setOnClickListener(a -> {
+                alertDialog.dismiss();
+            });
+
+            Button clearSearchFormButton = dialogView.findViewById(R.id.clearSearchFormButton);
+            clearSearchFormButton.setOnClickListener(a -> {
+                clearFormFields(dialogView);
+            });
+
+            alertDialog.show();
         });
 
 
-
-        Spinner spinner = binding.btnSort;
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_spinner_item,
-                getResources().getStringArray(R.array.sort_array));
-        // Specify the layout to use when the list of choices appears
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinner.setAdapter(arrayAdapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Sort implementation
-            }
-
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
-            }
-        });
-
-
-
-//        FragmentTransition.to(FragmentAccommodationList.newInstance(), getActivity(), false, R.id.scroll_accommodations_list);
 
         return root;
     }
@@ -219,6 +214,67 @@ public class FragmentGuestMainScreen extends Fragment{
             checkBox.setText(amenity.getName()); // Assuming 'getName()' returns the amenity name
             checkBox.setId(View.generateViewId());
             amenitiesCheckboxesContainer.addView(checkBox);
+        }
+    }
+
+    private void loadDateRangePicker(View view){
+        MaterialButton dateRangePickerButton = view.findViewById(R.id.dateRangePickerButton);
+        TextView selectedDateRangeTextView = view.findViewById(R.id.selectedDateRangeTextView);
+
+        MaterialDatePicker<Pair<Long, Long>> datePicker = MaterialDatePicker.Builder.dateRangePicker().build();
+
+        dateRangePickerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getChildFragmentManager();
+                datePicker.show(fragmentManager, datePicker.toString());
+            }
+        });
+
+        datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
+            @Override
+            public void onPositiveButtonClick(Pair<Long, Long> selection) {
+                // Handle the selected date range
+                String selectedDateRange = datePicker.getHeaderText();
+                selectedDateRangeTextView.setText(selectedDateRange);
+            }
+        });
+    }
+
+    // Add this method to clear the form fields
+    private void clearFormFields(View dialogView) {
+        // Clear text input fields
+        TextInputEditText cityEditText = dialogView.findViewById(R.id.cityTextField).findViewById(R.id.cityInputTextField);
+        TextInputEditText guestNumEditText = dialogView.findViewById(R.id.guestNumTextField).findViewById(R.id.guestNumInputTextField);
+        TextInputEditText priceFromEditText = dialogView.findViewById(R.id.priceFromTextField).findViewById(R.id.priceFromInputTextField);
+        TextInputEditText priceToEditText = dialogView.findViewById(R.id.priceToTextField).findViewById(R.id.priceToInputTextField);
+
+        cityEditText.setText("");
+        guestNumEditText.setText("");
+        priceFromEditText.setText("");
+        priceToEditText.setText("");
+
+        // Clear date range
+        MaterialButton dateRangePickerButton = dialogView.findViewById(R.id.dateRangePickerButton);
+        TextView selectedDateRangeTextView = dialogView.findViewById(R.id.selectedDateRangeTextView);
+        dateRangePickerButton.setText("Choose Date Range");
+        selectedDateRangeTextView.setText("");
+
+        // Clear checkboxes
+        clearCheckboxes(dialogView.findViewById(R.id.accommodationTypeCheckboxes));
+        clearCheckboxes(dialogView.findViewById(R.id.amenitiesCheckboxes));
+
+    }
+
+
+    private void clearCheckboxes(LinearLayout checkboxContainer) {
+        int childCount = checkboxContainer.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View childView = checkboxContainer.getChildAt(i);
+            if (childView instanceof CheckBox) {
+                CheckBox checkBox = (CheckBox) childView;
+                checkBox.setChecked(false);
+            }
         }
     }
 }
