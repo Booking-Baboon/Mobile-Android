@@ -81,18 +81,19 @@ public class FragmentGuestMainScreen extends Fragment{
         binding = FragmentGuestMainScreenBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        accommodationListView = root.findViewById(R.id.scroll_accommodations_list);
+
         //Loading...
         loadAmenities();
         searchAccommodations();
 
-        accommodationListView = root.findViewById(R.id.scroll_accommodations_list);
-
+        //Define filter dialog
         Button btnFilters = binding.btnFilters;
         btnFilters.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             View dialogView = getLayoutInflater().inflate(R.layout.bottom_sheet_filter, null);
 
-            // Fill search dialog
+            // Fill filter dialog
             fillAccommodationTypeCheckboxes(dialogView);
             fillAmenitiesCheckboxes(dialogView);
             loadDateRangePicker(dialogView);
@@ -151,8 +152,8 @@ public class FragmentGuestMainScreen extends Fragment{
                 (filter.getGuestNum() != null) ? filter.getGuestNum() : null,
                 (filter.getMinPrice() != null) ? filter.getMinPrice() : null,
                 (filter.getMaxPrice() != null) ? filter.getMaxPrice() : null,
-                (filter.getAmenities() != null) ? TextUtils.join(",", filter.getAmenities()) : null,
-                (filter.getTypes() != null) ? TextUtils.join(",", filter.getTypes()) : null,
+                (filter.getAmenities() != null && !filter.getAmenities().isEmpty()) ? TextUtils.join(",", filter.getAmenities()) : null,
+                (filter.getTypes() != null && !filter.getTypes().isEmpty()) ? TextUtils.join(",", filter.getTypes()) : null,
                 (filter.getMinRating() != null) ? filter.getMinRating() : null);
         call.enqueue(new Callback<ArrayList<Accommodation>>() {
             @Override
@@ -180,14 +181,6 @@ public class FragmentGuestMainScreen extends Fragment{
     }
 
     private void loadAmenities(){
-        /*
-         * Poziv REST servisa se odvija u pozadini i mi ne moramo da vodimo racuna o tome
-         * Samo je potrebno da registrujemo sta da se desi kada odgovor stigne od nas
-         * Taj deo treba da implementiramo dodavajuci Callback<List<Event>> unutar enqueue metode
-         *
-         * Servis koji pozivamo izgleda:
-         * http://<service_ip_adress>:<service_port>/api/product
-         * */
         Call<ArrayList<Amenity>> call = AmenityUtils.amenityService.getAll();
         call.enqueue(new Callback<ArrayList<Amenity>>() {
             @Override
@@ -214,26 +207,22 @@ public class FragmentGuestMainScreen extends Fragment{
 
         LinearLayout checkboxContainer = view.findViewById(R.id.accommodationTypeCheckboxes);
 
-        // Get the values from the AccommodationType enum
         AccommodationType[] values = AccommodationType.values();
 
-        // Dynamically add CheckBoxes to the LinearLayout
         for (AccommodationType type : values) {
             CheckBox checkBox = new CheckBox(requireContext());
-            checkBox.setText(type.toString()); // Assuming toString() gives the text representation of the enum
+            checkBox.setText(type.toString());
             checkBox.setId(View.generateViewId());
             checkboxContainer.addView(checkBox);
         }
     }
 
     private void fillAmenitiesCheckboxes(View view){
-        // Find the LinearLayout container for amenities checkboxes
         LinearLayout amenitiesCheckboxesContainer = view.findViewById(R.id.amenitiesCheckboxes);
 
-        // Dynamically add CheckBoxes for each amenity
         for (Amenity amenity : allAmenities) {
             CheckBox checkBox = new CheckBox(requireContext());
-            checkBox.setText(amenity.getName()); // Assuming 'getName()' returns the amenity name
+            checkBox.setText(amenity.getName());
             checkBox.setId(View.generateViewId());
             amenitiesCheckboxesContainer.addView(checkBox);
         }
@@ -251,7 +240,6 @@ public class FragmentGuestMainScreen extends Fragment{
         });
 
         datePicker.addOnPositiveButtonClickListener(selection -> {
-            // Handle the selected date range
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
             long startDateMillis = selection.first;
@@ -266,7 +254,6 @@ public class FragmentGuestMainScreen extends Fragment{
             selectedDateRangeTextView.setText(selectedDateRange);
         });
     }
-
 
     private void clearFormFields(View dialogView) {
         // Clear text input fields
@@ -319,7 +306,10 @@ public class FragmentGuestMainScreen extends Fragment{
                 accommodationFilterViewModel.getGuestNum(),
                 accommodationFilterViewModel.getPriceFrom(),
                 accommodationFilterViewModel.getPriceTo(),
-                startDate, endDate, convertToAccommodationTypeList(accommodationFilterViewModel.getSelectedAccommodationTypes()), accommodationFilterViewModel.getSelectedAmenities());
+                startDate,
+                endDate,
+                convertToAccommodationTypeList(accommodationFilterViewModel.getSelectedAccommodationTypes()),
+                accommodationFilterViewModel.getSelectedAmenities());
     }
 
 
@@ -390,34 +380,19 @@ public class FragmentGuestMainScreen extends Fragment{
             state.putString("priceFrom", accommodationFilterViewModel.getPriceFrom());
             state.putString("priceTo", accommodationFilterViewModel.getPriceTo());
             state.putString("selectedDateRange", accommodationFilterViewModel.getSelectedDateRange());
-
-            // Convert selectedAccommodationTypes to ArrayList<String>
-            ArrayList<String> selectedAccommodationTypes = accommodationFilterViewModel.getSelectedAccommodationTypes();
-            state.putStringArrayList("selectedAccommodationTypes", selectedAccommodationTypes);
-
-            // Save selectedAmenities as ArrayList<String>
+            state.putStringArrayList("selectedAccommodationTypes", accommodationFilterViewModel.getSelectedAccommodationTypes());
             state.putStringArrayList("selectedAmenities", accommodationFilterViewModel.getSelectedAmenities());
         }
     }
     private void restoreState(View view, Bundle state) {
         if (state != null) {
-            // Restore state from ViewModel
             setTextToEditText(view, R.id.cityInputTextField, state.getString("city", ""));
             setTextToEditText(view, R.id.guestNumInputTextField, state.getString("guestNum", ""));
             setTextToEditText(view, R.id.priceFromInputTextField, state.getString("priceFrom", ""));
             setTextToEditText(view, R.id.priceToInputTextField, state.getString("priceTo", ""));
             setTextToTextView(view, R.id.selectedDateRangeTextView, state.getString("selectedDateRange", ""));
-
-            // Restore selectedAccommodationTypes as ArrayList<String> and convert it to ArrayList<AccommodationType>
-            ArrayList<String> selectedAccommodationTypes = state.getStringArrayList("selectedAccommodationTypes");
-
-            // Restore selectedAmenities as ArrayList<String>
-            ArrayList<String> selectedAmenities = state.getStringArrayList("selectedAmenities");
-
-            setSelectedCheckboxes(view, R.id.accommodationTypeCheckboxes, selectedAccommodationTypes);
-            setSelectedCheckboxes(view, R.id.amenitiesCheckboxes, selectedAmenities);
-
-            dialogInstanceState = state.getBundle("dialogInstanceState");
+            setSelectedCheckboxes(view, R.id.accommodationTypeCheckboxes, state.getStringArrayList("selectedAccommodationTypes"));
+            setSelectedCheckboxes(view, R.id.amenitiesCheckboxes, state.getStringArrayList("selectedAmenities"));
         }
     }
     private void setTextToEditText(View dialogView, @IdRes int editTextId, String text) {
