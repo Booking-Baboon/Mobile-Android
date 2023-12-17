@@ -22,11 +22,11 @@ public class User implements Parcelable {
 
     private String phoneNumber;
 
-    private Role role = Role.GUEST;
+    private Role role = Role.UNAUTHORIZED;
 
     private String jwt;
 
-    protected User(Parcel in) {
+    public User(Parcel in) {
         if (in.readByte() == 0) {
             id = null;
         } else {
@@ -40,6 +40,93 @@ public class User implements Parcelable {
         phoneNumber = in.readString();
         jwt = in.readString();
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public void setRole(String role) {
+        this.role = Role.valueOf(role);
+    }
+
+    public void setJwt(String jwt) {
+        this.jwt = jwt;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public String getJwt() {
+        return jwt;
+    }
+
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    public User(){}
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
