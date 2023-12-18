@@ -48,4 +48,5 @@ public class Host extends User implements Parcelable {
     public Host(User user) {
         super(user.getPassword(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getAddress(), user.getPhoneNumber());
     }
+
 }
