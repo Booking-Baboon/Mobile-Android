@@ -22,7 +22,6 @@ import retrofit2.Response;
 public class LoginScreen extends AppCompatActivity {
 
     private TextInputLayout textInputEmail, textInputPassword;
-    private UserUtils userUtils;
 
     private User user = new User();
 
@@ -75,6 +74,10 @@ public class LoginScreen extends AppCompatActivity {
                             startActivity(intent);
                             break;
                         case HOST:
+                            Intent intent1 = new Intent(LoginScreen.this, HostMainScreen.class);
+
+                            startActivity(intent1);
+                            break;
                         case ADMIN:
                         case UNAUTHORIZED:
 

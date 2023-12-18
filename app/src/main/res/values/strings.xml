@@ -57,5 +57,6 @@
     <string name="cityInput">ex. Belgrade</string>
     <string name="guestNumInput">ex. 2</string>
     <string name="searchTitle">Search form</string>
+    <string name="hostSwitch">Host </string>
 
 </resources>

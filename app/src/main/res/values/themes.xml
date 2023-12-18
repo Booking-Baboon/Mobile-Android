@@ -17,6 +17,9 @@
 
         <item name="materialButtonStyle">@style/Button.CurvedEdges</item>
 
+
+
+
     </style>
     <style name="Button.CurvedEdges" parent="Widget.MaterialComponents.Button">
         <item name="android:background">@drawable/curved_buttons</item>
@@ -29,4 +32,11 @@
     <style name="Button.GreenCurved" parent="Widget.MaterialComponents.Button">
         <item name="colorPrimary">#16D329</item>
     </style>
+
+    <style name="SwitchMaterial" parent="">
+        <item name="colorOnSurface">#E3A74C</item>
+        <item name="colorSecondary">#FEA31A</item>
+    </style>
+
+
 </resources>

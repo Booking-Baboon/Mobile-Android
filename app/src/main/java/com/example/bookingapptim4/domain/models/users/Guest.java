@@ -17,4 +17,16 @@ public class Guest extends User {
     protected Guest(Parcel in) {
         super(in);
     }
+
+
+    public Guest() {
+    }
+
+    public Guest(String password, String email, String firstName, String lastName, String address, String phoneNumber) {
+        super(password, email, firstName, lastName, address, phoneNumber);
+    }
+
+    public Guest(User user) {
+        super(user.getPassword(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getAddress(), user.getPhoneNumber());
+    }
 }
