@@ -6,7 +6,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.helper.widget.Carousel;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,17 +17,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.data_layer.repositories.accommodations.AmenityUtils;
+import com.example.bookingapptim4.data_layer.repositories.reviews.AccommodationReviewUtils;
 import com.example.bookingapptim4.data_layer.repositories.shared.ImageUtils;
 import com.example.bookingapptim4.data_layer.repositories.users.HostUtils;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 import com.example.bookingapptim4.domain.models.accommodations.Amenity;
 
+import com.example.bookingapptim4.domain.models.reviews.AccommodationReview;
 import com.example.bookingapptim4.domain.models.shared.Image;
 import com.example.bookingapptim4.domain.models.users.Host;
+import com.example.bookingapptim4.ui.state_holders.adapters.AccommodationReviewAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -54,6 +60,7 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
     Accommodation accommodation;
     ImageCarousel imageCarousel;
     List<CarouselItem> images = new ArrayList<>();
+    RatingBar ratingBar;
     public AccommodationDetailsScreen() {
         // Required empty public constructor
     }
@@ -98,12 +105,23 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_accommodation_details_screen, container, false);
+
+        NestedScrollView nestedScrollView = view.findViewById(R.id.accommodation_details_screen);
+        nestedScrollView.setFillViewport(true);
+
+        //MAP
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById((R.id.maps));
         mapFragment.getMapAsync(this);
 
+        //REGISTER CAROUSEL
         imageCarousel = view.findViewById(R.id.accommodationCarousel);
         imageCarousel.registerLifecycle(getLifecycle());
 
+        //REGISER RATING BAR
+        ratingBar = view.findViewById(R.id.ratingBarAccommodation);
+        ratingBar.setIsIndicator(true);
+
+        //FILL
         fillViewWithDetails(view);
 
         return view;
@@ -118,6 +136,9 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
         //TITLE
         TextView titleTextView = view.findViewById(R.id.textViewAccommodationTitle);
         titleTextView.setText(accommodation.getName());
+
+        //AVERAGE RATING
+        loadAverageRating(view);
 
         //DESCRIPTION
         TextView descriptionTextView = view.findViewById(R.id.textViewAccommodationDescription);
@@ -146,6 +167,9 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
 
         //HOST
         loadHost(view);
+
+        //REVIEWS
+        loadReviews(view);
     }
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
@@ -193,20 +217,19 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
             @Override
             public void onResponse(Call<Host> call, Response<Host> response) {
                 if (response.code() == 200){
-                    Log.d("REZ","Meesage recieved");
-                    System.out.println(response.body());
+                    Log.d("HostUtils","Meesage recieved");
                     Host host = response.body();
                     TextView hostTextView = view.findViewById(R.id.textViewAccommodationHostUsername);
                     hostTextView.setText(host.getFirstName() + " " +host.getLastName());
 
                 }else{
-                    Log.d("REZ","Meesage recieved: "+response.code());
+                    Log.d("HostUtils","Meesage recieved: "+response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<Host> call, Throwable t) {
-                Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
+                Log.d("HostUtils", t.getMessage() != null?t.getMessage():"error");
             }
         });
 
@@ -238,6 +261,62 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.d("ImageUtils", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
+    }
+
+    private void loadReviews(View view){
+        Call<ArrayList<AccommodationReview>> call = AccommodationReviewUtils.accommodationReviewService.getAccommodationReviews(accommodation.getId());
+        call.enqueue(new Callback<ArrayList<AccommodationReview>>() {
+            @Override
+            public void onResponse(Call<ArrayList<AccommodationReview>> call, Response<ArrayList<AccommodationReview>> response) {
+                if (response.code() == 200){
+                    Log.d("AccommodationReviewUtils","Meesage recieved");
+                    ArrayList<AccommodationReview> reviews = response.body();
+
+                    TextView accommodationReviewTextView = view.findViewById(R.id.accommodationReviewTextView);
+                    if(!reviews.isEmpty()){
+                        //FILL REVIEWS
+                        RecyclerView reviewRecyclerView = view.findViewById(R.id.reviewRecyclerView);
+                        AccommodationReviewAdapter reviewAdapter = new AccommodationReviewAdapter(reviews);
+                        reviewRecyclerView.setAdapter(reviewAdapter);
+                        accommodationReviewTextView.setText("Reviws:");
+                    } else {
+                        accommodationReviewTextView.setText("No reviews");
+                    }
+
+                }else{
+                    Log.d("AccommodationReviewUtils","Meesage recieved: "+response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<AccommodationReview>> call, Throwable t) {
+                Log.d("AccommodationReviewUtils", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
+    }
+
+    private void loadAverageRating(View view){
+        Call<Float> call = AccommodationReviewUtils.accommodationReviewService.getAverateRating(accommodation.getId());
+        call.enqueue(new Callback<Float>() {
+            @Override
+            public void onResponse(Call<Float> call, Response<Float> response) {
+                if (response.code() == 200){
+                    Log.d("AccommodationReviewUtils","Meesage recieved");
+                    Float averageRating = response.body();
+
+                    if(averageRating != null) {
+                        ratingBar.setRating(averageRating);
+                    }
+                }else{
+                    Log.d("AccommodationReviewUtils","Meesage recieved: "+response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Float> call, Throwable t) {
+                Log.d("AccommodationReviewUtils", t.getMessage() != null?t.getMessage():"error");
             }
         });
     }
