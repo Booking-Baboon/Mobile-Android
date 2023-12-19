@@ -71,12 +71,12 @@ public class LoginScreen extends AppCompatActivity {
                     switch (user.getRole()){
                         case GUEST:
                             Intent intent = new Intent(LoginScreen.this, GuestMainScreen.class);
-
+                            intent.putExtra("USER", user);
                             startActivity(intent);
                             break;
                         case HOST:
                             Intent intent1 = new Intent(LoginScreen.this, HostMainScreen.class);
-
+                            intent1.putExtra("USER", user);
                             startActivity(intent1);
                             break;
                         case ADMIN:

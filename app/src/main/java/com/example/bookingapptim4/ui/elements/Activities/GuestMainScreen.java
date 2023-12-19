@@ -15,6 +15,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.databinding.ActivityGuestMainScreenBinding;
+import com.example.bookingapptim4.domain.models.users.Guest;
+import com.example.bookingapptim4.domain.models.users.User;
 
 public class GuestMainScreen extends AppCompatActivity {
 
@@ -29,6 +31,8 @@ public class GuestMainScreen extends AppCompatActivity {
         binding = ActivityGuestMainScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        User guest = getIntent().getParcelableExtra("USER");
+        System.out.println( "Successfully logged in as:" +  guest.getEmail());
         toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
