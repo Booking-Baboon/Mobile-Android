@@ -1,9 +1,12 @@
 package com.example.bookingapptim4.ui.elements.Activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +19,9 @@ import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
 import com.example.bookingapptim4.domain.models.users.Guest;
 import com.example.bookingapptim4.domain.models.users.Host;
 import com.example.bookingapptim4.domain.models.users.User;
+import com.example.bookingapptim4.ui.state_holders.text_watchers.EmailFieldTextWatcher;
+import com.example.bookingapptim4.ui.state_holders.text_watchers.PhoneFieldTextWatcher;
+import com.example.bookingapptim4.ui.state_holders.text_watchers.RequiredFieldTextWatcher;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -42,9 +48,17 @@ public class RegisterScreen extends AppCompatActivity {
         textInputPassword = findViewById(R.id.passwordRegister);
         textInputPasswordConfirm = findViewById(R.id.passwordConfirmRegister);
         hostSwitch = findViewById(R.id.hostSwitchRegister);
+        textInputFirstName.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(textInputFirstName));
+        textInputLastName.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(textInputLastName));
+        textInputEmail.getEditText().addTextChangedListener(new EmailFieldTextWatcher(textInputEmail));
+        textInputAddress.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(textInputAddress));
+        textInputPassword.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(textInputPassword));
+        textInputPasswordConfirm.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(textInputPasswordConfirm));
+        textInputPhone.getEditText().addTextChangedListener(new PhoneFieldTextWatcher(textInputPhone));
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!areFieldsValid()) return;
                 String firstName = textInputFirstName.getEditText().getText().toString();
                 String lastName = textInputLastName.getEditText().getText().toString();
                 String email = textInputEmail.getEditText().getText().toString();
@@ -116,4 +130,55 @@ public class RegisterScreen extends AppCompatActivity {
         });
 
     }
+
+    private boolean areFieldsValid() {
+
+        if (textInputFirstName.getEditText().length() == 0) {
+            textInputFirstName.setError("This field is required");
+            return false;
+        }else{
+            textInputFirstName.setError(null);
+        }
+
+        if (textInputLastName.getEditText().length() == 0) {
+            textInputLastName.setError("This field is required");
+            return false;
+        }
+
+
+        if (textInputEmail.getEditText().length() == 0) {
+            textInputEmail.setError("This field is required");
+            return false;
+        }
+
+        if (textInputAddress.getEditText().length() == 0) {
+            textInputAddress.setError("This field is required");
+            return false;
+        }
+
+        if (textInputPhone.getEditText().length() == 0) {
+            textInputPhone.setError("This field is required");
+            return false;
+        }
+
+        if (textInputPassword.getEditText().length() == 0) {
+            textInputPassword.setError("This field is required");
+            return false;
+        }
+
+        if (textInputPasswordConfirm.getEditText().length() == 0) {
+            textInputPasswordConfirm.setError("This field is required");
+            return false;
+        }
+
+        if(!textInputPassword.getEditText().getText().toString().equals(textInputPasswordConfirm.getEditText().getText().toString())){
+            textInputPassword.setError("Passwords must match");
+            textInputPasswordConfirm.setError("Passwords must match");
+            return false;
+        }
+
+        return true;
+    }
 }
+
+

@@ -13,6 +13,8 @@ import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
 
 import com.example.bookingapptim4.domain.models.users.User;
 import com.example.bookingapptim4.domain.shared.JwtUtils;
+import com.example.bookingapptim4.ui.state_holders.text_watchers.EmailFieldTextWatcher;
+import com.example.bookingapptim4.ui.state_holders.text_watchers.RequiredFieldTextWatcher;
 import com.google.android.material.textfield.TextInputLayout;
 
 import retrofit2.Call;
@@ -33,6 +35,8 @@ public class LoginScreen extends AppCompatActivity {
         Button loginButton = findViewById(R.id.loginButton);
         textInputEmail = findViewById(R.id.editText);
         textInputPassword = findViewById(R.id.editPassword);
+        textInputEmail.getEditText().addTextChangedListener(new EmailFieldTextWatcher(textInputEmail));
+        textInputPassword.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(textInputPassword));
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
