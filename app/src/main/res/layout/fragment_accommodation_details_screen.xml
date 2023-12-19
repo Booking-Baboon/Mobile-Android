@@ -11,13 +11,19 @@
             android:orientation="vertical">
 
                 <!-- Image View for the Accommodation Picture -->
-                <ImageView
-                    android:id="@+id/imageViewAccommodation"
+<!--                <ImageView-->
+<!--                    android:id="@+id/imageViewAccommodation"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="200dp"-->
+<!--                    android:scaleType="centerCrop"-->
+<!--                    android:src="@drawable/accommodation_image_example"-->
+<!--                    android:contentDescription="@string/accommodation_image"/>-->
+
+
+                <org.imaginativeworld.whynotimagecarousel.ImageCarousel
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/accommodation_image_example"
-                    android:contentDescription="@string/accommodation_image"/>
+                        android:id="@+id/accommodationCarousel"/>
 
                 <!-- Linear Layout for other content -->
                 <LinearLayout

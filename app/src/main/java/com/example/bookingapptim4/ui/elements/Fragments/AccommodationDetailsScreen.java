@@ -3,6 +3,7 @@ package com.example.bookingapptim4.ui.elements.Fragments;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.helper.widget.Carousel;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
@@ -16,10 +17,12 @@ import android.widget.TextView;
 
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.data_layer.repositories.accommodations.AmenityUtils;
+import com.example.bookingapptim4.data_layer.repositories.shared.ImageUtils;
 import com.example.bookingapptim4.data_layer.repositories.users.HostUtils;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 import com.example.bookingapptim4.domain.models.accommodations.Amenity;
 
+import com.example.bookingapptim4.domain.models.shared.Image;
 import com.example.bookingapptim4.domain.models.users.Host;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,9 +31,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.imaginativeworld.whynotimagecarousel.ImageCarousel;
+import org.imaginativeworld.whynotimagecarousel.model.CarouselItem;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,6 +50,8 @@ import retrofit2.Response;
  */
 public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCallback{
     Accommodation accommodation;
+    ImageCarousel imageCarousel;
+    List<CarouselItem> images = new ArrayList<>();
     public AccommodationDetailsScreen() {
         // Required empty public constructor
     }
@@ -89,12 +99,20 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById((R.id.maps));
         mapFragment.getMapAsync(this);
 
+        imageCarousel = view.findViewById(R.id.accommodationCarousel);
+        imageCarousel.registerLifecycle(getLifecycle());
+
         fillViewWithDetails(view);
 
         return view;
     }
 
     private void fillViewWithDetails(View view){
+        //IMAGES
+        for(Image image: accommodation.getImages()){
+            loadImage(image.getId());
+        }
+
         //TITLE
         TextView titleTextView = view.findViewById(R.id.textViewAccommodationTitle);
         titleTextView.setText(accommodation.getName());
@@ -160,5 +178,35 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
             }
         });
 
+    }
+
+    private void loadImage(Long imageId){
+        Call<ResponseBody> call = ImageUtils.imageService.getById(imageId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.code() == 200){
+
+                    try {
+                        Log.d("REZ","Meesage recieved");
+                        byte[] imageContent = response.body().bytes();
+                        String base64Image = ImageUtils.encodeImage(imageContent);
+                        String dataUri = "data:image/png;base64," + base64Image;
+                        images.add(new CarouselItem(dataUri));
+                        imageCarousel.setData(images);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }else{
+                    Log.d("ImageUtils","Meesage recieved: "+response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d("ImageUtils", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
     }
 }
