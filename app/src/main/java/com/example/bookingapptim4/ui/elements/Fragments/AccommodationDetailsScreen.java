@@ -1,5 +1,7 @@
 package com.example.bookingapptim4.ui.elements.Fragments;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -149,10 +151,40 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
     public void onMapReady(@NonNull GoogleMap googleMap) {
         GoogleMap mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(46.8182, 8.2275);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Switzerland"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        // Assuming locationText is in the format "Country, City, Address"
+//        String locationText = String.format(
+//                "%s, %s, %s",
+//                accommodation.getLocation().getCountry(),
+//                accommodation.getLocation().getCity(),
+//                accommodation.getLocation().getAddress()
+//        );
+
+        //TEMP LOCATION
+        String locationText = "Serbia, Novi Sad, Bulevar Oslobodjenja 14";
+
+
+        // Perform geocoding to get latitude and longitude
+        Geocoder geocoder = new Geocoder(requireContext());
+        try {
+            List<Address> addresses = geocoder.getFromLocationName(locationText, 1);
+
+            if (!addresses.isEmpty()) {
+                double latitude = addresses.get(0).getLatitude();
+                double longitude = addresses.get(0).getLongitude();
+
+                // Add a marker at the accommodation's location
+                LatLng accommodationLocation = new LatLng(latitude, longitude);
+                mMap.addMarker(new MarkerOptions().position(accommodationLocation).title(accommodation.getName()));
+
+                // Move the camera and zoom to the accommodation's location
+                float zoomLevel = 15.0f;
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(accommodationLocation, zoomLevel));
+            } else {
+                Log.d("MapUtils", "Geocoding failed, address not found");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadHost(View view){
