@@ -39,6 +39,7 @@ public class LoginScreen extends AppCompatActivity {
 
                 String email = textInputEmail.getEditText().getText().toString();
                 String password = textInputPassword.getEditText().getText().toString();
+                if(!areFieldsValid()) return;
                 login(new User(email, password));
 
             }
@@ -79,19 +80,36 @@ public class LoginScreen extends AppCompatActivity {
                             startActivity(intent1);
                             break;
                         case ADMIN:
-                        case UNAUTHORIZED:
+                        default:
+                            textInputEmail.setError("Invalid username or password");
 
                     }
                 }else{
                     Log.d("REZ","Meesage recieved: "+response.code());
+                    textInputEmail.setError("Invalid username or password");
                 }
             }
 
             @Override
             public void onFailure(Call<User>call, Throwable t) {
                 Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
+                textInputEmail.setError("Invalid username or password");
             }
         });
 
+    }
+
+    private boolean areFieldsValid() {
+        if (textInputEmail.getEditText().length() == 0) {
+            textInputEmail.setError("This field is required");
+            return false;
+        }
+
+        if (textInputPassword.getEditText().length() == 0) {
+            textInputPassword.setError("This field is required");
+            return false;
+        }
+
+        return true;
     }
 }
