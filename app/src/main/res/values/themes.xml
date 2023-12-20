@@ -16,11 +16,8 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
 
         <item name="materialButtonStyle">@style/Button.CurvedEdges</item>
-
-
-
-
     </style>
+
     <style name="Button.CurvedEdges" parent="Widget.MaterialComponents.Button">
         <item name="android:background">@drawable/curved_buttons</item>
     </style>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <RatingBar
+        android:id="@+id/ratingBarAccommodationReview"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:layout_marginTop="8dp"
+        android:numStars="5"
+        android:progressDrawable="@drawable/custom_rating_bar"
+        android:stepSize="0.5" />
+
+    <TextView
+        android:id="@+id/textViewAccommodationReviewer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="Reviewer:"/>
+
+    <TextView
+        android:id="@+id/textViewAccommodationReviewDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
+        android:text="Date:"/>
+
+
+    <TextView
+        android:id="@+id/textViewAccommodationReviewComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Review Message:"/>
+
+</LinearLayout>

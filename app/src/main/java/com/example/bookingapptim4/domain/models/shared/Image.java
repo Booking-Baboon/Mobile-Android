@@ -5,41 +5,42 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-public class Image implements Parcelable {
-    private Long id;
+public class Image {
+    Long id;
+    String path;
+    String fileName;
+    byte[] content;
 
-    protected Image(Parcel in) {
-        if (in.readByte() == 0) {
-            id = null;
-        } else {
-            id = in.readLong();
-        }
+    public Long getId() {
+        return id;
     }
 
-    public static final Creator<Image> CREATOR = new Creator<Image>() {
-        @Override
-        public Image createFromParcel(Parcel in) {
-            return new Image(in);
-        }
-
-        @Override
-        public Image[] newArray(int size) {
-            return new Image[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    @Override
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
-        if (id == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeLong(id);
-        }
+    public String getPath() {
+        return path;
     }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public byte[] getContent() {
+        return content;
+    }
+
+    public void setContent(byte[] content) {
+        this.content = content;
+    }
+
 }

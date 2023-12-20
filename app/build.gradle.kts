@@ -63,6 +63,7 @@ dependencies {
     implementation ("io.jsonwebtoken:jjwt-impl:0.11.2")
     implementation ("io.jsonwebtoken:jjwt-jackson:0.11.2")
     implementation ("com.fasterxml.jackson.core:jackson-databind:2.13.0")
+    implementation ("org.imaginativeworld.whynotimagecarousel:whynotimagecarousel:2.1.0")
 
 
 }

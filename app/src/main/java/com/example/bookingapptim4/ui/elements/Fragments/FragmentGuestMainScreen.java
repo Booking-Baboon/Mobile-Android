@@ -45,6 +45,7 @@ import com.example.bookingapptim4.ui.state_holders.view_models.AccommodationView
 import com.example.bookingapptim4.databinding.FragmentGuestMainScreenBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -107,6 +108,12 @@ public class FragmentGuestMainScreen extends Fragment{
 
             builder.setView(dialogView);
             AlertDialog alertDialog = builder.create();
+
+            //Add border radius
+            if (alertDialog.getWindow() != null) {
+                alertDialog.getWindow().setBackgroundDrawableResource(R.drawable.border_radius_background);
+            }
+
 
             ImageButton btnClose = dialogView.findViewById(R.id.btnClose);
             btnClose.setOnClickListener(closeView -> {
@@ -210,7 +217,7 @@ public class FragmentGuestMainScreen extends Fragment{
         AccommodationType[] values = AccommodationType.values();
 
         for (AccommodationType type : values) {
-            CheckBox checkBox = new CheckBox(requireContext());
+            MaterialCheckBox checkBox = new MaterialCheckBox(requireContext());
             checkBox.setText(type.toString());
             checkBox.setId(View.generateViewId());
             checkboxContainer.addView(checkBox);
@@ -221,7 +228,7 @@ public class FragmentGuestMainScreen extends Fragment{
         LinearLayout amenitiesCheckboxesContainer = view.findViewById(R.id.amenitiesCheckboxes);
 
         for (Amenity amenity : allAmenities) {
-            CheckBox checkBox = new CheckBox(requireContext());
+            MaterialCheckBox checkBox = new MaterialCheckBox(requireContext());
             checkBox.setText(amenity.getName());
             checkBox.setId(View.generateViewId());
             amenitiesCheckboxesContainer.addView(checkBox);
