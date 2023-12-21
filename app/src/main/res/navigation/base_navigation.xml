@@ -50,5 +50,50 @@
         app:popUpToInclusive="true"
         />
 
+    <fragment
+        android:id="@+id/nav_accommodations"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.AccommodationsScreen"
+        android:label="HostAccommodations"
+        tools:layout="@layout/fragment_accommodations_screen"
+        app:popUpTo="@+id/nav_main"
+        app:popUpToInclusive="true"
+        />
+
+    <fragment
+        android:id="@+id/nav_host_reservations"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.HostReservationScreen"
+        android:label="HostReservations"
+        tools:layout="@layout/fragment_host_reservation_screen"
+        app:popUpTo="@+id/nav_main"
+        app:popUpToInclusive="true"
+        />
+
+    <fragment
+        android:id="@+id/nav_accommodations_approval_screen"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.AccommodationsApprovalScreen"
+        android:label="AccommodationsApproval"
+        tools:layout="@layout/fragment_accommodations_approval_screen"
+        app:popUpTo="@+id/nav_main"
+        app:popUpToInclusive="true"
+        />
+
+    <fragment
+        android:id="@+id/nav_reported_comments_screen"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.ReportedCommentsScreen"
+        android:label="ReportedComments"
+        tools:layout="@layout/fragment_reported_comments_screen"
+        app:popUpTo="@+id/nav_main"
+        app:popUpToInclusive="true"
+        />
+
+    <fragment
+        android:id="@+id/nav_reported_users_screen"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.ReportedUsersScreen"
+        android:label="ReportedUsers"
+        tools:layout="@layout/fragment_reported_users_screen"
+        app:popUpTo="@+id/nav_main"
+        app:popUpToInclusive="true"
+        />
+
 
 </navigation>

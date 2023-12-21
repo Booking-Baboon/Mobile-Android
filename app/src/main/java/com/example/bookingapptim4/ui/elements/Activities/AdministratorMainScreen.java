@@ -8,18 +8,18 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.bookingapptim4.R;
-import com.example.bookingapptim4.databinding.ActivityHostMainScreenBinding;
+import com.example.bookingapptim4.databinding.ActivityAdministratorMainScreenBinding;
+import com.example.bookingapptim4.databinding.ActivityGuestMainScreenBinding;
 import com.example.bookingapptim4.domain.models.users.User;
 
-public class HostMainScreen extends AppCompatActivity {
+public class AdministratorMainScreen extends AppCompatActivity {
 
-    private ActivityHostMainScreenBinding binding;
+    private ActivityAdministratorMainScreenBinding binding;
     private Toolbar toolbar;
     private ActionBar actionBar;
     private NavController navController;
@@ -27,12 +27,11 @@ public class HostMainScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_host_main_screen);
-        binding = ActivityHostMainScreenBinding.inflate(getLayoutInflater());
+        binding = ActivityAdministratorMainScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        User host = getIntent().getParcelableExtra("USER");
-        System.out.println( "Successfully logged in as:" +  host.getEmail());
+        User admin = getIntent().getParcelableExtra("USER");
+        System.out.println( "Successfully logged in as:" +  admin.getEmail());
         toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
@@ -51,8 +50,7 @@ public class HostMainScreen extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        getMenuInflater().inflate(R.menu.host_toolbar, menu);
+        getMenuInflater().inflate(R.menu.admin_toolbar, menu);
         return true;
     }
 

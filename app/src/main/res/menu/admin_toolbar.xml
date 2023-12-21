@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/nav_main"
+        android:title="Main"
+        android:icon="@drawable/ic_home"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+
+
+    <item android:id="@+id/nav_reported_users_screen"
+        android:title="Reported users"
+        android:icon="@drawable/ic_reservation"
+        android:orderInCategory="100"
+        app:showAsAction="collapseActionView" />
+
+    <item android:id="@+id/nav_reported_comments_screen"
+        android:title="Reported comments"
+        android:icon="@drawable/ic_reservation"
+        android:orderInCategory="100"
+        app:showAsAction="collapseActionView" />
+
+    <item android:id="@+id/nav_accommodations_approval_screen"
+        android:title="Accommodation approval"
+        android:icon="@drawable/ic_reservation"
+        android:orderInCategory="100"
+        app:showAsAction="collapseActionView" />
+
+    <item android:id="@+id/nav_account"
+        android:title="Account"
+        android:orderInCategory="301"
+        app:showAsAction="collapseActionView" />
+</menu>
