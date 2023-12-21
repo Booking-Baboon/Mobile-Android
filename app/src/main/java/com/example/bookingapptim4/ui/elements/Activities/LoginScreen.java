@@ -84,6 +84,10 @@ public class LoginScreen extends AppCompatActivity {
                             startActivity(intent1);
                             break;
                         case ADMIN:
+                            Intent intent2 = new Intent(LoginScreen.this, AdministratorMainScreen.class);
+                            intent2.putExtra("USER", user);
+                            startActivity(intent2);
+                            break;
                         default:
                             textInputEmail.setError("Invalid username or password");
 
