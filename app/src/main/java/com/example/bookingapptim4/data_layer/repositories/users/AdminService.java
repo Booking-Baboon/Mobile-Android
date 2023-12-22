@@ -1,8 +1,6 @@
 package com.example.bookingapptim4.data_layer.repositories.users;
 
-import com.example.bookingapptim4.domain.models.users.Guest;
-import com.example.bookingapptim4.domain.models.users.User;
-import com.example.bookingapptim4.domain.models.users.UserUpdateRequest;
+import com.example.bookingapptim4.domain.models.users.Admin;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -11,18 +9,18 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 
-public interface GuestService {
+public interface AdminService {
     @Headers({
             "User-Agent: Mobile-Android",
             "Content-Type:application/json"
     })
-    @POST("guests/")
-    Call<Guest> create(@Body Guest guest);
+    @POST("admin/")
+    Call<Admin> create(@Body Admin admin);
 
     @Headers({
             "User-Agent: Mobile-Android",
             "Content-Type:application/json"
     })
-    @PUT("guests/")
-    Call<Guest> edit(@Body UserUpdateRequest guest, @Header("Authorization") String authorizationHeader);
+    @PUT("admin/")
+    Call<Admin> edit(@Body Admin admin, @Header("Authorization") String authorizationHeader);
 }

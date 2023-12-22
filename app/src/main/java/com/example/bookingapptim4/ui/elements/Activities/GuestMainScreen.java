@@ -17,6 +17,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.databinding.ActivityGuestMainScreenBinding;
 import com.example.bookingapptim4.domain.models.users.Guest;
+import com.example.bookingapptim4.domain.models.users.Role;
 import com.example.bookingapptim4.domain.models.users.User;
 import com.example.bookingapptim4.ui.state_holders.view_models.UserViewModel;
 
@@ -36,6 +37,7 @@ public class GuestMainScreen extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         User guest = getIntent().getParcelableExtra("USER");
+        guest.setRole(Role.GUEST);
         System.out.println( "Successfully logged in as:" +  guest);
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);

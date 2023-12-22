@@ -13,9 +13,14 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.bookingapptim4.R;
+import com.example.bookingapptim4.data_layer.repositories.users.GuestService;
+import com.example.bookingapptim4.data_layer.repositories.users.GuestUtils;
+import com.example.bookingapptim4.data_layer.repositories.users.HostService;
 import com.example.bookingapptim4.data_layer.repositories.users.UserService;
 import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
+import com.example.bookingapptim4.domain.models.users.Guest;
 import com.example.bookingapptim4.domain.models.users.User;
+import com.example.bookingapptim4.domain.models.users.UserUpdateRequest;
 import com.example.bookingapptim4.ui.elements.Activities.LoginScreen;
 import com.example.bookingapptim4.ui.state_holders.text_watchers.EmailFieldTextWatcher;
 import com.example.bookingapptim4.ui.state_holders.text_watchers.PhoneFieldTextWatcher;
@@ -44,6 +49,8 @@ public class AccountScreen extends Fragment {
     private String mParam2;
     private UserViewModel userViewModel;
     private UserService userService;
+    private GuestService guestService;
+    private HostService hostService;
     private User userProfile = new User();
 
     private TextInputLayout textInputEmail, textInputPassword, textInputFirstName, textInputLastName, textInputPhone, textInputAddress;
@@ -127,6 +134,21 @@ public class AccountScreen extends Fragment {
             }
         });
 
+        Button saveChangesButton = view.findViewById(R.id.saveChangesButton);
+
+        saveChangesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Check if all fields are valid
+                if (isInputValid()) {
+                    // Perform the save changes action
+                    saveChanges();
+                } else {
+                    // Show an error or handle invalid input
+                }
+            }
+        });
+
         Button logoutButton = view.findViewById(R.id.logoutButton);
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
@@ -139,7 +161,6 @@ public class AccountScreen extends Fragment {
                 userViewModel.getUserLiveData().observe(getViewLifecycleOwner(), user-> {
                    if (user != null) {
                        Call<Void> call = UserUtils.userService.logout("Bearer " + user.getJwt());
-
                        call.enqueue(new Callback<Void>() {
                            @Override
                            public void onResponse(Call<Void> call, Response<Void> response) {
@@ -160,5 +181,66 @@ public class AccountScreen extends Fragment {
         });
 
         return view;
+    }
+
+    // Method to check if all input fields are valid
+    private boolean isInputValid() {
+        return isEmailValid() && isFirstNameValid() && isLastNameValid() && isPhoneValid() && isAddressValid();
+    }
+
+    private boolean isEmailValid() {
+        return EmailFieldTextWatcher.isValid(textInputEmail.getEditText().getText().toString());
+    }
+
+    private boolean isFirstNameValid() {
+        return RequiredFieldTextWatcher.isValid(textInputFirstName.getEditText().getText().toString());
+    }
+
+    private boolean isLastNameValid() {
+        return RequiredFieldTextWatcher.isValid(textInputLastName.getEditText().getText().toString());
+    }
+
+    private boolean isPhoneValid() {
+        return PhoneFieldTextWatcher.isValid(textInputPhone.getEditText().getText().toString());
+    }
+
+    private boolean isAddressValid() {
+        return RequiredFieldTextWatcher.isValid(textInputAddress.getEditText().getText().toString());
+    }
+    private void saveChanges() {
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+
+        userViewModel.getUserLiveData().observe(getViewLifecycleOwner(), user-> {
+           if (user != null) {
+               UserUpdateRequest userUpdateRequest = new UserUpdateRequest(
+                       user.getId(),
+                       textInputEmail.getEditText().getText().toString(),
+                       textInputFirstName.getEditText().getText().toString(),
+                       textInputLastName.getEditText().getText().toString(),
+                       textInputAddress.getEditText().getText().toString(),
+                       textInputPhone.getEditText().getText().toString(),
+                       user.getJwt()
+               );
+               if(user.getRole().toString() == "GUEST") {
+                    Call<Guest> call = GuestUtils.guestService.edit(userUpdateRequest, "Bearer " + user.getJwt());
+
+                    call.enqueue(new Callback<Guest>() {
+                        @Override
+                        public void onResponse(Call<Guest> call, Response<Guest> response) {
+                            if (response.code() == 200) {
+                                System.out.println("update succesfull");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Guest> call, Throwable t) {
+
+                        }
+                    });
+
+               }
+           }
+        });
+
     }
 }
