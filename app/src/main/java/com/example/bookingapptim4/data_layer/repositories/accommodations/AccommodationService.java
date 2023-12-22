@@ -67,4 +67,11 @@ public interface AccommodationService {
             @Query("property-type") String propertyType,
             @Query("min-rating") Double minRating
     );
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/host/{id}")
+    Call<ArrayList<Accommodation>> getAllByHost(@Path("id") Long id);
 }

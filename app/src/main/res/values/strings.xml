@@ -58,5 +58,11 @@
     <string name="guestNumInput">ex. 2</string>
     <string name="searchTitle">Search form</string>
     <string name="hostSwitch">Host </string>
+    <string name="auto_accept">Auto accept reservation</string>
+    <string name="generateReportButton">Generate report</string>
+    <string name="edit_accommodation_button">Edit\n</string>
+    <string name="add_availability_button">Add availability\n</string>
+    <string name="delete_button">Delete\n</string>
+    <string name="add_accommodation_button">Add Accommodation</string>
 
 </resources>

@@ -5,10 +5,42 @@
     android:layout_height="match_parent"
     tools:context=".ui.elements.Fragments.AccommodationsScreen">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical"
+        tools:context=".fragments.MainScreen">
+
+    <LinearLayout
+        android:id="@+id/linear2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        >
+
+        <Button
+            android:id="@+id/add_accommodation_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.7"
+            android:text="@string/add_accommodation_button"
+            tools:ignore="TextContrastCheck" />
+
+
+    </LinearLayout>
+
+
+    <ListView
+        android:id="@+id/host_accommodations_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        tools:listitem="@layout/host_accommodation_card"/>
+
+    </LinearLayout>
+
 
 </FrameLayout>
