@@ -52,7 +52,7 @@ public class AccommodationsScreen extends Fragment {
 
         accommodationListView = root.findViewById(R.id.host_accommodations_list);
 
-        loadAccommodations(UserUtils.getCurrentUser().getId());
+        loadAccommodations(UserUtils.getCurrentUser().getId(), UserUtils.getCurrentUser().getJwt());
 
 
         return root;
@@ -64,9 +64,9 @@ public class AccommodationsScreen extends Fragment {
         binding = null;
     }
 
-    private void loadAccommodations(Long hostId){
+    private void loadAccommodations(Long hostId, String jwt){
 
-        Call<ArrayList<Accommodation>> call = AccommodationUtils.accommodationService.getAllByHost(hostId);
+        Call<ArrayList<Accommodation>> call = AccommodationUtils.accommodationService.getAllByHost(hostId, "Bearer " + jwt);
 
         call.enqueue(new Callback<ArrayList<Accommodation>>() {
             @Override
