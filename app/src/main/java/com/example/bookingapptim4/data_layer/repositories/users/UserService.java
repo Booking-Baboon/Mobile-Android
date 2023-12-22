@@ -9,6 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -28,6 +29,13 @@ public interface UserService {
     })
     @GET("users/{id}")
     Call<User> getById(@Path("id") Long id);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("users/profile/{userEmail}")
+    Call<User> getProfile(@Path("userEmail") String userEmail, @Header("Authorization") String authorizationHeader);
 
     @Headers({
             "User-Agent: Mobile-Android",
@@ -56,4 +64,11 @@ public interface UserService {
     })
     @POST("users/login")
     Call<User> login(@Body User user);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("users/logout")
+    Call<Void> logout(@Header("Authorization") String authorizationHeader);
 }

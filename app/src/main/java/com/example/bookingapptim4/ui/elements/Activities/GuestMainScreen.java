@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
@@ -17,6 +18,7 @@ import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.databinding.ActivityGuestMainScreenBinding;
 import com.example.bookingapptim4.domain.models.users.Guest;
 import com.example.bookingapptim4.domain.models.users.User;
+import com.example.bookingapptim4.ui.state_holders.view_models.UserViewModel;
 
 public class GuestMainScreen extends AppCompatActivity {
 
@@ -25,6 +27,8 @@ public class GuestMainScreen extends AppCompatActivity {
     private ActionBar actionBar;
     private NavController navController;
 
+    private UserViewModel userViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +36,11 @@ public class GuestMainScreen extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         User guest = getIntent().getParcelableExtra("USER");
-        System.out.println( "Successfully logged in as:" +  guest.getEmail());
+        System.out.println( "Successfully logged in as:" +  guest);
+
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        userViewModel.setUser(guest);
+
         toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
