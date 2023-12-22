@@ -4,14 +4,28 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.bookingapptim4.R;
+import com.example.bookingapptim4.data_layer.repositories.users.UserService;
+import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
+import com.example.bookingapptim4.domain.models.users.User;
 import com.example.bookingapptim4.ui.elements.Activities.LoginScreen;
+import com.example.bookingapptim4.ui.state_holders.text_watchers.EmailFieldTextWatcher;
+import com.example.bookingapptim4.ui.state_holders.text_watchers.PhoneFieldTextWatcher;
+import com.example.bookingapptim4.ui.state_holders.text_watchers.RequiredFieldTextWatcher;
+import com.example.bookingapptim4.ui.state_holders.view_models.UserViewModel;
+import com.google.android.material.textfield.TextInputLayout;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +42,11 @@ public class AccountScreen extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private UserViewModel userViewModel;
+    private UserService userService;
+    private User userProfile = new User();
+
+    private TextInputLayout textInputEmail, textInputPassword, textInputFirstName, textInputLastName, textInputPhone, textInputAddress;
 
     public AccountScreen() {
         // Required empty public constructor
@@ -66,14 +85,77 @@ public class AccountScreen extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_account_screen, container, false);
 
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+
+        userViewModel.getUserLiveData().observe(getViewLifecycleOwner(), user-> {
+            if (user != null) {
+
+                Call<User> call = UserUtils.userService.getProfile(user.getEmail(), "Bearer " + user.getJwt());
+
+                call.enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if (response.code() == 200) {
+
+                            textInputEmail = view.findViewById(R.id.editTextEmail);
+                            textInputEmail.getEditText().addTextChangedListener(new EmailFieldTextWatcher(textInputEmail));
+                            textInputEmail.getEditText().setText(response.body().getEmail());
+
+                            textInputFirstName = view.findViewById(R.id.editTextFirstName);
+                            textInputFirstName.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(textInputFirstName));
+                            textInputFirstName.getEditText().setText(response.body().getFirstName());
+
+                            textInputLastName = view.findViewById(R.id.editTextLastName);
+                            textInputLastName.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(textInputLastName));
+                            textInputLastName.getEditText().setText(response.body().getLastName());
+
+                            textInputPhone = view.findViewById(R.id.editTextPhone);
+                            textInputPhone.getEditText().addTextChangedListener(new PhoneFieldTextWatcher(textInputPhone));
+                            textInputPhone.getEditText().setText(response.body().getPhoneNumber());
+
+                            textInputAddress = view.findViewById(R.id.editTextAddress);
+                            textInputAddress.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(textInputAddress));
+                            textInputAddress.getEditText().setText(response.body().getAddress());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
+
         Button logoutButton = view.findViewById(R.id.logoutButton);
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Handle button click, open the LoginScreen activity
-                Intent intent = new Intent(getActivity(), LoginScreen.class);
-                startActivity(intent);
+
+                userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+
+                userViewModel.getUserLiveData().observe(getViewLifecycleOwner(), user-> {
+                   if (user != null) {
+                       Call<Void> call = UserUtils.userService.logout("Bearer " + user.getJwt());
+
+                       call.enqueue(new Callback<Void>() {
+                           @Override
+                           public void onResponse(Call<Void> call, Response<Void> response) {
+                               if (response.code() == 200) {
+                                   Intent intent = new Intent(getActivity(), LoginScreen.class);
+                                   startActivity(intent);
+                               }
+                           }
+
+                           @Override
+                           public void onFailure(Call<Void> call, Throwable t) {
+
+                           }
+                       });
+                   }
+                });
             }
         });
 
