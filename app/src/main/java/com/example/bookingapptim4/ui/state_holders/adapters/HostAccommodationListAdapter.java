@@ -2,6 +2,7 @@ package com.example.bookingapptim4.ui.state_holders.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +15,14 @@ import androidx.annotation.Nullable;
 import androidx.navigation.Navigation;
 
 import com.example.bookingapptim4.R;
+import com.example.bookingapptim4.data_layer.repositories.reviews.AccommodationReviewUtils;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HostAccommodationListAdapter extends ArrayAdapter<Accommodation> {
     private ArrayList<Accommodation> accommodations;
@@ -71,7 +77,7 @@ public class HostAccommodationListAdapter extends ArrayAdapter<Accommodation> {
                     accommodation.getLocation().getAddress());
             accommodationLocation.setText(locationText);
 
-            accommodationRating.setText("4.5");
+            loadAverageRating(accommodation.getId(),accommodationRating);
 
             accommodationCard.setOnClickListener(v -> {
                 Bundle bundle = new Bundle();
@@ -82,5 +88,31 @@ public class HostAccommodationListAdapter extends ArrayAdapter<Accommodation> {
         }
 
         return convertView;
+    }
+
+    private void loadAverageRating(Long accommodationId, TextView accommodationRating){
+        Call<Float> call = AccommodationReviewUtils.accommodationReviewService.getAverateRating(accommodationId);
+        call.enqueue(new Callback<Float>() {
+            @Override
+            public void onResponse(Call<Float> call, Response<Float> response) {
+                if (response.code() == 200){
+                    Log.d("AccommodationReviewUtils","Meesage recieved");
+                    System.out.println(response.body());
+                    if(response.body() == -1){
+                        accommodationRating.setText("No reviews");
+                    }else{
+                        accommodationRating.setText(response.body().toString());
+                    }
+
+                }else{
+                    Log.d("AccommodationReviewUtils","Meesage recieved: "+response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Float> call, Throwable t) {
+                Log.d("AccommodationReviewUtils", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
     }
 }
