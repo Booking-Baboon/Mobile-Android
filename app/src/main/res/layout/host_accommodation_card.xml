@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/host_accommodation_card"
+    android:layout_width="match_parent"
+    android:layout_height="280dp"
+    android:layout_marginVertical="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="5dp"
+    android:background="@drawable/border_background"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="horizontal"
+        >
+
+    <ImageView
+        android:background="@drawable/border_background"
+        android:id="@+id/host_accommodation_image"
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:contentDescription="@string/accommodation_image"
+        app:srcCompat="@drawable/accommodation_image_example" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/host_accommodation_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"
+                android:text="@string/accommodation_title"
+                android:textAlignment="gravity"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/host_accommodation_rating"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:gravity="right|center_vertical"
+                    android:text="@string/accommodation_rating"
+                    android:textAlignment="gravity"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/host_accommodationm_rating_star"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/accommodation_image"
+                    app:srcCompat="@drawable/ic_rating_star" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/host_accommodation_location"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:text="@string/accommodation_location"
+            android:textSize="14sp"
+            android:textStyle="italic" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id = "@+id/auto_accept_reservation_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme = "@style/SwitchMaterial"
+            android:text="@string/auto_accept"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            />
+
+        <Button
+            android:layout_marginTop="10dp"
+            android:id="@+id/generate_report_button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/generateReportButton"
+            android:theme="@style/Button.BrownCurved" />
+
+
+    </LinearLayout>
+</LinearLayout>
+
+    <LinearLayout
+        android:paddingTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/edit_accommodation_button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/edit_accommodation_button"
+            android:theme="@style/Button.TealCurved"
+            android:layout_marginRight="5dp"
+            />
+
+        <Button
+            android:id="@+id/add_availability_accommodation_button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/add_availability_button"
+            android:theme="@style/Button.GreenCurved"
+            android:layout_marginRight="5dp"
+            />
+
+        <Button
+            android:id="@+id/delete_accommodation_button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/delete_button"
+            android:theme="@style/Button.RedCurved"
+            />
+
+
+    </LinearLayout>
+</LinearLayout>

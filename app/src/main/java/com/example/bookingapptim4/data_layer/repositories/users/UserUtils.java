@@ -2,6 +2,7 @@ package com.example.bookingapptim4.data_layer.repositories.users;
 
 import com.example.bookingapptim4.BuildConfig;
 import com.example.bookingapptim4.data_layer.repositories.users.UserService;
+import com.example.bookingapptim4.domain.models.users.User;
 
 import java.util.concurrent.TimeUnit;
 
@@ -12,6 +13,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserUtils {
     public static final String SERVICE_API_PATH = "http://"+ BuildConfig.IP_ADDR +":8080/api/v1/";
+    private static User currentUser;
+
+    public static User getCurrentUser() {
+        return currentUser;
+    }
+
+    public static void setCurrentUser(User currentUser) {
+        UserUtils.currentUser = currentUser;
+    }
 
     public static OkHttpClient test(){
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();

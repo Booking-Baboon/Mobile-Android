@@ -51,6 +51,13 @@
         />
 
     <fragment
+        android:id="@+id/nav_host"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.FragmentGuestMainScreen"
+        android:label="Main"
+        tools:layout="@layout/fragment_host_main_screen"
+        />
+
+    <fragment
         android:id="@+id/nav_accommodations"
         android:name="com.example.bookingapptim4.ui.elements.Fragments.AccommodationsScreen"
         android:label="HostAccommodations"
