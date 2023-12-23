@@ -13,16 +13,22 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.bookingapptim4.R;
+import com.example.bookingapptim4.data_layer.repositories.users.AdminUtils;
 import com.example.bookingapptim4.data_layer.repositories.users.GuestService;
 import com.example.bookingapptim4.data_layer.repositories.users.GuestUtils;
 import com.example.bookingapptim4.data_layer.repositories.users.HostService;
+import com.example.bookingapptim4.data_layer.repositories.users.HostUtils;
 import com.example.bookingapptim4.data_layer.repositories.users.UserService;
 import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
+import com.example.bookingapptim4.domain.dtos.PasswordChangeRequest;
+import com.example.bookingapptim4.domain.models.users.Admin;
 import com.example.bookingapptim4.domain.models.users.Guest;
+import com.example.bookingapptim4.domain.models.users.Host;
 import com.example.bookingapptim4.domain.models.users.User;
 import com.example.bookingapptim4.domain.models.users.UserUpdateRequest;
 import com.example.bookingapptim4.ui.elements.Activities.LoginScreen;
 import com.example.bookingapptim4.ui.state_holders.text_watchers.EmailFieldTextWatcher;
+import com.example.bookingapptim4.ui.state_holders.text_watchers.PasswordFieldTextWatcher;
 import com.example.bookingapptim4.ui.state_holders.text_watchers.PhoneFieldTextWatcher;
 import com.example.bookingapptim4.ui.state_holders.text_watchers.RequiredFieldTextWatcher;
 import com.example.bookingapptim4.ui.state_holders.view_models.UserViewModel;
@@ -53,7 +59,7 @@ public class AccountScreen extends Fragment {
     private HostService hostService;
     private User userProfile = new User();
 
-    private TextInputLayout textInputEmail, textInputPassword, textInputFirstName, textInputLastName, textInputPhone, textInputAddress;
+    private TextInputLayout textInputEmail, textInputPassword, textInputFirstName, textInputLastName, textInputPhone, textInputAddress, textInputCurrentPassword, textInputNewPassword, textInputConfirmPassword;
 
     public AccountScreen() {
         // Required empty public constructor
@@ -123,6 +129,15 @@ public class AccountScreen extends Fragment {
                             textInputAddress = view.findViewById(R.id.editTextAddress);
                             textInputAddress.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(textInputAddress));
                             textInputAddress.getEditText().setText(response.body().getAddress());
+
+                            textInputCurrentPassword = view.findViewById(R.id.editTextCurrentPassword);
+
+                            textInputNewPassword = view.findViewById(R.id.editTextNewPassword);
+                            textInputConfirmPassword = view.findViewById(R.id.editTextConfirmPassword);
+
+                            // Add TextWatcher after initializing TextInputLayout instances
+                            textInputNewPassword.getEditText().addTextChangedListener(new PasswordFieldTextWatcher(textInputNewPassword.getEditText(), textInputConfirmPassword.getEditText()));
+                            textInputConfirmPassword.getEditText().addTextChangedListener(new PasswordFieldTextWatcher(textInputNewPassword.getEditText(), textInputConfirmPassword.getEditText()));
                         }
                     }
 
@@ -140,6 +155,7 @@ public class AccountScreen extends Fragment {
             @Override
             public void onClick(View v) {
                 // Check if all fields are valid
+                System.out.println(isInputValid());
                 if (isInputValid()) {
                     // Perform the save changes action
                     saveChanges();
@@ -155,37 +171,39 @@ public class AccountScreen extends Fragment {
             @Override
             public void onClick(View v) {
                 // Handle button click, open the LoginScreen activity
-
-                userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
-
-                userViewModel.getUserLiveData().observe(getViewLifecycleOwner(), user-> {
-                   if (user != null) {
-                       Call<Void> call = UserUtils.userService.logout("Bearer " + user.getJwt());
-                       call.enqueue(new Callback<Void>() {
-                           @Override
-                           public void onResponse(Call<Void> call, Response<Void> response) {
-                               if (response.code() == 200) {
-                                   Intent intent = new Intent(getActivity(), LoginScreen.class);
-                                   startActivity(intent);
-                               }
-                           }
-
-                           @Override
-                           public void onFailure(Call<Void> call, Throwable t) {
-
-                           }
-                       });
-                   }
-                });
+                logout();
             }
         });
 
         return view;
     }
 
+    private void logout() {
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+
+        userViewModel.getUserLiveData().observe(getViewLifecycleOwner(), user-> {
+            if (user != null) {
+                Call<Void> call = UserUtils.userService.logout("Bearer " + user.getJwt());
+                call.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.code() == 200) {
+                            Intent intent = new Intent(getActivity(), LoginScreen.class);
+                            startActivity(intent);
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
+    }
+
     // Method to check if all input fields are valid
     private boolean isInputValid() {
-        return isEmailValid() && isFirstNameValid() && isLastNameValid() && isPhoneValid() && isAddressValid();
+        return isEmailValid() && isFirstNameValid() && isLastNameValid() && isPhoneValid() && isAddressValid() && isPasswordValid();
     }
 
     private boolean isEmailValid() {
@@ -207,6 +225,18 @@ public class AccountScreen extends Fragment {
     private boolean isAddressValid() {
         return RequiredFieldTextWatcher.isValid(textInputAddress.getEditText().getText().toString());
     }
+
+    private boolean isPasswordValid() {
+        String currentPassword = textInputCurrentPassword.getEditText().getText().toString();
+        String newPassword = textInputNewPassword.getEditText().getText().toString();
+        String confirmPassword = textInputConfirmPassword.getEditText().getText().toString();
+        if (currentPassword.equals("")) {
+            return true;
+        }else if(newPassword.equals("") || confirmPassword.equals("")) {
+            textInputConfirmPassword.getEditText().setError("New password cannot be empty");
+        }
+        return PasswordFieldTextWatcher.isValid(newPassword, confirmPassword);
+    }
     private void saveChanges() {
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
 
@@ -227,6 +257,9 @@ public class AccountScreen extends Fragment {
                     call.enqueue(new Callback<Guest>() {
                         @Override
                         public void onResponse(Call<Guest> call, Response<Guest> response) {
+                            if (response.code() == 500) {
+                                textInputEmail.getEditText().setError("Email already in use!");
+                            }
                             if (response.code() == 200) {
                                 System.out.println("update succesfull");
                             }
@@ -238,6 +271,65 @@ public class AccountScreen extends Fragment {
                         }
                     });
 
+               } else if (user.getRole().toString() == "HOST") {
+                   Call<Host> call = HostUtils.hostService.edit(userUpdateRequest, "Bearer " + user.getJwt());
+
+                   call.enqueue(new Callback<Host>() {
+                       @Override
+                       public void onResponse(Call<Host> call, Response<Host> response) {
+                           if (response.code() == 200) {
+                               System.out.println("update succesfull");
+                           }
+                       }
+
+                       @Override
+                       public void onFailure(Call<Host> call, Throwable t) {
+
+                       }
+                   });
+
+               } else if (user.getRole().toString() == "ADMIN") {
+                   Call<Admin> call = AdminUtils.adminService.edit(userUpdateRequest, "Bearer " + user.getJwt());
+                   call.enqueue(new Callback<Admin>() {
+                       @Override
+                       public void onResponse(Call<Admin> call, Response<Admin> response) {
+                           if (response.code() == 200) {
+                               System.out.println("update succesfull");
+                           }
+                       }
+                       @Override
+                       public void onFailure(Call<Admin> call, Throwable t) {
+
+                       }
+                   });
+
+               }
+
+               String currentPassword = textInputCurrentPassword.getEditText().getText().toString();
+               String newPassword = textInputNewPassword.getEditText().getText().toString();
+               String confirmPassword = textInputConfirmPassword.getEditText().getText().toString();
+
+               if (!currentPassword.equals("") && !currentPassword.equals("") && !currentPassword.equals("")) {
+                   PasswordChangeRequest request = new PasswordChangeRequest(currentPassword, newPassword);
+                    Call<User> call = UserUtils.userService.changePassword(user.getId(), request, "Bearer " + user.getJwt());
+
+                    call.enqueue(new Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, Response<User> response) {
+                            if (response.code() == 401) {
+                                textInputCurrentPassword.getEditText().setError("Wrong password!");
+                            }
+                            if (response.code() == 200) {
+                            logout();
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+
+                        }
+                    });
                }
            }
         });

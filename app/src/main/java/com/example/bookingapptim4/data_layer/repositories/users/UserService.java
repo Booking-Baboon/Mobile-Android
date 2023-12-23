@@ -1,5 +1,6 @@
 package com.example.bookingapptim4.data_layer.repositories.users;
 
+import com.example.bookingapptim4.domain.dtos.PasswordChangeRequest;
 import com.example.bookingapptim4.domain.models.users.User;
 
 import java.util.ArrayList;
@@ -71,6 +72,13 @@ public interface UserService {
     })
     @GET("users/logout")
     Call<Void> logout(@Header("Authorization") String authorizationHeader);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("users/{userId}/change-password")
+    Call<User> changePassword(@Path("userId") Long userId, @Body PasswordChangeRequest request, @Header("Authorization") String authorizationHeader);
 
 
 }
