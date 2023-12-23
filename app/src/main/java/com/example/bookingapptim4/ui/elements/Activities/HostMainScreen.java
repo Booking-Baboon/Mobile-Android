@@ -35,6 +35,7 @@ public class HostMainScreen extends AppCompatActivity {
 
 
         User host = getIntent().getParcelableExtra("USER");
+        host.setRole("HOST");
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         userViewModel.setUser(host);

@@ -34,6 +34,7 @@ public class AdministratorMainScreen extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         User admin = getIntent().getParcelableExtra("USER");
+        admin.setRole("ADMIN");
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         userViewModel.setUser(admin);

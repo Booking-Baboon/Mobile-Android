@@ -3,6 +3,7 @@ package com.example.bookingapptim4.data_layer.repositories.users;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 import com.example.bookingapptim4.domain.models.users.Guest;
 import com.example.bookingapptim4.domain.models.users.Host;
+import com.example.bookingapptim4.domain.models.users.UserUpdateRequest;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -33,5 +34,5 @@ public interface HostService {
             "Content-Type:application/json"
     })
     @PUT("hosts/")
-    Call<Host> edit(@Body Host host, @Header("Authorization") String authorizationHeader);
+    Call<Host> edit(@Body UserUpdateRequest guest, @Header("Authorization") String authorizationHeader);
 }

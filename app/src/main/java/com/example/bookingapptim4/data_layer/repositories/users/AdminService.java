@@ -1,6 +1,8 @@
 package com.example.bookingapptim4.data_layer.repositories.users;
 
 import com.example.bookingapptim4.domain.models.users.Admin;
+import com.example.bookingapptim4.domain.models.users.Guest;
+import com.example.bookingapptim4.domain.models.users.UserUpdateRequest;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -22,5 +24,5 @@ public interface AdminService {
             "Content-Type:application/json"
     })
     @PUT("admin/")
-    Call<Admin> edit(@Body Admin admin, @Header("Authorization") String authorizationHeader);
+    Call<Admin> edit(@Body UserUpdateRequest admin, @Header("Authorization") String authorizationHeader);
 }
