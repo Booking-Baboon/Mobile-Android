@@ -67,4 +67,16 @@ public interface AccommodationService {
             @Query("property-type") String propertyType,
             @Query("min-rating") Double minRating
     );
+
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/{id}/total-price")
+    Call<Float> getTotalPrice(
+            @Path("id") Long id,
+            @Query("checkin") String checkin,
+            @Query("checkout") String checkout
+    );
 }
