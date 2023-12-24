@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
@@ -16,6 +17,7 @@ import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.databinding.ActivityAdministratorMainScreenBinding;
 import com.example.bookingapptim4.databinding.ActivityGuestMainScreenBinding;
 import com.example.bookingapptim4.domain.models.users.User;
+import com.example.bookingapptim4.ui.state_holders.view_models.UserViewModel;
 
 public class AdministratorMainScreen extends AppCompatActivity {
 
@@ -23,6 +25,7 @@ public class AdministratorMainScreen extends AppCompatActivity {
     private Toolbar toolbar;
     private ActionBar actionBar;
     private NavController navController;
+    private UserViewModel userViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,11 @@ public class AdministratorMainScreen extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         User admin = getIntent().getParcelableExtra("USER");
+        admin.setRole("ADMIN");
+
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        userViewModel.setUser(admin);
+
         System.out.println( "Successfully logged in as:" +  admin.getEmail());
         toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
