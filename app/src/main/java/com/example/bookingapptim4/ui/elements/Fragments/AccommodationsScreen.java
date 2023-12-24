@@ -4,11 +4,13 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.bookingapptim4.R;
@@ -54,6 +56,13 @@ public class AccommodationsScreen extends Fragment {
 
         loadAccommodations(UserUtils.getCurrentUser().getId(), UserUtils.getCurrentUser().getJwt());
 
+        Button button = root.findViewById(R.id.add_accommodation_button);
+        button.setOnClickListener(v -> {
+            // Handle click on the item at 'position'
+            Bundle bundle = new Bundle();
+
+            Navigation.findNavController(v).navigate(R.id.nav_accommodation_creation, bundle);
+        });
 
         return root;
     }

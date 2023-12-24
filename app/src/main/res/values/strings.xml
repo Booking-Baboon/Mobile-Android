@@ -64,5 +64,19 @@
     <string name="add_availability_button">Add availability\n</string>
     <string name="delete_button">Delete\n</string>
     <string name="add_accommodation_button">Add Accommodation</string>
+    <string name="create_accommodation">New Accommodation</string>
+    <string name="accommodation_name_hint">Name</string>
+    <string name="accommodation_address_hint">Address</string>
+    <string name="accommodation_city_hint">City</string>
+    <string name="accommodation_country_hint">Country</string>
+    <string name="accommodation_description_hint">Description</string>
+    <string name="accommodation_type">Type</string>
+    <string name="accommodation_min_guest_hint">Minimum Number Of Guests</string>
+    <string name="accommodation_max_guest_hint">Maximum Number Of Guests</string>
+    <string name="create_accommodation_button">Create Accommodation</string>
+    <string name="pricePerPerson">Price Per Person</string>
+    <string name="upload_image">Upload Image</string>
+    <string name="add_availability_price_hint">Price</string>
+    <string name="add_available_periods">Add availability</string>
 
 </resources>
