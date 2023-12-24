@@ -140,8 +140,6 @@ public class FragmentGuestMainScreen extends Fragment{
             alertDialog.show();
         });
 
-
-
         return root;
     }
 

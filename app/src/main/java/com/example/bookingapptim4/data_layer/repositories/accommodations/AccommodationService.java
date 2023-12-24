@@ -73,6 +73,18 @@ public interface AccommodationService {
             "User-Agent: Mobile-Android",
             "Content-Type:application/json"
     })
+    @GET("accommodations/{id}/total-price")
+    Call<Float> getTotalPrice(
+            @Path("id") Long id,
+            @Query("checkin") String checkin,
+            @Query("checkout") String checkout
+    );
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
     @GET("accommodations/host/{id}")
     Call<ArrayList<Accommodation>> getAllByHost(@Path("id") Long id,  @Header("Authorization") String authorizationHeader);
+
 }

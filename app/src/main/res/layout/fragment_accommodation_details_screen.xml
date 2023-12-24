@@ -10,16 +10,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-                <!-- Image View for the Accommodation Picture -->
-<!--                <ImageView-->
-<!--                    android:id="@+id/imageViewAccommodation"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="200dp"-->
-<!--                    android:scaleType="centerCrop"-->
-<!--                    android:src="@drawable/accommodation_image_example"-->
-<!--                    android:contentDescription="@string/accommodation_image"/>-->
-
-
                 <org.imaginativeworld.whynotimagecarousel.ImageCarousel
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
@@ -138,7 +128,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
-                            android:text="Make Reservation"/>
+                            android:text="Make a reservation"/>
 
 
 <!--                        REVIEWS-->

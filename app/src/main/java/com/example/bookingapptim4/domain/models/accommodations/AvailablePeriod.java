@@ -10,7 +10,7 @@ import com.example.bookingapptim4.domain.models.shared.TimeSlot;
 public class AvailablePeriod implements Parcelable {
     private Long id;
     private TimeSlot timeSlot;
-    private Float PricePerNight;
+    private Float pricePerNight;
 
     protected AvailablePeriod(Parcel in) {
         if (in.readByte() == 0) {
@@ -19,9 +19,9 @@ public class AvailablePeriod implements Parcelable {
             id = in.readLong();
         }
         if (in.readByte() == 0) {
-            PricePerNight = null;
+            pricePerNight = null;
         } else {
-            PricePerNight = in.readFloat();
+            pricePerNight = in.readFloat();
         }
     }
 
@@ -50,11 +50,35 @@ public class AvailablePeriod implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeLong(id);
         }
-        if (PricePerNight == null) {
+        if (pricePerNight == null) {
             dest.writeByte((byte) 0);
         } else {
             dest.writeByte((byte) 1);
-            dest.writeFloat(PricePerNight);
+            dest.writeFloat(pricePerNight);
         }
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public TimeSlot getTimeSlot() {
+        return timeSlot;
+    }
+
+    public void setTimeSlot(TimeSlot timeSlot) {
+        this.timeSlot = timeSlot;
+    }
+
+    public Float getPricePerNight() {
+        return pricePerNight;
+    }
+
+    public void setPricePerNight(Float pricePerNight) {
+        this.pricePerNight = pricePerNight;
     }
 }

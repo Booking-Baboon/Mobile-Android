@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.helper.widget.Carousel;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.TextUtils;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -86,8 +88,6 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
         Bundle args = getArguments();
         if (args != null && args.containsKey("selectedAccommodation")) {
             accommodation = args.getParcelable("selectedAccommodation");
-            //populate detailed screen ...
-
 
         }
 
@@ -123,6 +123,14 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
 
         //FILL
         fillViewWithDetails(view);
+
+        Button makeReservationButton = view.findViewById(R.id.buttonMakeReservation);
+        makeReservationButton.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("selectedAccommodation", accommodation);
+
+            Navigation.findNavController(v).navigate(R.id.nav_reservation_request, bundle);
+        });
 
         return view;
     }

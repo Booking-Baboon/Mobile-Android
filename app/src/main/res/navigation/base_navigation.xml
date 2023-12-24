@@ -35,6 +35,15 @@
         />
 
     <fragment
+        android:id="@+id/nav_reservation_request"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.ReservationRequestScreen"
+        android:label="AccommodationDetails"
+        tools:layout="@layout/fragment_reservation_request_screen"
+        app:popUpTo="@+id/nav_main"
+        app:popUpToInclusive="true"
+        />
+
+    <fragment
         android:id="@+id/nav_main"
         android:name="com.example.bookingapptim4.ui.elements.Fragments.FragmentGuestMainScreen"
         android:label="Main"
