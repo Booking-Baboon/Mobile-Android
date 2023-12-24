@@ -114,30 +114,29 @@ public class AccountScreen extends Fragment {
                     public void onResponse(Call<User> call, Response<User> response) {
                         if (response.code() == 200) {
 
+                            userProfile = response.body();
+
                             textInputEmail = view.findViewById(R.id.editTextEmail);
                             textInputEmail.getEditText().addTextChangedListener(new EmailFieldTextWatcher(textInputEmail));
-                            textInputEmail.getEditText().setText(response.body().getEmail());
 
                             textInputFirstName = view.findViewById(R.id.editTextFirstName);
                             textInputFirstName.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(textInputFirstName));
-                            textInputFirstName.getEditText().setText(response.body().getFirstName());
 
                             textInputLastName = view.findViewById(R.id.editTextLastName);
                             textInputLastName.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(textInputLastName));
-                            textInputLastName.getEditText().setText(response.body().getLastName());
 
                             textInputPhone = view.findViewById(R.id.editTextPhone);
                             textInputPhone.getEditText().addTextChangedListener(new PhoneFieldTextWatcher(textInputPhone));
-                            textInputPhone.getEditText().setText(response.body().getPhoneNumber());
 
                             textInputAddress = view.findViewById(R.id.editTextAddress);
                             textInputAddress.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(textInputAddress));
-                            textInputAddress.getEditText().setText(response.body().getAddress());
 
                             textInputCurrentPassword = view.findViewById(R.id.editTextCurrentPassword);
 
                             textInputNewPassword = view.findViewById(R.id.editTextNewPassword);
                             textInputConfirmPassword = view.findViewById(R.id.editTextConfirmPassword);
+
+                            setDefaultInformation();
 
                             // Add TextWatcher after initializing TextInputLayout instances
                             textInputNewPassword.getEditText().addTextChangedListener(new PasswordFieldTextWatcher(textInputNewPassword.getEditText(), textInputConfirmPassword.getEditText()));
@@ -166,6 +165,15 @@ public class AccountScreen extends Fragment {
                 } else {
                     // Show an error or handle invalid input
                 }
+            }
+        });
+
+        Button discardChanges = view.findViewById(R.id.discardChangesButton);
+
+        discardChanges.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDefaultInformation();
             }
         });
 
@@ -207,6 +215,15 @@ public class AccountScreen extends Fragment {
 
         return view;
     }
+
+    private void setDefaultInformation() {
+        textInputEmail.getEditText().setText(userProfile.getEmail());
+        textInputFirstName.getEditText().setText(userProfile.getFirstName());
+        textInputLastName.getEditText().setText(userProfile.getLastName());
+        textInputPhone.getEditText().setText(userProfile.getPhoneNumber());
+        textInputAddress.getEditText().setText(userProfile.getAddress());
+    }
+
     private void deleteAccount(View view) {
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
 

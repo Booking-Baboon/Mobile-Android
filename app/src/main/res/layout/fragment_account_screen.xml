@@ -182,7 +182,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
                     android:text="@string/saveChanges"
-                    android:theme="@style/Button.GreenCurved" />
+                    android:theme="@style/Button.CurvedEdges" />
 
                 <Button
                     android:id="@+id/discardChangesButton"
@@ -193,12 +193,12 @@
                     android:layout_marginLeft="2dp"
                     android:layout_weight="1"
                     android:text="@string/discardChanges"
-                    android:theme="@style/Button.RedCurved" />
+                    android:theme="@style/Button.CurvedEdges" />
             </LinearLayout>
 
             <Button
                 android:id="@+id/logoutButton"
-                android:theme="@style/Button.RedCurved"
+                android:theme="@style/Button.CurvedEdges"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginBottom="10dp"
