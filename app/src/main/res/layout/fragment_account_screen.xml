@@ -34,130 +34,75 @@
                 android:text="@string/account" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textViewEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="@string/email" />
-
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editTextEmail"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_weight="0"
-                android:ems="10"
-                android:background="#80D9D9D9"
-                android:inputType="textEmailAddress"
-                android:text="branko.maric@gmail.com" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textViewFirstName"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="@string/firstName" />
+                android:hint="@string/email"
+                android:layout_marginBottom="16dp">
 
-            <EditText
-                android:id="@+id/editTextFirstName"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_weight="0"
-                android:ems="10"
-                android:background="#80D9D9D9"
-                android:inputType="textPersonName"
-                android:text="Branko" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"/>
 
-        </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/editTextFirstName"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:hint="@string/firstName"
+            android:layout_marginBottom="16dp">
 
-            <TextView
-                android:id="@+id/textViewLastName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="@string/lastName" />
-
-            <EditText
-                android:id="@+id/editTextLastName"
+            <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_weight="0"
-                android:ems="10"
-                android:background="#80D9D9D9"
-                android:inputType="textPersonName"
-                android:text="Maric" />
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"/>
 
-        </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/editTextLastName"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:hint="@string/lastName"
+            android:layout_marginBottom="16dp">
 
-            <TextView
-                android:id="@+id/textViewPhone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="@string/textPhone" />
-
-            <EditText
-                android:id="@+id/editTextPhone"
+            <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_weight="0"
-                android:ems="10"
-                android:background="#80D9D9D9"
-                android:inputType="textPhonetic"
-                android:text="+3811231231234" />
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"/>
 
-        </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/editTextPhone"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:hint="@string/textPhone"
+            android:layout_marginBottom="16dp">
 
-            <TextView
-                android:id="@+id/textViewAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="@string/textAddress" />
-
-            <EditText
-                android:id="@+id/editTextAddress"
+            <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_weight="0"
-                android:ems="10"
-                android:background="#80D9D9D9"
-                android:inputType="textPostalAddress"
-                android:text="Address example" />
+                android:layout_height="wrap_content"
+                android:inputType="textPhonetic"/>
 
-        </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/editTextAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/textAddress"
+            android:layout_marginBottom="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPostalAddress"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -176,78 +121,46 @@
                 android:textSize="23sp"
                 android:text="@string/passwordTitle" />
         </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textViewCurrentPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="@string/currentPassword" />
-
-        <EditText
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editTextCurrentPassword"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_weight="0"
-            android:ems="10"
-            android:background="#80D9D9D9"
-            android:inputType="textPassword"
-            android:text="password" />
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textViewNewPassword"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="@string/newPassword" />
+            android:hint="@string/currentPassword"
+            android:layout_marginBottom="16dp">
 
-        <EditText
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editTextNewPassword"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_weight="0"
-            android:ems="10"
-            android:background="#80D9D9D9"
-            android:inputType="textPassword"
-            android:text="password123" />
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textViewConfirmPassword"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="@string/confirmPassword" />
+            android:hint="@string/newPassword"
+            android:layout_marginBottom="16dp">
 
-        <EditText
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editTextConfirmPassword"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_weight="0"
-            android:ems="10"
-            android:background="#80D9D9D9"
-            android:inputType="textPassword"
-            android:text="password123" />
+            android:layout_height="wrap_content"
+            android:hint="@string/confirmPassword"
+            android:layout_marginBottom="16dp">
 
-    </LinearLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -269,7 +182,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_weight="1"
                     android:text="@string/saveChanges"
-                    android:theme="@style/Button.GreenCurved" />
+                    android:theme="@style/Button.CurvedEdges" />
 
                 <Button
                     android:id="@+id/discardChangesButton"
@@ -280,12 +193,12 @@
                     android:layout_marginLeft="2dp"
                     android:layout_weight="1"
                     android:text="@string/discardChanges"
-                    android:theme="@style/Button.RedCurved" />
+                    android:theme="@style/Button.CurvedEdges" />
             </LinearLayout>
 
             <Button
                 android:id="@+id/logoutButton"
-                android:theme="@style/Button.RedCurved"
+                android:theme="@style/Button.CurvedEdges"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginBottom="10dp"

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/base_navigation"
+    app:startDestination="@+id/nav_administrator"
+    >
+
+    <fragment
+        android:id="@+id/nav_administrator"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.FragmentAdministratorMainScreen"
+        android:label="Main"
+        tools:layout="@layout/fragment_administrator_main_screen"
+        />
+
+    <fragment
+        android:id="@+id/nav_account"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.AccountScreen"
+        android:label="Account"
+        tools:layout="@layout/fragment_account_screen"
+        app:popUpTo="@+id/nav_administrator"
+        app:popUpToInclusive="true"
+        />
+
+    <fragment
+        android:id="@+id/nav_accommodations_approval_screen"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.AccommodationsApprovalScreen"
+        android:label="AccommodationsApproval"
+        tools:layout="@layout/fragment_accommodations_approval_screen"
+        app:popUpTo="@+id/nav_administrator"
+        app:popUpToInclusive="true"
+        />
+
+    <fragment
+        android:id="@+id/nav_reported_comments_screen"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.ReportedCommentsScreen"
+        android:label="ReportedComments"
+        tools:layout="@layout/fragment_reported_comments_screen"
+        app:popUpTo="@+id/nav_administrator"
+        app:popUpToInclusive="true"
+        />
+
+    <fragment
+        android:id="@+id/nav_reported_users_screen"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.ReportedUsersScreen"
+        android:label="ReportedUsers"
+        tools:layout="@layout/fragment_reported_users_screen"
+        app:popUpTo="@+id/nav_administrator"
+        app:popUpToInclusive="true"
+        />
+
+
+</navigation>

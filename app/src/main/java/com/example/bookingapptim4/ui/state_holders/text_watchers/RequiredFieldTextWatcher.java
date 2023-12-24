@@ -26,4 +26,9 @@ public class RequiredFieldTextWatcher implements TextWatcher {
     public void afterTextChanged(Editable s) {
         textInputLayout.setError(textInputLayout.getEditText().length()==0 ? "Field is required" : null);
     }
+
+    public static boolean isValid(String value) {
+        // Check if the value is not empty or null
+        return value != null && !value.trim().isEmpty();
+    }
 }

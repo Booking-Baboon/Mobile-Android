@@ -4,44 +4,37 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
 import com.example.bookingapptim4.R;
-import com.example.bookingapptim4.databinding.ActivityGuestMainScreenBinding;
-import com.example.bookingapptim4.domain.models.users.Guest;
-import com.example.bookingapptim4.domain.models.users.Role;
+import com.example.bookingapptim4.databinding.ActivityHostMainScreenBinding;
 import com.example.bookingapptim4.domain.models.users.User;
 import com.example.bookingapptim4.ui.state_holders.view_models.UserViewModel;
 
-public class GuestMainScreen extends AppCompatActivity {
+public class UnauthorizedMainScreen extends AppCompatActivity {
 
-    private ActivityGuestMainScreenBinding binding;
+    private ActivityHostMainScreenBinding binding;
     private Toolbar toolbar;
     private ActionBar actionBar;
     private NavController navController;
-
-    private UserViewModel userViewModel;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityGuestMainScreenBinding.inflate(getLayoutInflater());
+        //setContentView(R.layout.activity_host_main_screen);
+        binding = ActivityHostMainScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        User guest = getIntent().getParcelableExtra("USER");
-        guest.setRole(Role.GUEST);
-        System.out.println( "Successfully logged in as:" +  guest);
 
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-        userViewModel.setUser(guest);
+        User unauthorized = getIntent().getParcelableExtra("USER");
+        unauthorized.setRole("UNAUTHORIZED");
 
         toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
@@ -62,7 +55,7 @@ public class GuestMainScreen extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.toolbar, menu);
+        getMenuInflater().inflate(R.menu.unauthorized_toolbar, menu);
         return true;
     }
 

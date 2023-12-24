@@ -9,6 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -68,7 +69,6 @@ public interface AccommodationService {
             @Query("min-rating") Double minRating
     );
 
-
     @Headers({
             "User-Agent: Mobile-Android",
             "Content-Type:application/json"
@@ -79,4 +79,12 @@ public interface AccommodationService {
             @Query("checkin") String checkin,
             @Query("checkout") String checkout
     );
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/host/{id}")
+    Call<ArrayList<Accommodation>> getAllByHost(@Path("id") Long id,  @Header("Authorization") String authorizationHeader);
+
 }

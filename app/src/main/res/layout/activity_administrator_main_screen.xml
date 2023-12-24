@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.elements.Activities.HostMainScreen">
+    tools:context=".ui.elements.Activities.AdministratorMainScreen">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -31,6 +31,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/host_base_navigation" />
+        app:navGraph="@navigation/admin_base_navigation" />
 
 </LinearLayout>
