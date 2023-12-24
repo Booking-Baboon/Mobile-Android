@@ -380,7 +380,6 @@ public class AccountScreen extends Fragment {
                                 textInputEmail.getEditText().setError("Email already in use!");
                             }
                             if (response.code() == 200) {
-                                showSnackbar(view, "Saved changes");
                             }
                         }
                         @Override
@@ -394,7 +393,6 @@ public class AccountScreen extends Fragment {
                        @Override
                        public void onResponse(Call<Host> call, Response<Host> response) {
                            if (response.code() == 200) {
-                               showSnackbar(view, "Saved changes");
                            }
                        }
                        @Override
@@ -408,7 +406,6 @@ public class AccountScreen extends Fragment {
                        @Override
                        public void onResponse(Call<Admin> call, Response<Admin> response) {
                            if (response.code() == 200) {
-                               showSnackbar(view, "Saved changes");
                            }
                        }
                        @Override
@@ -439,6 +436,8 @@ public class AccountScreen extends Fragment {
                         public void onFailure(Call<User> call, Throwable t) {
                         }
                     });
+               } else {
+                   showSnackbar(view, "Update successful");
                }
            }
         });
