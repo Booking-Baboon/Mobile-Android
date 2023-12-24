@@ -20,14 +20,20 @@ import android.widget.TextView;
 
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.data_layer.repositories.accommodations.AccommodationUtils;
+import com.example.bookingapptim4.data_layer.repositories.reservations.ReservationUtils;
+import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
+import com.example.bookingapptim4.domain.dtos.reservations.CreateReservationRequest;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 import com.example.bookingapptim4.domain.models.accommodations.AvailablePeriod;
+import com.example.bookingapptim4.domain.models.reservations.Reservation;
 import com.example.bookingapptim4.domain.models.shared.TimeSlot;
+import com.example.bookingapptim4.domain.models.users.Guest;
 import com.example.bookingapptim4.ui.state_holders.adapters.AccommodationListAdapter;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.ParseException;
@@ -86,10 +92,74 @@ public class ReservationRequestScreen extends Fragment {
 
         Button sendRequestButton = view.findViewById(R.id.sendRequestButton);
         sendRequestButton.setOnClickListener(v -> {
-            //Send request
+            CreateReservationRequest request = parseReservationInfo(view);
+            if(request != null){
+                sendRequest(request);
+                showSnackbar(view, "Your request has been created");
+            } else {
+                showSnackbar(view, "You must fill all input fields");
+            }
         });
 
         return view;
+    }
+
+    private CreateReservationRequest parseReservationInfo(View view){
+        String guestNumText = getTextFromTextView(view, R.id.requestGuestNumInputTextField);
+        String totalPriceText = getTextFromTextView(view, R.id.requestTotalPrice);
+        List<String> selectedDates = parseDates(view);
+        String checkin = selectedDates.get(0);
+        String checkout = selectedDates.get(1);
+
+        if(guestNumText == null || guestNumText.isEmpty() || checkin == null || checkin.isEmpty() || checkout == null || checkout.isEmpty() || totalPriceText == null || totalPriceText.isEmpty()){
+            return null;
+        }
+
+        totalPriceText = totalPriceText.substring(0, totalPriceText.length() - 1);
+        float totalPrice = Float.parseFloat(totalPriceText);
+
+        Guest guest = new Guest();
+        guest.setId(UserUtils.getCurrentUser().getId());
+
+        return new CreateReservationRequest(accommodation, new TimeSlot(checkin,checkout), guest, totalPrice);
+    }
+
+    private Date convertStringToDate(String dateString){
+        String pattern = "yyyy-MM-dd";
+
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(pattern, Locale.getDefault());
+            return dateFormat.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    private void sendRequest(CreateReservationRequest request) {
+
+        Call<Reservation> call = ReservationUtils.reservationService.create(request, "Bearer " + UserUtils.getCurrentUser().getJwt());
+        call.enqueue(new Callback<Reservation>() {
+            @Override
+            public void onResponse(Call<Reservation> call, Response<Reservation> response) {
+                if (response.code() == 201){
+                    Log.d("ReservationUtils","Meesage recieved");
+
+                }else{
+                    Log.d("ReservationUtils","Meesage recieved: "+response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Reservation> call, Throwable t) {
+                Log.d("ReservationUtils", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
+
+    }
+
+    private void showSnackbar(View view, String message) {
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
     }
 
     private void addTextWatchers(View view){

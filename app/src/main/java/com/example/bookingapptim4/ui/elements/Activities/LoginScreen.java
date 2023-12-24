@@ -76,14 +76,21 @@ public class LoginScreen extends AppCompatActivity {
                         case GUEST:
                             Intent intent = new Intent(LoginScreen.this, GuestMainScreen.class);
                             intent.putExtra("USER", user);
+                            UserUtils.setCurrentUser(user);
                             startActivity(intent);
                             break;
                         case HOST:
                             Intent intent1 = new Intent(LoginScreen.this, HostMainScreen.class);
                             intent1.putExtra("USER", user);
+                            UserUtils.setCurrentUser(user);
                             startActivity(intent1);
                             break;
                         case ADMIN:
+//                            Intent intent2 = new Intent(LoginScreen.this, AdministratorMainScreen.class);
+//                            intent2.putExtra("USER", user);
+//                            UserUtils.setCurrentUser(user);
+//                            startActivity(intent2);
+                            break;
                         default:
                             textInputEmail.setError("Invalid username or password");
 

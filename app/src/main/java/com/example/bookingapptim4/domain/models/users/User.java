@@ -45,6 +45,10 @@ public class User implements Parcelable {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getPassword() {
         return password;
     }

@@ -1,8 +1,7 @@
-package com.example.bookingapptim4.data_layer.repositories.users;
+package com.example.bookingapptim4.data_layer.repositories.reservations;
 
 import com.example.bookingapptim4.BuildConfig;
-import com.example.bookingapptim4.data_layer.repositories.users.UserService;
-import com.example.bookingapptim4.domain.models.users.User;
+import com.example.bookingapptim4.data_layer.repositories.accommodations.AccommodationService;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,17 +10,8 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class UserUtils {
+public class ReservationUtils {
     public static final String SERVICE_API_PATH = "http://"+ BuildConfig.IP_ADDR +":8080/api/v1/";
-    private static User currentUser;
-
-    public static User getCurrentUser() {
-        return currentUser;
-    }
-
-    public static void setCurrentUser(User currentUser) {
-        UserUtils.currentUser = currentUser;
-    }
 
     public static OkHttpClient test(){
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -42,5 +32,5 @@ public class UserUtils {
             .client(test())
             .build();
 
-    public static UserService userService = retrofit.create(UserService.class);
+    public static ReservationService reservationService = retrofit.create(ReservationService.class);
 }

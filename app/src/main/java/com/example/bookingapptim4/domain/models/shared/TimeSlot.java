@@ -9,6 +9,11 @@ public class TimeSlot implements Parcelable {
     private String startDate;
     private String endDate;
 
+    public TimeSlot(String startDate, String endDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
     protected TimeSlot(Parcel in) {
         startDate = in.readString();
         endDate = in.readString();
