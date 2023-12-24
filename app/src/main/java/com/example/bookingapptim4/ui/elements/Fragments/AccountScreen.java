@@ -1,5 +1,7 @@
 package com.example.bookingapptim4.ui.elements.Fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -13,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.bookingapptim4.R;
+import com.example.bookingapptim4.data_layer.repositories.shared.ConfirmationDialog;
 import com.example.bookingapptim4.data_layer.repositories.users.AdminUtils;
 import com.example.bookingapptim4.data_layer.repositories.users.GuestService;
 import com.example.bookingapptim4.data_layer.repositories.users.GuestUtils;
@@ -32,6 +35,7 @@ import com.example.bookingapptim4.ui.state_holders.text_watchers.PasswordFieldTe
 import com.example.bookingapptim4.ui.state_holders.text_watchers.PhoneFieldTextWatcher;
 import com.example.bookingapptim4.ui.state_holders.text_watchers.RequiredFieldTextWatcher;
 import com.example.bookingapptim4.ui.state_holders.view_models.UserViewModel;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
 import retrofit2.Call;
@@ -158,7 +162,7 @@ public class AccountScreen extends Fragment {
                 System.out.println(isInputValid());
                 if (isInputValid()) {
                     // Perform the save changes action
-                    saveChanges();
+                    saveChanges(view);
                 } else {
                     // Show an error or handle invalid input
                 }
@@ -172,10 +176,110 @@ public class AccountScreen extends Fragment {
             public void onClick(View v) {
                 // Handle button click, open the LoginScreen activity
                 logout();
+                Intent intent = new Intent(getActivity(), LoginScreen.class);
+                startActivity(intent);
             }
         });
 
+        Button deleteAccountButton = view.findViewById(R.id.deleteAccountButton);
+
+        deleteAccountButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Show confirmation dialog
+                ConfirmationDialog.show(requireContext(), "Confirm Deletion",
+                        "Are you sure you want to delete your account? This action cannot be undone.",
+                        new ConfirmationDialog.ConfirmationDialogListener() {
+                            @Override
+                            public void onConfirm() {
+                                // User clicked Yes, proceed with account deletion
+                                deleteAccount(view);
+                            }
+
+                            @Override
+                            public void onCancel() {
+                                // User clicked No, do nothing or dismiss the dialog
+                            }
+                        });
+            }
+        });
+
+
+
         return view;
+    }
+    private void deleteAccount(View view) {
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+
+        userViewModel.getUserLiveData().observe(getViewLifecycleOwner(), user-> {
+            if (user != null) {
+                if(user.getRole().toString() == "GUEST") {
+                    Call<Guest> call = GuestUtils.guestService.remove(user.getId(), "Bearer " + user.getJwt());
+
+                    call.enqueue(new Callback<Guest>() {
+                        @Override
+                        public void onResponse(Call<Guest> call, Response<Guest> response) {
+                            if (response.code() == 403) {
+                                showSnackbar(view, "Deletion failed: You have active reservations.");
+                            }
+                            if (response.code() == 200) {
+                                logout();
+                                Intent intent = new Intent(getActivity(), LoginScreen.class);
+                                startActivity(intent);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Guest> call, Throwable t) {
+
+                        }
+                    });
+
+                } else if (user.getRole().toString() == "HOST") {
+                    Call<Host> call = HostUtils.hostService.remove(user.getId(), "Bearer " + user.getJwt());
+
+                    call.enqueue(new Callback<Host>() {
+                        @Override
+                        public void onResponse(Call<Host> call, Response<Host> response) {
+                            if (response.code() == 403) {
+                                showSnackbar(view, "Deletion failed. One or more of your accommodations have active reservations");
+                            }
+                            if (response.code() == 200) {
+                                logout();
+                                Intent intent = new Intent(getActivity(), LoginScreen.class);
+                                startActivity(intent);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Host> call, Throwable t) {
+
+                        }
+                    });
+
+                } else if (user.getRole().toString() == "ADMIN") {
+                    Call<Admin> call = AdminUtils.adminService.remove(user.getId(), "Bearer " + user.getJwt());
+                    call.enqueue(new Callback<Admin>() {
+                        @Override
+                        public void onResponse(Call<Admin> call, Response<Admin> response) {
+                            if (response.code() == 200) {
+                                logout();
+                                Intent intent = new Intent(getActivity(), LoginScreen.class);
+                                startActivity(intent);
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<Admin> call, Throwable t) {
+
+                        }
+                    });
+
+                }
+            }
+        });
+    }
+
+    private void showSnackbar(View view, String message) {
+        Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
     }
 
     private void logout() {
@@ -188,8 +292,6 @@ public class AccountScreen extends Fragment {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.code() == 200) {
-                            Intent intent = new Intent(getActivity(), LoginScreen.class);
-                            startActivity(intent);
                         }
                     }
                     @Override
@@ -237,7 +339,7 @@ public class AccountScreen extends Fragment {
         }
         return PasswordFieldTextWatcher.isValid(newPassword, confirmPassword);
     }
-    private void saveChanges() {
+    private void saveChanges(View view) {
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
 
         userViewModel.getUserLiveData().observe(getViewLifecycleOwner(), user-> {
@@ -261,30 +363,25 @@ public class AccountScreen extends Fragment {
                                 textInputEmail.getEditText().setError("Email already in use!");
                             }
                             if (response.code() == 200) {
-                                System.out.println("update succesfull");
+                                showSnackbar(view, "Saved changes");
                             }
                         }
-
                         @Override
                         public void onFailure(Call<Guest> call, Throwable t) {
-
                         }
                     });
 
                } else if (user.getRole().toString() == "HOST") {
                    Call<Host> call = HostUtils.hostService.edit(userUpdateRequest, "Bearer " + user.getJwt());
-
                    call.enqueue(new Callback<Host>() {
                        @Override
                        public void onResponse(Call<Host> call, Response<Host> response) {
                            if (response.code() == 200) {
-                               System.out.println("update succesfull");
+                               showSnackbar(view, "Saved changes");
                            }
                        }
-
                        @Override
                        public void onFailure(Call<Host> call, Throwable t) {
-
                        }
                    });
 
@@ -294,17 +391,14 @@ public class AccountScreen extends Fragment {
                        @Override
                        public void onResponse(Call<Admin> call, Response<Admin> response) {
                            if (response.code() == 200) {
-                               System.out.println("update succesfull");
+                               showSnackbar(view, "Saved changes");
                            }
                        }
                        @Override
                        public void onFailure(Call<Admin> call, Throwable t) {
-
                        }
                    });
-
                }
-
                String currentPassword = textInputCurrentPassword.getEditText().getText().toString();
                String newPassword = textInputNewPassword.getEditText().getText().toString();
                String confirmPassword = textInputConfirmPassword.getEditText().getText().toString();
@@ -312,7 +406,6 @@ public class AccountScreen extends Fragment {
                if (!currentPassword.equals("") && !currentPassword.equals("") && !currentPassword.equals("")) {
                    PasswordChangeRequest request = new PasswordChangeRequest(currentPassword, newPassword);
                     Call<User> call = UserUtils.userService.changePassword(user.getId(), request, "Bearer " + user.getJwt());
-
                     call.enqueue(new Callback<User>() {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
@@ -321,18 +414,16 @@ public class AccountScreen extends Fragment {
                             }
                             if (response.code() == 200) {
                             logout();
-
+                                Intent intent = new Intent(getActivity(), LoginScreen.class);
+                                startActivity(intent);
                             }
                         }
-
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {
-
                         }
                     });
                }
            }
         });
-
     }
 }

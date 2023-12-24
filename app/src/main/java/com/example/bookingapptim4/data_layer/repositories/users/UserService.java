@@ -80,5 +80,4 @@ public interface UserService {
     @PUT("users/{userId}/change-password")
     Call<User> changePassword(@Path("userId") Long userId, @Body PasswordChangeRequest request, @Header("Authorization") String authorizationHeader);
 
-
 }
