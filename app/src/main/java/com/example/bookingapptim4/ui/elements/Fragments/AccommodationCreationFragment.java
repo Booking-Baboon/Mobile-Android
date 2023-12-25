@@ -64,6 +64,7 @@ import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.radiobutton.MaterialRadioButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputLayout;
 import androidx.fragment.app.Fragment;
@@ -81,6 +82,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.Navigation;
 
 import java.io.File;
 import java.net.HttpCookie;
@@ -200,7 +202,7 @@ public class AccommodationCreationFragment extends Fragment {
                 availablePeriods.add(request);
                 System.out.println(request.getTimeSlot().getStartDate()+"-"+request.getTimeSlot().getEndDate());
                 Chip chip = new Chip(new ContextThemeWrapper(getContext(), R.style.Theme_BookingAppTim4));
-                chip.setText(request.getTimeSlot().getStartDate()+" to "+request.getTimeSlot().getEndDate()+"| Price per night: "+request.getPricePerNight()+"€");
+                chip.setText(request.getTimeSlot().getStartDate()+" to "+request.getTimeSlot().getEndDate()+"| Price per night: "+Float.toString(request.getPricePerNight())+"€");
 
                 chip.setCloseIconVisible(true);
                 chip.setOnCloseIconClickListener(new View.OnClickListener() {
@@ -234,7 +236,9 @@ public class AccommodationCreationFragment extends Fragment {
 
                  AccommodationRequest request = new AccommodationRequest(name, description, new HostReference(UserUtils.getCurrentUser().getId()), location, amenities, minGuest, maxGuest, isPricingPerPerson, type);
                  createAccommodation(request);
-
+                 showSnackbar(view, "Accommodation successfully created!");
+                 Bundle bundle = new Bundle();
+                 Navigation.findNavController(v).navigate(R.id.nav_accommodations, bundle);
 
              }
          });
@@ -242,6 +246,10 @@ public class AccommodationCreationFragment extends Fragment {
 
 
         return view;
+    }
+
+    private void showSnackbar(View view, String message) {
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
     }
 
     private AvailablePeriod parseAvailabilityPeriodInfo(View view){
@@ -342,7 +350,7 @@ public class AccommodationCreationFragment extends Fragment {
     }
 
     private void addPeriod(AvailablePeriod period) {
-        Call<Accommodation> call = AccommodationUtils.accommodationService.addPeriod(createdAccommodation.getId(),period.getId());
+        Call<Accommodation> call = AccommodationUtils.accommodationService.addPeriod(createdAccommodation.getId(),period.getId(), "Bearer " + UserUtils.getCurrentUser().getJwt());
         call.enqueue(new Callback<Accommodation>() {
             @Override
             public void onResponse(Call<Accommodation> call, Response<Accommodation> response) {
@@ -383,6 +391,7 @@ public class AccommodationCreationFragment extends Fragment {
                     Image uploadedImage = response.body();
                     if (uploadedImage != null) {
                         Log.d("REZ", "Uploaded image ID: " + uploadedImage.getId());
+                        addImage(uploadedImage);
                     }
 
                 }else{

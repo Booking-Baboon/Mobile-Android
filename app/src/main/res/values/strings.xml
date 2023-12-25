@@ -78,5 +78,6 @@
     <string name="upload_image">Upload Image</string>
     <string name="add_availability_price_hint">Price</string>
     <string name="add_available_periods">Add availability</string>
+    <string name="submit_changes">Submit Changes</string>
 
 </resources>

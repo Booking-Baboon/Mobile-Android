@@ -94,7 +94,7 @@ public interface AccommodationService {
             "Content-Type:application/json"
     })
     @PUT("accommodations/{accommodationId}/addPeriod/{periodId}")
-    Call<Accommodation> addPeriod(@Path("accommodationId") Long accommodationId,@Path("periodId") Long periodId );
+    Call<Accommodation> addPeriod(@Path("accommodationId") Long accommodationId,@Path("periodId") Long periodId, @Header("Authorization") String authorizationHeader );
 
     @Headers({
             "User-Agent: Mobile-Android",
@@ -102,5 +102,13 @@ public interface AccommodationService {
     })
     @PUT("accommodations//{accommodationId}/add/{imageId}")
     Call<Accommodation> addImage(@Path("accommodationId") Long accommodationId,@Path("imageId") Long periodId );
+
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @DELETE("accommodations/{accommodationId}/available-periods/{periodId}")
+    Call<Accommodation> remove(@Path("accommodationId") Long accommodationId,@Path("periodId") Long periodId);
 
 }
