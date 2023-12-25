@@ -1,6 +1,8 @@
 package com.example.bookingapptim4.ui.elements.Fragments;
 
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.IdRes;
@@ -219,6 +221,9 @@ public class FragmentGuestMainScreen extends Fragment{
             checkBox.setText(type.toString());
             checkBox.setId(View.generateViewId());
             checkboxContainer.addView(checkBox);
+            int checkboxColor = Color.parseColor("#FEA31A");
+            int checkboxColorStateList = ColorStateList.valueOf(checkboxColor).getDefaultColor();
+            checkBox.setButtonTintList(ColorStateList.valueOf(checkboxColorStateList));
         }
     }
 
@@ -230,6 +235,9 @@ public class FragmentGuestMainScreen extends Fragment{
             checkBox.setText(amenity.getName());
             checkBox.setId(View.generateViewId());
             amenitiesCheckboxesContainer.addView(checkBox);
+            int checkboxColor = Color.parseColor("#FEA31A");
+            int checkboxColorStateList = ColorStateList.valueOf(checkboxColor).getDefaultColor();
+            checkBox.setButtonTintList(ColorStateList.valueOf(checkboxColorStateList));
         }
     }
 

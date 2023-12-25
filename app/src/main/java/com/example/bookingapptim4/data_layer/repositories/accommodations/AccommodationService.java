@@ -86,25 +86,26 @@ public interface AccommodationService {
             "Content-Type:application/json"
     })
     @GET("accommodations/host/{id}")
-    Call<ArrayList<Accommodation>> getAllByHost(@Path("id") Long id,  @Header("Authorization") String authorizationHeader);
+    Call<ArrayList<Accommodation>> getAllByHost(@Path("id") Long id, @Header("Authorization") String authorizationHeader);
 
     @Headers({
             "User-Agent: Mobile-Android",
             "Content-Type:application/json"
     })
     @PUT("accommodations/{accommodationId}/updateEditingStatus/{isBeingEdited}")
-    Call<Accommodation> updateEditingStatus(@Path("accommodationId") Long accommodationId, @Path("isBeingEdited") boolean isBeingEdited,  @Header("Authorization") String authorizationHeader);
-    
+    Call<Accommodation> updateEditingStatus(@Path("accommodationId") Long accommodationId, @Path("isBeingEdited") boolean isBeingEdited, @Header("Authorization") String authorizationHeader);
+
     @Headers({
             "User-Agent: Mobile-Android",
             "Content-Type:application/json"
     })
     @PUT("accommodations/{accommodationId}/addPeriod/{periodId}")
-    Call<Accommodation> addPeriod(@Path("accommodationId") Long accommodationId,@Path("periodId") Long periodId );
+    Call<Accommodation> addPeriod(@Path("accommodationId") Long accommodationId, @Path("periodId") Long periodId);
 
     @Headers({
             "User-Agent: Mobile-Android",
             "Content-Type:application/json"
     })
     @PUT("accommodations//{accommodationId}/add/{imageId}")
-    Call<Accommodation> addImage(@Path("accommodationId") Long accommodationId,@Path("imageId") Long periodId );
+    Call<Accommodation> addImage(@Path("accommodationId") Long accommodationId, @Path("imageId") Long periodId);
+}

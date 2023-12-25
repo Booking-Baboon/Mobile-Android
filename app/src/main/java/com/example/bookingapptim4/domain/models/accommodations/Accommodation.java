@@ -25,9 +25,10 @@ public class Accommodation implements Parcelable {
     private Boolean pricingPerPerson;
     private AccommodationType type;
     private boolean isAutomaticallyAccepted;
+    private boolean isBeingEdited;
     private List<Image> images;
 
-    public Accommodation(Long id, String name, String description, Host host, Location location, List<Amenity> amenities, List<AvailablePeriod> availablePeriods, Integer minGuests, Integer maxGuests, Boolean pricingPerPerson, AccommodationType type, boolean isAutomaticallyAccepted, List<Image> images) {
+    public Accommodation(Long id, String name, String description, Host host, Location location, List<Amenity> amenities, List<AvailablePeriod> availablePeriods, Integer minGuests, Integer maxGuests, Boolean pricingPerPerson, AccommodationType type, boolean isAutomaticallyAccepted, boolean isBeingEdited, List<Image> images) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -40,6 +41,7 @@ public class Accommodation implements Parcelable {
         this.pricingPerPerson = pricingPerPerson;
         this.type = type;
         this.isAutomaticallyAccepted = isAutomaticallyAccepted;
+        this.isBeingEdited = isBeingEdited;
         this.images = images;
     }
 
@@ -55,6 +57,7 @@ public class Accommodation implements Parcelable {
         this.pricingPerPerson = pricingPerPerson;
         this.type = type;
         this.isAutomaticallyAccepted = false;
+        this.isBeingEdited = false;
         this.images = new ArrayList<>();
     }
 
@@ -78,6 +81,7 @@ public class Accommodation implements Parcelable {
         pricingPerPerson = in.readByte() != 0;
         type = (AccommodationType) in.readSerializable();
         isAutomaticallyAccepted = in.readByte() != 0;
+        isBeingEdited = in.readByte() != 0;
 
         // Read ArrayList instead of List
         images = new ArrayList<>();
@@ -132,6 +136,14 @@ public class Accommodation implements Parcelable {
         return isAutomaticallyAccepted;
     }
 
+    public boolean isBeingEdited() {
+        return isBeingEdited;
+    }
+
+    public void setBeingEdited(boolean beingEdited) {
+        isBeingEdited = beingEdited;
+    }
+
     public List<Image> getImages() {
         return images;
     }
@@ -160,6 +172,7 @@ public class Accommodation implements Parcelable {
         dest.writeByte((byte) (pricingPerPerson ? 1 : 0));
         dest.writeSerializable(type);
         dest.writeByte((byte) (isAutomaticallyAccepted ? 1 : 0));
+        dest.writeByte((byte) (isBeingEdited ? 1 : 0));
 
         // Convert List to ArrayList before writing
         dest.writeList(new ArrayList<>(images));

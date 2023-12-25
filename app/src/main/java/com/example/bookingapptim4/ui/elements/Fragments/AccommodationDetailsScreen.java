@@ -27,12 +27,14 @@ import com.example.bookingapptim4.data_layer.repositories.accommodations.Amenity
 import com.example.bookingapptim4.data_layer.repositories.reviews.AccommodationReviewUtils;
 import com.example.bookingapptim4.data_layer.repositories.shared.ImageUtils;
 import com.example.bookingapptim4.data_layer.repositories.users.HostUtils;
+import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 import com.example.bookingapptim4.domain.models.accommodations.Amenity;
 
 import com.example.bookingapptim4.domain.models.reviews.AccommodationReview;
 import com.example.bookingapptim4.domain.models.shared.Image;
 import com.example.bookingapptim4.domain.models.users.Host;
+import com.example.bookingapptim4.domain.models.users.Role;
 import com.example.bookingapptim4.ui.state_holders.adapters.AccommodationReviewAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -125,12 +127,17 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
         fillViewWithDetails(view);
 
         Button makeReservationButton = view.findViewById(R.id.buttonMakeReservation);
-        makeReservationButton.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("selectedAccommodation", accommodation);
+        if(UserUtils.getCurrentUser().getRole() == Role.GUEST && !accommodation.isBeingEdited()){
+            makeReservationButton.setOnClickListener(v -> {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("selectedAccommodation", accommodation);
 
-            Navigation.findNavController(v).navigate(R.id.nav_reservation_request, bundle);
-        });
+                Navigation.findNavController(v).navigate(R.id.nav_reservation_request, bundle);
+            });
+        } else {
+            makeReservationButton.setEnabled(false);
+        }
+
 
         return view;
     }
