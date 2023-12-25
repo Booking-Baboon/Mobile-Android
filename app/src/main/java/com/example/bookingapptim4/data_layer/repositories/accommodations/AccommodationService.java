@@ -87,4 +87,10 @@ public interface AccommodationService {
     @GET("accommodations/host/{id}")
     Call<ArrayList<Accommodation>> getAllByHost(@Path("id") Long id,  @Header("Authorization") String authorizationHeader);
 
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("accommodations/{accommodationId}/updateEditingStatus/{isBeingEdited}")
+    Call<Accommodation> updateEditingStatus(@Path("accommodationId") Long accommodationId, @Path("isBeingEdited") boolean isBeingEdited,  @Header("Authorization") String authorizationHeader);
 }

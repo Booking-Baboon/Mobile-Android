@@ -22,10 +22,12 @@ import com.example.bookingapptim4.databinding.FragmentAccommodationsApprovalScre
 import com.example.bookingapptim4.databinding.FragmentGuestMainScreenBinding;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 import com.example.bookingapptim4.domain.models.accommodations.AccommodationModification;
+import com.example.bookingapptim4.domain.models.accommodations.AccommodationModificationStatus;
 import com.example.bookingapptim4.domain.models.accommodations.AccommodationModificationType;
 import com.example.bookingapptim4.domain.models.accommodations.Amenity;
 import com.example.bookingapptim4.ui.state_holders.adapters.AccommodationListAdapter;
 import com.example.bookingapptim4.ui.state_holders.adapters.AccommodationModificationListAdapter;
+import com.example.bookingapptim4.ui.state_holders.adapters.HostAccommodationListAdapter;
 import com.example.bookingapptim4.ui.state_holders.view_models.AccommodationFilterViewModel;
 
 import java.util.ArrayList;
@@ -49,6 +51,8 @@ public class AccommodationsApprovalScreen extends Fragment {
     ListView accommodationListView;
     private FragmentAccommodationsApprovalScreenBinding binding;
     private Bundle dialogInstanceState;
+
+    private AccommodationModificationListAdapter accommodationListAdapter;
 
     public AccommodationsApprovalScreen() {
         // Required empty public constructor
@@ -89,14 +93,24 @@ public class AccommodationsApprovalScreen extends Fragment {
                             System.out.println(response.body());
                             accommodationModifications = response.body();
 
-                            AccommodationModificationListAdapter accommodationListAdapter = new AccommodationModificationListAdapter(getActivity(), accommodationModifications);
+                            accommodationListAdapter = new AccommodationModificationListAdapter(getActivity(), accommodationModifications);
                             accommodationListAdapter.setOnApproveButtonClickListener(new AccommodationModificationListAdapter.OnApproveButtonClickListener() {
                                 @Override
                                 public void onApproveButtonClick(AccommodationModification modification) {
                                     // Handle the approve button click for the specific item
                                     // You can perform your approval logic or show a confirmation dialog
                                     // For example:
-                                    approveRequest(modification);
+                                    handleNewApproveRequest(modification);
+                                }
+                            });
+
+                            accommodationListAdapter.setOnDenyButtonClickListener(new AccommodationModificationListAdapter.OnDenyButtonClickListener() {
+                                @Override
+                                public void onDenyButtonClick(AccommodationModification modification) {
+                                    // Handle the approve button click for the specific item
+                                    // You can perform your approval logic or show a confirmation dialog
+                                    // For example:
+                                    handleNewDenyRequest(modification);
                                 }
                             });
                             accommodationListView.setAdapter(accommodationListAdapter);
@@ -118,10 +132,52 @@ public class AccommodationsApprovalScreen extends Fragment {
 
 
     }
-
-    private void approveRequest(AccommodationModification modification) {
+    private void handleNewApproveRequest(AccommodationModification modification) {
         if (modification.getRequestType() == AccommodationModificationType.New) {
+            Call<Accommodation> call = AccommodationUtils.accommodationService.updateEditingStatus(modification.getId(), false, "Bearer " + UserUtils.getCurrentUser().getJwt());
 
+            call.enqueue(new Callback<Accommodation>() {
+                @Override
+                public void onResponse(Call<Accommodation> call, Response<Accommodation> response) {
+                    if (response.code() == 200){
+                        Log.d("REZ","Meesage recieved");
+                        approveRequest(modification.getId());
+
+                    }else{
+                        Log.d("REZ","Meesage recieved: "+response.code());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Accommodation> call, Throwable t) {
+                    Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
+                }
+            });
         }
+    }
+
+    private void approveRequest(Long id) {
+        Call<AccommodationModification> call = AccommodationModificationUtils.accommodationModificationService.approve(id, "Bearer " + UserUtils.getCurrentUser().getJwt());
+
+        call.enqueue(new Callback<AccommodationModification>() {
+            @Override
+            public void onResponse(Call<AccommodationModification> call, Response<AccommodationModification> response) {
+                if (response.code() == 200){
+                    Log.d("REZ","Meesage recieved");
+                    accommodationListAdapter.updateModificationStatus(id, AccommodationModificationStatus.Approved);
+
+                }else{
+                    Log.d("REZ","Meesage recieved: "+response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AccommodationModification> call, Throwable t) {
+                Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
+    }
+
+    private void handleNewDenyRequest(AccommodationModification modification) {
     }
 }

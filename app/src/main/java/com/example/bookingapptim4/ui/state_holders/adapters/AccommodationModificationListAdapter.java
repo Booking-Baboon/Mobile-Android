@@ -20,6 +20,7 @@ import androidx.navigation.Navigation;
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.data_layer.repositories.reviews.AccommodationReviewUtils;
 import com.example.bookingapptim4.domain.models.accommodations.AccommodationModification;
+import com.example.bookingapptim4.domain.models.accommodations.AccommodationModificationStatus;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,7 @@ import retrofit2.Response;
 public class AccommodationModificationListAdapter extends ArrayAdapter<AccommodationModification> {
     private ArrayList<AccommodationModification> accommodationModifications;
     private OnApproveButtonClickListener approveButtonClickListener;
+    private OnDenyButtonClickListener denyButtonClickListener;
     public AccommodationModificationListAdapter(Context context, ArrayList<AccommodationModification> accommodationModifications) {
         super(context, R.layout.accommodation_modification_card, accommodationModifications);
         this.accommodationModifications = accommodationModifications;
@@ -76,6 +78,9 @@ public class AccommodationModificationListAdapter extends ArrayAdapter<Accommoda
 
     public void setOnApproveButtonClickListener(OnApproveButtonClickListener listener) {
         this.approveButtonClickListener = listener;
+    }
+    public void setOnDenyButtonClickListener(OnDenyButtonClickListener listener) {
+        this.denyButtonClickListener = listener;
     }
 
     @NonNull
@@ -129,12 +134,36 @@ public class AccommodationModificationListAdapter extends ArrayAdapter<Accommoda
             }
         });
 
+        Button denyButton = convertView.findViewById(R.id.accommodation_modification_deny_button);
+
+        denyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (denyButtonClickListener != null) {
+                    denyButtonClickListener.onDenyButtonClick(getItem(position));
+                }
+            }
+        });
+
 
         return convertView;
     }
 
+    public void updateModificationStatus(long modificationId, AccommodationModificationStatus status) {
+        for (AccommodationModification modification : accommodationModifications) {
+            if (modification.getId() == modificationId) {
+                modification.setStatus(status);
+                notifyDataSetChanged();
+                break;
+            }
+        }
+    }
+
     public interface OnApproveButtonClickListener {
         void onApproveButtonClick(AccommodationModification modification);
+    }
+    public interface OnDenyButtonClickListener {
+        void onDenyButtonClick(AccommodationModification modification);
     }
     private void loadAverageRating(Long accommodationId, TextView accommodationRating){
         Call<Float> call = AccommodationReviewUtils.accommodationReviewService.getAverateRating(accommodationId);
