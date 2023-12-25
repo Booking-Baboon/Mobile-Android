@@ -12,6 +12,14 @@ public class AvailablePeriod implements Parcelable {
     private TimeSlot timeSlot;
     private Float pricePerNight;
 
+    public AvailablePeriod() {
+    }
+
+    public AvailablePeriod(TimeSlot timeSlot, Float pricePerNight) {
+        this.timeSlot = timeSlot;
+        this.pricePerNight = pricePerNight;
+    }
+
     protected AvailablePeriod(Parcel in) {
         if (in.readByte() == 0) {
             id = null;

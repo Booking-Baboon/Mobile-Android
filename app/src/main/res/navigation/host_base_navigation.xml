@@ -41,6 +41,24 @@
         />
 
     <fragment
+        android:id="@+id/nav_accommodation_creation"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.AccommodationCreationFragment"
+        android:label="HostAccommodationCreation"
+        tools:layout="@layout/fragment_accommodation_creation"
+        app:popUpTo="@+id/nav_accommodations"
+        app:popUpToInclusive="true"
+        />
+
+    <fragment
+        android:id="@+id/nav_accommodation_details"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.AccommodationDetailsScreen"
+        android:label="AccommodationDetails"
+        tools:layout="@layout/fragment_accommodation_details_screen"
+        app:popUpTo="@+id/nav_host"
+        app:popUpToInclusive="true"
+        />
+
+    <fragment
         android:id="@+id/nav_host_reservations"
         android:name="com.example.bookingapptim4.ui.elements.Fragments.HostReservationScreen"
         android:label="HostReservations"

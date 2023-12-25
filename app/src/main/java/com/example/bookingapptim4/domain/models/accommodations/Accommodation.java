@@ -43,6 +43,21 @@ public class Accommodation implements Parcelable {
         this.images = images;
     }
 
+    public Accommodation( String name, String description, Host host, Location location, List<Amenity> amenities, Integer minGuests, Integer maxGuests, Boolean pricingPerPerson, AccommodationType type) {
+        this.name = name;
+        this.description = description;
+        this.host = host;
+        this.location = location;
+        this.amenities = amenities;
+        this.availablePeriods = new ArrayList<>();
+        this.minGuests = minGuests;
+        this.maxGuests = maxGuests;
+        this.pricingPerPerson = pricingPerPerson;
+        this.type = type;
+        this.isAutomaticallyAccepted = false;
+        this.images = new ArrayList<>();
+    }
+
     protected Accommodation(Parcel in) {
         id = in.readLong();
         name = in.readString();

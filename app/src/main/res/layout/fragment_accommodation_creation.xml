@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.elements.Fragments.AccommodationCreationFragment"
+    >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="16dp">
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/create_accommodation"
+                android:textAlignment="center"
+                android:textColor="@color/cardview_dark_background"
+                android:textSize="36sp"
+                android:textStyle="italic"
+                android:layout_weight="0"
+                android:layout_marginBottom="10dp"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/accommodation_name_creation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/accommodation_name_hint"
+                android:layout_marginBottom="14dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/accommodation_address_creation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/accommodation_address_hint"
+                android:layout_marginBottom="14dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/accommodation_city_creation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/accommodation_city_hint"
+                android:layout_marginBottom="14dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/accommodation_country_creation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/accommodation_country_hint"
+                android:layout_marginBottom="14dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/accommodation_description_creation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/accommodation_description_hint"
+                android:layout_marginBottom="16dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:inputType="text" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20px"
+                android:text="@string/accommodation_type"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/accommodation_type_checkboxes_creation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"></RadioGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20px"
+                android:text="@string/Amenities"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/accommodation_amenities_checkboxes_creation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"></LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/accommodation_min_guest_creation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/accommodation_min_guest_hint"
+                android:layout_marginBottom="14dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number|numberSigned"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/accommodation_max_guest_creation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/accommodation_max_guest_hint"
+                android:layout_marginBottom="14dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number|numberSigned"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <org.imaginativeworld.whynotimagecarousel.ImageCarousel
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/accommodationImagesCarousel"/>
+
+            <Button
+                android:layout_marginTop="16dp"
+                android:id="@+id/upload_image_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/upload_image"
+                android:theme="@style/Button.TealCurved"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20px"
+                android:text="@string/add_available_periods"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+            <LinearLayout
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20px"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/add_availability_date_range_button"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Choose Date Range" />
+
+                <TextView
+                    android:id="@+id/add_availability_date_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/add_availability_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/add_availability_price_hint"
+                    android:layout_marginBottom="14dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number|numberSigned"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+                <Button
+                    android:id="@+id/add_availability_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="@string/add_availability_button"
+                    />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/add_availability_chips">
+
+
+
+
+                </com.google.android.material.chip.ChipGroup>
+
+
+
+
+
+            </LinearLayout>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id = "@+id/accommodation_price_per_person_creation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:theme = "@style/SwitchMaterial"
+                android:text="@string/pricePerPerson"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                />
+
+            <Button
+                android:id="@+id/accommodation_create_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/create_accommodation_button"
+                />
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

@@ -1,6 +1,7 @@
 package com.example.bookingapptim4.data_layer.repositories.accommodations;
 
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
+import com.example.bookingapptim4.domain.models.accommodations.AccommodationRequest;
 
 import java.util.ArrayList;
 
@@ -36,7 +37,7 @@ public interface AccommodationService {
             "Content-Type:application/json"
     })
     @POST("accommodations")
-    Call<Accommodation> create(@Body Accommodation accommodation);
+    Call<Accommodation> create(@Body AccommodationRequest accommodation, @Header("Authorization") String authorizationHeader);
 
     @Headers({
             "User-Agent: Mobile-Android",
@@ -93,4 +94,17 @@ public interface AccommodationService {
     })
     @PUT("accommodations/{accommodationId}/updateEditingStatus/{isBeingEdited}")
     Call<Accommodation> updateEditingStatus(@Path("accommodationId") Long accommodationId, @Path("isBeingEdited") boolean isBeingEdited,  @Header("Authorization") String authorizationHeader);
-}
+    
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("accommodations/{accommodationId}/addPeriod/{periodId}")
+    Call<Accommodation> addPeriod(@Path("accommodationId") Long accommodationId,@Path("periodId") Long periodId );
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("accommodations//{accommodationId}/add/{imageId}")
+    Call<Accommodation> addImage(@Path("accommodationId") Long accommodationId,@Path("imageId") Long periodId );
