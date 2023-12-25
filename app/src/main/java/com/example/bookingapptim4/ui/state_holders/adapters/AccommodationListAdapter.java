@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,11 +18,14 @@ import androidx.navigation.Navigation;
 
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
+import com.example.bookingapptim4.domain.models.accommodations.AccommodationModification;
+import com.example.bookingapptim4.domain.models.accommodations.AccommodationModificationStatus;
 
 import java.util.ArrayList;
 
 public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
     private ArrayList<Accommodation> accommodations;
+
     public AccommodationListAdapter(Context context, ArrayList<Accommodation> accommodations) {
         super(context, R.layout.accommodation_card, accommodations);
         this.accommodations = accommodations;

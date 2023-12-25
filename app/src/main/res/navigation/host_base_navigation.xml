@@ -50,6 +50,15 @@
         />
 
     <fragment
+        android:id="@+id/nav_accommodation_edit"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.AccommodationEditFragment"
+        android:label="HostAccommodationEdit"
+        tools:layout="@layout/fragment_accommodation_edit"
+        app:popUpTo="@+id/nav_accommodations"
+        app:popUpToInclusive="true"
+        />
+              
+        <fragment
         android:id="@+id/nav_add_availability"
         android:name="com.example.bookingapptim4.ui.elements.Fragments.AddAvailabilityFragment"
         android:label="AddAvailability"

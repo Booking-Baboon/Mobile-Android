@@ -20,7 +20,9 @@ import com.example.bookingapptim4.databinding.FragmentAccommodationsScreenBindin
 import com.example.bookingapptim4.databinding.FragmentGuestMainScreenBinding;
 import com.example.bookingapptim4.databinding.FragmentHostMainScreenBinding;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
+import com.example.bookingapptim4.domain.models.accommodations.AccommodationModification;
 import com.example.bookingapptim4.ui.state_holders.adapters.AccommodationListAdapter;
+import com.example.bookingapptim4.ui.state_holders.adapters.AccommodationModificationListAdapter;
 import com.example.bookingapptim4.ui.state_holders.adapters.HostAccommodationListAdapter;
 
 import java.util.ArrayList;
@@ -54,7 +56,7 @@ public class AccommodationsScreen extends Fragment {
 
         accommodationListView = root.findViewById(R.id.host_accommodations_list);
 
-        loadAccommodations(UserUtils.getCurrentUser().getId(), UserUtils.getCurrentUser().getJwt());
+        loadAccommodations(UserUtils.getCurrentUser().getId(), UserUtils.getCurrentUser().getJwt(), root);
 
         Button button = root.findViewById(R.id.add_accommodation_button);
         button.setOnClickListener(v -> {
@@ -73,7 +75,7 @@ public class AccommodationsScreen extends Fragment {
         binding = null;
     }
 
-    private void loadAccommodations(Long hostId, String jwt){
+    private void loadAccommodations(Long hostId, String jwt, View view){
 
         Call<ArrayList<Accommodation>> call = AccommodationUtils.accommodationService.getAllByHost(hostId, "Bearer " + jwt);
 
@@ -86,6 +88,17 @@ public class AccommodationsScreen extends Fragment {
                     accommodations = response.body();
 
                     HostAccommodationListAdapter accommodationListAdapter = new HostAccommodationListAdapter(getActivity(), accommodations);
+
+                    accommodationListAdapter.setOnEditButtonClickListener(new HostAccommodationListAdapter.OnEditButtonClickListener() {
+                        @Override
+                        public void onEditButtonClick(Accommodation accommodation) {
+
+                            Bundle bundle = new Bundle();
+
+                            Navigation.findNavController(view).navigate(R.id.nav_accommodation_edit, bundle);
+                        }
+                    });
+
                     accommodationListView.setAdapter(accommodationListAdapter);
                     accommodationListAdapter.notifyDataSetChanged();
 

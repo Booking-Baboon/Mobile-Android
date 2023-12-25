@@ -107,7 +107,7 @@ public interface AccommodationService {
             "Content-Type:application/json"
     })
     @PUT("accommodations//{accommodationId}/add/{imageId}")
-    Call<Accommodation> addImage(@Path("accommodationId") Long accommodationId,@Path("imageId") Long periodId );
+    Call<Accommodation> addImage(@Path("accommodationId") Long accommodationId, @Path("imageId") Long periodId);
 
 
     @Headers({
@@ -116,5 +116,4 @@ public interface AccommodationService {
     })
     @DELETE("accommodations/{accommodationId}/available-periods/{periodId}")
     Call<Accommodation> remove(@Path("accommodationId") Long accommodationId,@Path("periodId") Long periodId);
-
 }
