@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ import retrofit2.Response;
 
 public class HostAccommodationListAdapter extends ArrayAdapter<Accommodation> {
     private ArrayList<Accommodation> accommodations;
+    private OnEditButtonClickListener editButtonClickListener;
     public HostAccommodationListAdapter(Context context, ArrayList<Accommodation> accommodations) {
         super(context, R.layout.host_accommodation_card, accommodations);
         this.accommodations = accommodations;
@@ -49,6 +51,11 @@ public class HostAccommodationListAdapter extends ArrayAdapter<Accommodation> {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+
+    public void setOnEditButtonClickListener(OnEditButtonClickListener listener) {
+        this.editButtonClickListener = listener;
     }
 
     @NonNull
@@ -85,9 +92,29 @@ public class HostAccommodationListAdapter extends ArrayAdapter<Accommodation> {
 
                 Navigation.findNavController(v).navigate(R.id.nav_accommodation_details, bundle);
             });
+
+            Button editButton = convertView.findViewById(R.id.edit_accommodation_button);
+
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (editButtonClickListener != null) {
+                        editButtonClickListener.onEditButtonClick(getItem(position));
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("selectedAccommodation", accommodation);
+
+                        Navigation.findNavController(v).navigate(R.id.nav_accommodation_edit, bundle);
+                    }
+                }
+            });
+
         }
 
         return convertView;
+    }
+
+    public interface OnEditButtonClickListener {
+        void onEditButtonClick(Accommodation accommodation);
     }
 
     private void loadAverageRating(Long accommodationId, TextView accommodationRating){
