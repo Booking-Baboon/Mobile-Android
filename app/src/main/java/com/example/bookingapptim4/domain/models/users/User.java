@@ -22,7 +22,7 @@ public class User implements Parcelable {
 
     private String phoneNumber;
 
-    private Role role = Role.UNAUTHORIZED;
+    private Role role;
 
     private String jwt;
 
