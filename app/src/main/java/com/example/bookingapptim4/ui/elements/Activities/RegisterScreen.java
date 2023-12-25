@@ -68,8 +68,10 @@ public class RegisterScreen extends AppCompatActivity {
                 String passwordConfirm = textInputPasswordConfirm.getEditText().getText().toString();
                 User user = new User(password, email, firstName, lastName, address, phone);
                 if(hostSwitch.isChecked()){
+                    user.setRole("HOST");
                     registerHost(user);
                 }else{
+                    user.setRole("GUEST");
                     registerGuest(user);
                 }
             }
