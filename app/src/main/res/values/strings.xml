@@ -64,5 +64,10 @@
     <string name="add_availability_button">Add availability\n</string>
     <string name="delete_button">Delete\n</string>
     <string name="add_accommodation_button">Add Accommodation</string>
+    <string name="Deny">deny</string>
+    <string name="Approve">approve</string>
+    <string name="status">Status:</string>
+    <string name="requestType">Request type:</string>
+    <string name="show_all_requests">Show all requests</string>
 
 </resources>
