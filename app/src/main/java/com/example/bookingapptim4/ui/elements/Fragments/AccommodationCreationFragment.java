@@ -1,10 +1,7 @@
 package com.example.bookingapptim4.ui.elements.Fragments;
 
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.app.Activity.RESULT_OK;
 
-
-import static com.fasterxml.jackson.databind.type.LogicalType.DateTime;
 
 import android.content.Context;
 import android.content.Intent;
@@ -34,14 +31,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.bookingapptim4.R;
-import com.example.bookingapptim4.data_layer.repositories.accommodations.AccommodationService;
 import com.example.bookingapptim4.data_layer.repositories.accommodations.AccommodationUtils;
 import com.example.bookingapptim4.data_layer.repositories.accommodations.AmenityUtils;
 import com.example.bookingapptim4.data_layer.repositories.accommodations.AvailablePeriodUtils;
 import com.example.bookingapptim4.data_layer.repositories.shared.ImageUtils;
 import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
 import com.example.bookingapptim4.databinding.FragmentAccommodationCreationBinding;
-import com.example.bookingapptim4.domain.dtos.reservations.CreateReservationRequest;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 import com.example.bookingapptim4.domain.models.accommodations.AccommodationRequest;
 import com.example.bookingapptim4.domain.models.accommodations.AccommodationType;
@@ -51,23 +46,18 @@ import com.example.bookingapptim4.domain.models.accommodations.AvailablePeriod;
 import com.example.bookingapptim4.domain.models.accommodations.Location;
 import com.example.bookingapptim4.domain.models.shared.Image;
 import com.example.bookingapptim4.domain.models.shared.TimeSlot;
-import com.example.bookingapptim4.domain.models.users.Guest;
-import com.example.bookingapptim4.domain.models.users.Host;
 import com.example.bookingapptim4.domain.models.users.HostReference;
-import com.example.bookingapptim4.domain.models.users.User;
-import com.example.bookingapptim4.ui.elements.Activities.HostMainScreen;
+import com.example.bookingapptim4.ui.state_holders.text_watchers.RequiredFieldTextWatcher;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.radiobutton.MaterialRadioButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputLayout;
-import androidx.fragment.app.Fragment;
 
 import org.imaginativeworld.whynotimagecarousel.ImageCarousel;
 import org.imaginativeworld.whynotimagecarousel.model.CarouselItem;
@@ -75,35 +65,25 @@ import org.imaginativeworld.whynotimagecarousel.model.CarouselItem;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Bundle;
-import android.widget.Toast;
+
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.Navigation;
 
 import java.io.File;
-import java.net.HttpCookie;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.UUID;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -133,6 +113,8 @@ public class AccommodationCreationFragment extends Fragment {
     private Accommodation createdAccommodation;
 
     private List<AvailablePeriod> availablePeriods = new ArrayList<>();
+
+    private RadioGroup typeRadioGroup;
 
 
 
@@ -174,6 +156,15 @@ public class AccommodationCreationFragment extends Fragment {
 
          priceInput = view.findViewById(R.id.add_availability_price);
 
+         typeRadioGroup= view.findViewById(R.id.accommodation_type_radio_creation);
+
+        nameInput.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(nameInput));
+        countryInput.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(countryInput));
+        cityInput.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(cityInput));
+        addressInput.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(addressInput));
+        descriptionInput.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(descriptionInput));
+        minGuestInput.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(minGuestInput));
+        maxGuestInput.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(maxGuestInput));
 
 
         loadAmenities();
@@ -220,6 +211,10 @@ public class AccommodationCreationFragment extends Fragment {
          submit.setOnClickListener(new View.OnClickListener(){
              @Override
              public void onClick(View v) {
+                 if (!areFieldsValid()){
+                     showSnackbar(view,"Please fill all required fields!");
+                     return;
+                 }
                  String name = nameInput.getEditText().getText().toString();
                  String description = descriptionInput.getEditText().getText().toString();
                  Location location = new Location(countryInput.getEditText().getText().toString(), cityInput.getEditText().getText().toString(), addressInput.getEditText().getText().toString());
@@ -228,7 +223,7 @@ public class AccommodationCreationFragment extends Fragment {
                  int maxGuest = Integer.parseInt(maxGuestInput.getEditText().getText().toString());
                  SwitchMaterial  pricePerPersonSwitch = binding.getRoot().findViewById(R.id.accommodation_price_per_person_creation);
                  boolean isPricingPerPerson =  pricePerPersonSwitch.isChecked();
-                 RadioGroup radioGroup = binding.getRoot().findViewById(R.id.accommodation_type_checkboxes_creation);
+                 RadioGroup radioGroup = binding.getRoot().findViewById(R.id.accommodation_type_radio_creation);
                  int checkedTypeId = radioGroup.getCheckedRadioButtonId();
                  RadioButton selectedRadioButton = binding.getRoot().findViewById(checkedTypeId);
                  String selectedValue = selectedRadioButton.getText().toString();
@@ -482,7 +477,7 @@ public class AccommodationCreationFragment extends Fragment {
 
     private void fillAccommodationTypeRadioGroup(View view){
 
-        RadioGroup radioGroup = view.findViewById(R.id.accommodation_type_checkboxes_creation);
+        RadioGroup radioGroup = view.findViewById(R.id.accommodation_type_radio_creation);
         
         AccommodationType[] values = AccommodationType.values();
 
@@ -630,5 +625,49 @@ public class AccommodationCreationFragment extends Fragment {
         });
     }
 
+    private boolean areFieldsValid() {
 
+        if (nameInput.getEditText().length() == 0) {
+            nameInput.setError("This field is required");
+            return false;
+        }else{
+            nameInput.setError(null);
+        }
+
+        if (countryInput.getEditText().length() == 0) {
+            countryInput.setError("This field is required");
+            return false;
+        }
+
+
+        if (cityInput.getEditText().length() == 0) {
+            cityInput.setError("This field is required");
+            return false;
+        }
+
+        if (addressInput.getEditText().length() == 0) {
+            addressInput.setError("This field is required");
+            return false;
+        }
+
+        if (descriptionInput.getEditText().length() == 0) {
+            descriptionInput.setError("This field is required");
+            return false;
+        }
+
+        if (minGuestInput.getEditText().length() == 0) {
+            minGuestInput.setError("This field is required");
+            return false;
+        }
+
+        if (maxGuestInput.getEditText().length() == 0) {
+            maxGuestInput.setError("This field is required");
+            return false;
+        }
+
+        if(typeRadioGroup.getCheckedRadioButtonId() == -1) return false;
+
+
+        return true;
+    }
 }
