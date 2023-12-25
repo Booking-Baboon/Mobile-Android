@@ -110,7 +110,7 @@
                 android:textStyle="bold" />
 
             <RadioGroup
-                android:id="@+id/accommodation_type_checkboxes_creation"
+                android:id="@+id/accommodation_type_radio_creation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"></RadioGroup>
@@ -211,7 +211,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number|numberSigned"/>
+                        android:inputType="numberDecimal"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
                 <Button

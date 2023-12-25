@@ -9,6 +9,7 @@ import retrofit2.http.Body;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 
 public interface AvailablePeriodService {
     @Headers({
@@ -17,4 +18,11 @@ public interface AvailablePeriodService {
     })
     @POST("available-periods")
     Call<AvailablePeriod> create(@Body AvailablePeriod period);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("available-periods")
+    Call<AvailablePeriod> update(@Body AvailablePeriod period);
 }

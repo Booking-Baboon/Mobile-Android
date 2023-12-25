@@ -72,6 +72,7 @@ public class HostAccommodationListAdapter extends ArrayAdapter<Accommodation> {
         TextView accommodationName = convertView.findViewById(R.id.host_accommodation_title);
         TextView accommodationLocation = convertView.findViewById(R.id.host_accommodation_location);
         TextView accommodationRating = convertView.findViewById(R.id.host_accommodation_rating);
+        Button addAvailabilityButton = convertView.findViewById(R.id.add_availability_accommodation_button);
 
 
         if (accommodation != null) {
@@ -108,6 +109,15 @@ public class HostAccommodationListAdapter extends ArrayAdapter<Accommodation> {
                 }
             });
 
+            addAvailabilityButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("accommodation", accommodation);
+
+                    Navigation.findNavController(v).navigate(R.id.nav_add_availability, bundle);
+                }
+            });
         }
 
         return convertView;
