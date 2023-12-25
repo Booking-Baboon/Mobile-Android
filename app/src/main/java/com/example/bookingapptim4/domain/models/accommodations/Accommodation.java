@@ -169,7 +169,7 @@ public class Accommodation implements Parcelable {
 
         dest.writeInt(minGuests);
         dest.writeInt(maxGuests);
-        dest.writeByte((byte) (pricingPerPerson ? 1 : 0));
+        /*dest.writeByte((byte) (pricingPerPerson ? 1 : 0));*/
         dest.writeSerializable(type);
         dest.writeByte((byte) (isAutomaticallyAccepted ? 1 : 0));
         dest.writeByte((byte) (isBeingEdited ? 1 : 0));
