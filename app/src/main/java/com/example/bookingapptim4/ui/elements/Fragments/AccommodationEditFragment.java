@@ -446,7 +446,7 @@ public class AccommodationEditFragment extends Fragment {
     }
 
     private void addPeriod(AvailablePeriod period) {
-        Call<Accommodation> call = AccommodationUtils.accommodationService.addPeriod(createdAccommodation.getId(),period.getId());
+        /*Call<Accommodation> call = AccommodationUtils.accommodationService.addPeriod(createdAccommodation.getId(),period.getId());
         call.enqueue(new Callback<Accommodation>() {
             @Override
             public void onResponse(Call<Accommodation> call, Response<Accommodation> response) {
@@ -464,7 +464,7 @@ public class AccommodationEditFragment extends Fragment {
             public void onFailure(Call<Accommodation> call, Throwable t) {
                 Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
             }
-        });
+        });*/
     }
 
 
