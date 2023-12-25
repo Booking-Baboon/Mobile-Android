@@ -5,10 +5,45 @@
     android:layout_height="match_parent"
     tools:context=".ui.elements.Fragments.AccommodationsApprovalScreen">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical"
+        tools:context=".fragments.MainScreen">
+
+        <LinearLayout
+            android:id="@+id/linear2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal">
+            >
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id = "@+id/show_all_requests_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:theme = "@style/SwitchMaterial"
+                android:text="@string/show_all_requests"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                />
+
+
+        </LinearLayout>
+
+
+        <ListView
+            android:id="@+id/accommodation_modifications_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            tools:listitem="@layout/accommodation_modification_card"/>
+
+    </LinearLayout>
+
 
 </FrameLayout>

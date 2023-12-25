@@ -44,7 +44,7 @@ public interface AccommodationService {
             "Content-Type:application/json"
     })
     @DELETE("accommodations/{id}")
-    Call<ResponseBody> remove(@Path("id") Long id);
+    Call<Accommodation> remove(@Path("id") Long id, @Header("Authorization") String authorizationHeader);
 
     @Headers({
             "User-Agent: Mobile-Android",
@@ -86,8 +86,14 @@ public interface AccommodationService {
             "Content-Type:application/json"
     })
     @GET("accommodations/host/{id}")
-    Call<ArrayList<Accommodation>> getAllByHost(@Path("id") Long id,  @Header("Authorization") String authorizationHeader);
+    Call<ArrayList<Accommodation>> getAllByHost(@Path("id") Long id, @Header("Authorization") String authorizationHeader);
 
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("accommodations/{accommodationId}/updateEditingStatus/{isBeingEdited}")
+    Call<Accommodation> updateEditingStatus(@Path("accommodationId") Long accommodationId, @Path("isBeingEdited") boolean isBeingEdited, @Header("Authorization") String authorizationHeader);
 
     @Headers({
             "User-Agent: Mobile-Android",
