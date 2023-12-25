@@ -6,6 +6,7 @@ import com.example.bookingapptim4.domain.models.accommodations.AccommodationModi
 import java.util.ArrayList;
 
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -27,4 +28,11 @@ public interface AccommodationModificationService {
     })
     @PUT("accommodation-modifications/approve/{id}")
     Call<AccommodationModification> approve(@Path("id") Long id, @Header("Authorization") String authorizationHeader);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("accommodation-modifications/deny/{id}")
+    Call<AccommodationModification> deny(@Path("id") Long id, @Header("Authorization") String authorizationHeader);
 }

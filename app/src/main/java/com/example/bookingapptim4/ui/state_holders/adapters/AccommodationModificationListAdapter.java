@@ -124,6 +124,15 @@ public class AccommodationModificationListAdapter extends ArrayAdapter<Accommoda
         }
 
         Button approveButton = convertView.findViewById(R.id.accommodation_modification_approve_button);
+        Button denyButton = convertView.findViewById(R.id.accommodation_modification_deny_button);
+
+        if (accommodationModification != null && accommodationModification.getStatus().equals(AccommodationModificationStatus.Pending)) {
+            approveButton.setEnabled(true);
+            denyButton.setEnabled(true);
+        } else {
+            approveButton.setEnabled(false);
+            denyButton.setEnabled(false);
+        }
 
         approveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,7 +143,7 @@ public class AccommodationModificationListAdapter extends ArrayAdapter<Accommoda
             }
         });
 
-        Button denyButton = convertView.findViewById(R.id.accommodation_modification_deny_button);
+
 
         denyButton.setOnClickListener(new View.OnClickListener() {
             @Override

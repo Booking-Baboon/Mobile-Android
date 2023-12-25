@@ -43,7 +43,7 @@ public interface AccommodationService {
             "Content-Type:application/json"
     })
     @DELETE("accommodations/{id}")
-    Call<ResponseBody> remove(@Path("id") Long id);
+    Call<Accommodation> remove(@Path("id") Long id, @Header("Authorization") String authorizationHeader);
 
     @Headers({
             "User-Agent: Mobile-Android",
