@@ -22,11 +22,11 @@ public class Guest extends User {
     public Guest() {
     }
 
-    public Guest(String password, String email, String firstName, String lastName, String address, String phoneNumber) {
-        super(password, email, firstName, lastName, address, phoneNumber);
+    public Guest(String password, String email, String firstName, String lastName, String address, String phoneNumber, Role role) {
+        super(password, email, firstName, lastName, address, phoneNumber, role);
     }
 
     public Guest(User user) {
-        super(user.getPassword(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getAddress(), user.getPhoneNumber());
+        super(user.getPassword(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getAddress(), user.getPhoneNumber(), user.getRole());
     }
 }

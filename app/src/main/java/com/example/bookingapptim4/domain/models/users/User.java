@@ -132,13 +132,14 @@ public class User implements Parcelable {
 
     public User(){}
 
-    public User(String password, String email, String firstName, String lastName, String address, String phoneNumber) {
+    public User(String password, String email, String firstName, String lastName, String address, String phoneNumber, Role role) {
         this.password = password;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.phoneNumber = phoneNumber;
+        this.role = role;
     }
 
     @Override

@@ -18,6 +18,7 @@ import com.example.bookingapptim4.data_layer.repositories.users.HostUtils;
 import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
 import com.example.bookingapptim4.domain.models.users.Guest;
 import com.example.bookingapptim4.domain.models.users.Host;
+import com.example.bookingapptim4.domain.models.users.Role;
 import com.example.bookingapptim4.domain.models.users.User;
 import com.example.bookingapptim4.ui.state_holders.text_watchers.EmailFieldTextWatcher;
 import com.example.bookingapptim4.ui.state_holders.text_watchers.PhoneFieldTextWatcher;
@@ -66,12 +67,11 @@ public class RegisterScreen extends AppCompatActivity {
                 String address = textInputAddress.getEditText().getText().toString();
                 String password = textInputPassword.getEditText().getText().toString();
                 String passwordConfirm = textInputPasswordConfirm.getEditText().getText().toString();
-                User user = new User(password, email, firstName, lastName, address, phone);
                 if(hostSwitch.isChecked()){
-                    user.setRole("HOST");
+                    User user = new User(password, email, firstName, lastName, address, phone, Role.HOST);
                     registerHost(user);
                 }else{
-                    user.setRole("GUEST");
+                    User user = new User(password, email, firstName, lastName, address, phone, Role.GUEST);
                     registerGuest(user);
                 }
             }

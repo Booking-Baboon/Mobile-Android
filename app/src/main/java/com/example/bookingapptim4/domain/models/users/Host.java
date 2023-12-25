@@ -41,12 +41,12 @@ public class Host extends User implements Parcelable {
     public Host() {
     }
 
-    public Host(String password, String email, String firstName, String lastName, String address, String phoneNumber) {
-        super(password, email, firstName, lastName, address, phoneNumber);
+    public Host(String password, String email, String firstName, String lastName, String address, String phoneNumber,Role role) {
+        super(password, email, firstName, lastName, address, phoneNumber, role);
     }
 
     public Host(User user) {
-        super(user.getPassword(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getAddress(), user.getPhoneNumber());
+        super(user.getPassword(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getAddress(), user.getPhoneNumber(),user.getRole());
     }
 
 }
