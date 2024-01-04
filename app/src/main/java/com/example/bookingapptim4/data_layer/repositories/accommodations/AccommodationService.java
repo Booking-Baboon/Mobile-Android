@@ -124,6 +124,7 @@ public interface AccommodationService {
     @PUT("accommodations/{accommodationId}/update-auto-accept/{isAutomaticallyAccepted}")
     Call<Accommodation> updateAutoAccept(
             @Path("accommodationId") Long accommodationId,
-            @Path("isAutomaticallyAccepted") boolean isAutomaticallyAccepted
+            @Path("isAutomaticallyAccepted") boolean isAutomaticallyAccepted,
+            @Header("Authorization") String authorizationHeader
     );
 }

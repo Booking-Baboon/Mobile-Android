@@ -20,6 +20,7 @@ import androidx.navigation.Navigation;
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.data_layer.repositories.accommodations.AccommodationUtils;
 import com.example.bookingapptim4.data_layer.repositories.reviews.AccommodationReviewUtils;
+import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 import com.example.bookingapptim4.domain.models.accommodations.AccommodationFilter;
 import com.google.android.material.materialswitch.MaterialSwitch;
@@ -178,7 +179,7 @@ public class HostAccommodationListAdapter extends ArrayAdapter<Accommodation> {
     }
 
     private void performUpdateAutoAccept(Accommodation accommodation, boolean isAutoAccept){
-        Call<Accommodation> call = AccommodationUtils.accommodationService.updateAutoAccept(accommodation.getId(), isAutoAccept);
+        Call<Accommodation> call = AccommodationUtils.accommodationService.updateAutoAccept(accommodation.getId(), isAutoAccept, "Bearer " + UserUtils.getCurrentUser().getJwt());
         call.enqueue(new Callback<Accommodation>() {
             @Override
             public void onResponse(Call<Accommodation> call, Response<Accommodation> response) {
