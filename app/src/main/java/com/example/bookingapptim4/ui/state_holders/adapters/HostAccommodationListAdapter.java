@@ -2,12 +2,14 @@ package com.example.bookingapptim4.ui.state_holders.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,8 +18,13 @@ import androidx.annotation.Nullable;
 import androidx.navigation.Navigation;
 
 import com.example.bookingapptim4.R;
+import com.example.bookingapptim4.data_layer.repositories.accommodations.AccommodationUtils;
 import com.example.bookingapptim4.data_layer.repositories.reviews.AccommodationReviewUtils;
+import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
+import com.example.bookingapptim4.domain.models.accommodations.AccommodationFilter;
+import com.google.android.material.materialswitch.MaterialSwitch;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
 
@@ -73,7 +80,10 @@ public class HostAccommodationListAdapter extends ArrayAdapter<Accommodation> {
         TextView accommodationLocation = convertView.findViewById(R.id.host_accommodation_location);
         TextView accommodationRating = convertView.findViewById(R.id.host_accommodation_rating);
         Button addAvailabilityButton = convertView.findViewById(R.id.add_availability_accommodation_button);
+        SwitchMaterial autoAcceptSwitch = convertView.findViewById(R.id.auto_accept_reservation_switch);
 
+        autoAcceptSwitch.setChecked(accommodation.isAutomaticallyAccepted());
+        addAutoAcceptListener(autoAcceptSwitch,accommodation);
 
         if (accommodation != null) {
             accommodationName.setText(accommodation.getName());
@@ -149,6 +159,40 @@ public class HostAccommodationListAdapter extends ArrayAdapter<Accommodation> {
             @Override
             public void onFailure(Call<Float> call, Throwable t) {
                 Log.d("AccommodationReviewUtils", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
+    }
+
+    private void addAutoAcceptListener(SwitchMaterial autoAcceptSwitch, Accommodation accommodation) {
+        autoAcceptSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isChecked = autoAcceptSwitch.isChecked();
+
+                if (isChecked) {
+                    performUpdateAutoAccept(accommodation, true);
+                } else {
+                    performUpdateAutoAccept(accommodation, false);
+                }
+            }
+        });
+    }
+
+    private void performUpdateAutoAccept(Accommodation accommodation, boolean isAutoAccept){
+        Call<Accommodation> call = AccommodationUtils.accommodationService.updateAutoAccept(accommodation.getId(), isAutoAccept, "Bearer " + UserUtils.getCurrentUser().getJwt());
+        call.enqueue(new Callback<Accommodation>() {
+            @Override
+            public void onResponse(Call<Accommodation> call, Response<Accommodation> response) {
+                if (response.code() == 200){
+                    Log.d("AccommodationUtils","Meesage recieved");
+                    System.out.println(response.body());
+                }else{
+                    Log.d("AccommodationUtils","Meesage recieved: "+response.code());
+                }
+            }
+            @Override
+            public void onFailure(Call<Accommodation> call, Throwable t) {
+                Log.d("AccommodationUtils", t.getMessage() != null?t.getMessage():"error");
             }
         });
     }

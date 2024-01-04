@@ -50,4 +50,5 @@ public interface AmenityService {
     })
     @PUT("accommodations")
     Call<Accommodation> edit(@Body Accommodation accommodation);
+
 }

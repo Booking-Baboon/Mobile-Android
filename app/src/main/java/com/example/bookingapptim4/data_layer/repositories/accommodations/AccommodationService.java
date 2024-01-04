@@ -116,4 +116,15 @@ public interface AccommodationService {
     })
     @DELETE("accommodations/{accommodationId}/available-periods/{periodId}")
     Call<Accommodation> remove(@Path("accommodationId") Long accommodationId,@Path("periodId") Long periodId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("accommodations/{accommodationId}/update-auto-accept/{isAutomaticallyAccepted}")
+    Call<Accommodation> updateAutoAccept(
+            @Path("accommodationId") Long accommodationId,
+            @Path("isAutomaticallyAccepted") boolean isAutomaticallyAccepted,
+            @Header("Authorization") String authorizationHeader
+    );
 }
