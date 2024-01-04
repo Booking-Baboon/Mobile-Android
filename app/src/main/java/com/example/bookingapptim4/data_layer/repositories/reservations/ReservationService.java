@@ -51,4 +51,11 @@ public interface ReservationService {
     })
     @PUT("reservations")
     Call<Reservation> edit(@Body Reservation reservation);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("reservations/guest/{id}")
+    Call<ArrayList<Reservation>> getAllForGuest(@Path("id") Long id, @Header("Authorization") String authorizationHeader);
 }

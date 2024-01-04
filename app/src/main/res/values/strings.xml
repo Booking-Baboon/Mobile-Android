@@ -85,5 +85,13 @@
     <string name="add_available_periods">Add availability</string>
     <string name="edit_accommodation">Edit accommodation</string>
     <string name="submit_changes">Submit Changes</string>
+    <string name="reservation_host">reservation host</string>
+    <string name="reservation_status">status</string>
+    <string name="reservation_accommodation_name">Accommodation</string>
+    <string name="reservation_period">2024.01.25 - 2024.02.05</string>
+    <string name="cancelButton">Cancel</string>
+    <string name="reviewHost">review host</string>
+    <string name="reportHost">report host</string>
+    <string name="reviewAccommodation">review accommodation\n</string>
 
 </resources>

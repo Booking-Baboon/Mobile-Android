@@ -5,10 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".ui.elements.Fragments.GuestReservationsScreen">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
+        android:id="@+id/guest_reservations_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="res" />
+        android:layout_marginTop="10dp"
+        tools:listitem="@layout/guest_reservation_card"/>
 
 </FrameLayout>
