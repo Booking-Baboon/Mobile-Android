@@ -11,9 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.data_layer.repositories.accommodations.AccommodationUtils;
@@ -44,6 +47,9 @@ public class GuestReservationsScreen extends Fragment {
     private ArrayList<Reservation> reservations = new ArrayList<>();
     private FragmentGuestReservationsScreenBinding binding;
     ListView reservationsListView;
+    private Spinner statusSpinner;
+
+    private GuestReservationsAdapter guestReservationsAdapter;
     public GuestReservationsScreen() {
         // Required empty public constructor
     }
@@ -66,12 +72,51 @@ public class GuestReservationsScreen extends Fragment {
         View root = binding.getRoot();
 
         reservationsListView = root.findViewById(R.id.guest_reservations_list);
-        loadReservations();
+
+        loadSpinner(root);
 
         return root;
     }
 
-    private void loadReservations() {
+    private void loadSpinner(View root) {
+        statusSpinner = root.findViewById(R.id.guest_reservation_status_spinner);
+        reservationsListView = root.findViewById(R.id.guest_reservations_list);
+
+        // Set up the spinner with status options
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.reservation_status_options,
+                android.R.layout.simple_spinner_item
+        );
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        statusSpinner.setAdapter(spinnerAdapter);
+
+        statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String selectedStatus = (String) parentView.getItemAtPosition(position);
+                loadReservations(selectedStatus);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                loadReservations("all");
+            }
+        });
+    }
+
+    private ArrayList<Reservation> filterReservationsByStatus(ArrayList<Reservation> reservations, String selectedStatus) {
+        ArrayList<Reservation> filteredReservations = new ArrayList<>();
+        for (Reservation reservation : reservations) {
+            if (reservation.getStatus().toString().equalsIgnoreCase(selectedStatus)) {
+                filteredReservations.add(reservation);
+            }
+        }
+        return filteredReservations;
+    }
+
+
+    private void loadReservations(String selectedStatus) {
         User user = UserUtils.getCurrentUser();
         Call<ArrayList<Reservation>> call = ReservationUtils.reservationService.getAllForGuest(user.getId(),"Bearer " + user.getJwt());
         call.enqueue(new Callback<ArrayList<Reservation>>() {
@@ -81,6 +126,10 @@ public class GuestReservationsScreen extends Fragment {
                     Log.d("ReservationUtils","Meesage recieved");
                     System.out.println(response.body());
                     reservations = response.body();
+
+                    if(!"all".equalsIgnoreCase(selectedStatus)){
+                        reservations = filterReservationsByStatus(reservations, selectedStatus);
+                    }
 
                     GuestReservationsAdapter guestReservationsAdapter = new GuestReservationsAdapter(getActivity(), reservations);
                     reservationsListView.setAdapter(guestReservationsAdapter);
