@@ -22,16 +22,37 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                        <!-- Accommodation Title -->
-                        <TextView
-                            android:id="@+id/textViewAccommodationTitle"
+
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:text="Accommodation Title"
-                            android:textSize="24sp"
-                            android:textStyle="bold"/>
+                            android:orientation="horizontal"
+                            android:layout_marginTop="16dp">
 
+                                <!-- Accommodation Title -->
+                                <TextView
+                                    android:id="@+id/textViewAccommodationTitle"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="Accommodation Title"
+                                    android:layout_weight="5"
+                                    android:textSize="24sp"
+                                    android:textStyle="bold"/>
+
+                                <ImageView
+                                    android:id="@+id/heartIcon"
+                                    android:layout_marginTop="4dp"
+                                    android:layout_width="0dp"
+                                    android:layout_height="24sp"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:clickable="true"
+                                    android:contentDescription="@string/favorites_icon_description"
+                                    android:src="@drawable/ic_empty_heart" />
+
+                        </LinearLayout>
 
                         <!-- RatingBar for Accommodation Rating -->
                         <RatingBar

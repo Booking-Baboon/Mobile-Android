@@ -85,5 +85,6 @@
     <string name="add_available_periods">Add availability</string>
     <string name="edit_accommodation">Edit accommodation</string>
     <string name="submit_changes">Submit Changes</string>
+    <string name="favorites_icon_description">favorites icon</string>
 
 </resources>
