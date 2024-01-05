@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.Navigation;
 
 import com.example.bookingapptim4.R;
@@ -65,6 +66,14 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
 
 
         if (reservation != null) {
+            if ("approved".equalsIgnoreCase(reservation.getStatus().toString())) {
+                status.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
+            } else if ("denied".equalsIgnoreCase(reservation.getStatus().toString())) {
+                status.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+            } else {
+                status.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+            }
+
             accommodationName.setText(reservation.getAccommodation().getName());
             status.setText(reservation.getStatus().toString());
             accommodationHost.setText(reservation.getAccommodation().getHost().getEmail());
