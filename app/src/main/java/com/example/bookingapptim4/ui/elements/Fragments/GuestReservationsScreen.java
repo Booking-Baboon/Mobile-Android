@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -29,6 +30,7 @@ import com.example.bookingapptim4.domain.models.reservations.Reservation;
 import com.example.bookingapptim4.domain.models.users.User;
 import com.example.bookingapptim4.ui.state_holders.adapters.AccommodationListAdapter;
 import com.example.bookingapptim4.ui.state_holders.adapters.GuestReservationsAdapter;
+import com.example.bookingapptim4.ui.state_holders.adapters.HostAccommodationListAdapter;
 import com.example.bookingapptim4.ui.state_holders.view_models.AccommodationFilterViewModel;
 
 import java.util.ArrayList;
@@ -95,12 +97,12 @@ public class GuestReservationsScreen extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String selectedStatus = (String) parentView.getItemAtPosition(position);
-                loadReservations(selectedStatus);
+                loadReservations(selectedStatus, root);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                loadReservations("all");
+                loadReservations("all", root);
             }
         });
     }
@@ -116,7 +118,7 @@ public class GuestReservationsScreen extends Fragment {
     }
 
 
-    private void loadReservations(String selectedStatus) {
+    private void loadReservations(String selectedStatus, View view) {
         User user = UserUtils.getCurrentUser();
         Call<ArrayList<Reservation>> call = ReservationUtils.reservationService.getAllForGuest(user.getId(),"Bearer " + user.getJwt());
         call.enqueue(new Callback<ArrayList<Reservation>>() {
@@ -131,7 +133,20 @@ public class GuestReservationsScreen extends Fragment {
                         reservations = filterReservationsByStatus(reservations, selectedStatus);
                     }
 
+
+
                     GuestReservationsAdapter guestReservationsAdapter = new GuestReservationsAdapter(getActivity(), reservations);
+
+                    guestReservationsAdapter.setOnReviewHostClickListener(new GuestReservationsAdapter.OnReviewHostButtonClickListener() {
+
+
+                        @Override
+                        public void onReviewHostButtonClick(Reservation reservation) {
+                            Bundle bundle = new Bundle();
+
+                            Navigation.findNavController(view).navigate(R.id.nav_review_host, bundle);
+                        }
+                    });
                     reservationsListView.setAdapter(guestReservationsAdapter);
                     guestReservationsAdapter.notifyDataSetChanged();
 

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,6 +23,12 @@ import java.util.ArrayList;
 
 public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
     private ArrayList<Reservation> reservations;
+
+    private OnReviewHostButtonClickListener reviewHostButtonClickListener;
+
+    public interface OnReviewHostButtonClickListener {
+        void onReviewHostButtonClick(Reservation reservation);
+    }
 
     public GuestReservationsAdapter(Context context, ArrayList<Reservation> reservations) {
         super(context, R.layout.guest_reservation_card, reservations);
@@ -46,6 +53,10 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    public void setOnReviewHostClickListener(OnReviewHostButtonClickListener listener) {
+        this.reviewHostButtonClickListener = listener;
     }
 
     @NonNull
@@ -73,6 +84,21 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
             } else {
                 status.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
             }
+
+            Button reviewHost = convertView.findViewById(R.id.guest_reservation_review_host_button);
+
+            reviewHost.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (reviewHostButtonClickListener != null) {
+                        reviewHostButtonClickListener.onReviewHostButtonClick(getItem(position));
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("selectedReservation", reservation);
+
+                        Navigation.findNavController(v).navigate(R.id.nav_review_host, bundle);
+                    }
+                }
+            });
 
             accommodationName.setText(reservation.getAccommodation().getName());
             status.setText(reservation.getStatus().toString());
