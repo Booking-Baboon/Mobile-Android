@@ -93,5 +93,10 @@
     <string name="reviewHost">review host</string>
     <string name="reportHost">report host</string>
     <string name="reviewAccommodation">review accommodation\n</string>
+    <string name="reportGuest">report guest</string>
+    <string name="approve">approve</string>
+    <string name="deny">deny</string>
+    <string name="reservation_guest">reservation_guest</string>
+    <string name="guestCancellations">5 cancellations</string>
 
 </resources>
