@@ -1,18 +1,27 @@
 package com.example.bookingapptim4.ui.elements.Fragments;
 
+import android.content.ContentValues;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.bookingapptim4.R;
+import com.example.bookingapptim4.data_layer.repositories.accommodations.SummaryUtils;
+import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 import com.example.bookingapptim4.domain.models.accommodations.summaries.MonthlySummary;
+import com.example.bookingapptim4.domain.models.users.User;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
@@ -23,10 +32,19 @@ import com.github.mikephil.charting.formatter.DefaultValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MonthlySummaryFragment extends Fragment {
@@ -72,7 +90,71 @@ public class MonthlySummaryFragment extends Fragment {
         String periodText = String.format("%s - %s", monthlySummary.getTimeSlot().getStartDate(), monthlySummary.getTimeSlot().getEndDate());
         periodTextView.setText(periodText);
 
+        setupDownloadButton(view);
+
         return view;
+    }
+
+    private void setupDownloadButton(View view) {
+        Button downloadButton = view.findViewById(R.id.monthlySummaryDownloadPDFButton);
+        downloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                downloadMonthlySummaryPDF();
+            }
+        });
+    }
+
+    private void downloadMonthlySummaryPDF() {
+        User user = UserUtils.getCurrentUser();
+        Call<ResponseBody> call = SummaryUtils.summaryService.getMonthlySummaryPDF(monthlySummary.getAccommodationId(), "Bearer " + user.getJwt());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Log.d("GuestUtils","Download successful");
+                    savePdf(response.body());
+                } else {
+                    Log.d("GuestUtils","Meesage recieved: "+response.code());
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d("SummaryUtils", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
+    }
+
+    private void savePdf(ResponseBody body) {
+        try {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "monthly_summary.pdf");
+            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "application/pdf");
+
+            Uri uri = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                uri = getActivity().getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues);
+            }
+
+            OutputStream outputStream = getActivity().getContentResolver().openOutputStream(uri);
+
+            if (outputStream != null) {
+                outputStream.write(body.bytes());
+                outputStream.close();
+
+                openPdf(uri);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openPdf(Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "application/pdf");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(intent);
     }
 
     private void populateReservationChart() {

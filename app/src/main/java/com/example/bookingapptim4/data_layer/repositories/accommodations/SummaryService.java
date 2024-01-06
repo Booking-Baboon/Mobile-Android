@@ -26,4 +26,11 @@ public interface SummaryService {
     @GET("summary/monthly/{accommodationId}")
     Call<MonthlySummary> getMonthlySummary(@Path("accommodationId") Long id, @Header("Authorization") String authorizationHeader);
 
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("summary/monthly/{accommodationId}/pdf")
+    Call<ResponseBody> getMonthlySummaryPDF(@Path("accommodationId") Long id, @Header("Authorization") String authorizationHeader);
+
 }
