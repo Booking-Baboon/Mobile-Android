@@ -103,5 +103,14 @@
         app:popUpToInclusive="true"
         />
 
+    <fragment
+        android:id="@+id/nav_period_summary"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.PeriodSummaryFragment"
+        android:label="MonthlySummary"
+        tools:layout="@layout/fragment_period_summary"
+        app:popUpTo="@+id/nav_host"
+        app:popUpToInclusive="true"
+        />
+
 
 </navigation>
