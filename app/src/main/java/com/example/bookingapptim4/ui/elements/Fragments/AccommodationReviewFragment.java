@@ -1,6 +1,5 @@
 package com.example.bookingapptim4.ui.elements.Fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,18 +14,14 @@ import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.example.bookingapptim4.R;
-import com.example.bookingapptim4.data_layer.repositories.reviews.HostReviewUtils;
-import com.example.bookingapptim4.data_layer.repositories.users.GuestUtils;
+import com.example.bookingapptim4.data_layer.repositories.reviews.AccommodationReviewUtils;
 import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
-import com.example.bookingapptim4.databinding.FragmentAddAvailabilityBinding;
-import com.example.bookingapptim4.databinding.FragmentHostReviewBinding;
-import com.example.bookingapptim4.domain.dtos.reviews.CreateHostReviewRequest;
+import com.example.bookingapptim4.domain.dtos.accommodations.AccommodationReference;
+import com.example.bookingapptim4.domain.dtos.reviews.CreateAccommodationReviewRequest;
 import com.example.bookingapptim4.domain.dtos.users.UserReference;
 import com.example.bookingapptim4.domain.models.reservations.Reservation;
-import com.example.bookingapptim4.domain.models.reviews.HostReview;
-import com.example.bookingapptim4.domain.models.users.Guest;
-import com.example.bookingapptim4.ui.elements.Activities.LoginScreen;
-import com.example.bookingapptim4.ui.elements.Activities.RegisterScreen;
+import com.example.bookingapptim4.databinding.FragmentAccommodationReviewBinding;
+import com.example.bookingapptim4.domain.models.reviews.AccommodationReview;
 import com.example.bookingapptim4.ui.state_holders.text_watchers.RequiredFieldTextWatcher;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -41,14 +36,14 @@ import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link HostReviewFragment#newInstance} factory method to
+ * Use the {@link AccommodationReviewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HostReviewFragment extends Fragment {
+public class AccommodationReviewFragment extends Fragment {
 
     private static final String RESERVATION_PARAM = "selectedReservation";
 
-    private FragmentHostReviewBinding binding;
+    private FragmentAccommodationReviewBinding binding;
 
     private Reservation reservation;
 
@@ -58,13 +53,13 @@ public class HostReviewFragment extends Fragment {
 
     private FragmentManager fragmentManager;
 
-    public HostReviewFragment() {
+    public AccommodationReviewFragment() {
         // Required empty public constructor
     }
 
 
-    public static HostReviewFragment newInstance() {
-        HostReviewFragment fragment = new HostReviewFragment();
+    public static AccommodationReviewFragment newInstance() {
+        AccommodationReviewFragment fragment = new AccommodationReviewFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -82,14 +77,14 @@ public class HostReviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentHostReviewBinding.inflate(inflater, container, false);
+        binding = FragmentAccommodationReviewBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        RatingBar ratingBar = view.findViewById(R.id.review_host_rating_bar);
+        RatingBar ratingBar = view.findViewById(R.id.review_accommodation_rating_bar);
         rating = (short) ratingBar.getRating();
-        textInputComment = view.findViewById(R.id.review_host_comment);
+        textInputComment = view.findViewById(R.id.review_accommodation_comment);
         textInputComment.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(textInputComment));
-        Button submitButton = view.findViewById(R.id.host_review_submit_button);
+        Button submitButton = view.findViewById(R.id.accommodation_review_submit_button);
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
         Date today = Calendar.getInstance().getTime();
@@ -98,7 +93,7 @@ public class HostReviewFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(!areFieldsValid()) return;
-                CreateHostReviewRequest review = new CreateHostReviewRequest(new UserReference(UserUtils.getCurrentUser().getId()), todayAsString, rating, textInputComment.getEditText().getText().toString(), new UserReference(reservation.getAccommodation().getHost().getId()) );
+                CreateAccommodationReviewRequest review = new CreateAccommodationReviewRequest(new UserReference(UserUtils.getCurrentUser().getId()), todayAsString, rating, textInputComment.getEditText().getText().toString(), new AccommodationReference(reservation.getAccommodation().getId()) );
                 submitReview(review);
             }
         });
@@ -107,12 +102,12 @@ public class HostReviewFragment extends Fragment {
 
     }
 
-    private void submitReview(CreateHostReviewRequest review) {
-        Call<HostReview> call = HostReviewUtils.hostReviewService.create(review, "Bearer " + UserUtils.getCurrentUser().getJwt());
+    private void submitReview(CreateAccommodationReviewRequest review) {
+        Call<AccommodationReview> call = AccommodationReviewUtils.accommodationReviewService.create(review, "Bearer " + UserUtils.getCurrentUser().getJwt());
 
-        call.enqueue(new Callback<HostReview>() {
+        call.enqueue(new Callback<AccommodationReview>() {
             @Override
-            public void onResponse(Call<HostReview> call, Response<HostReview> response) {
+            public void onResponse(Call<AccommodationReview> call, Response<AccommodationReview> response) {
                 if (response.code() == 200){
                     Log.d("REZ","Meesage recieved");
                     System.out.println(response.body());
@@ -128,7 +123,7 @@ public class HostReviewFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<HostReview>call, Throwable t) {
+            public void onFailure(Call<AccommodationReview>call, Throwable t) {
                 Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
             }
         });

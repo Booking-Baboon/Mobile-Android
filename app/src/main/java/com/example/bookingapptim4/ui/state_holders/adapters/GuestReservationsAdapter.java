@@ -18,16 +18,27 @@ import androidx.navigation.Navigation;
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 import com.example.bookingapptim4.domain.models.reservations.Reservation;
+import com.example.bookingapptim4.domain.models.reservations.ReservationStatus;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
     private ArrayList<Reservation> reservations;
 
     private OnReviewHostButtonClickListener reviewHostButtonClickListener;
 
+    private OnReviewAccommodationButtonClickListener reviewAccommodationButtonClickListener;
+
     public interface OnReviewHostButtonClickListener {
         void onReviewHostButtonClick(Reservation reservation);
+    }
+
+    public interface OnReviewAccommodationButtonClickListener {
+        void onReviewAccommodationButtonClick(Reservation reservation);
     }
 
     public GuestReservationsAdapter(Context context, ArrayList<Reservation> reservations) {
@@ -57,6 +68,10 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
 
     public void setOnReviewHostClickListener(OnReviewHostButtonClickListener listener) {
         this.reviewHostButtonClickListener = listener;
+    }
+
+    public void setOnReviewAccommodationClickListener(OnReviewAccommodationButtonClickListener listener) {
+        this.reviewAccommodationButtonClickListener = listener;
     }
 
     @NonNull
@@ -100,6 +115,25 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
                 }
             });
 
+            reviewHost.setEnabled(isHostReviewable(reservation));
+
+            Button reviewAccommodation = convertView.findViewById(R.id.guest_reservation_review_accommodation_button);
+
+            reviewAccommodation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (reviewAccommodationButtonClickListener != null) {
+                        reviewAccommodationButtonClickListener.onReviewAccommodationButtonClick(getItem(position));
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("selectedReservation", reservation);
+
+                        Navigation.findNavController(v).navigate(R.id.nav_review_accommodation, bundle);
+                    }
+                }
+            });
+
+            reviewAccommodation.setEnabled(isAccommodationReviewable(reservation));
+
             accommodationName.setText(reservation.getAccommodation().getName());
             status.setText(reservation.getStatus().toString());
             accommodationHost.setText(reservation.getAccommodation().getHost().getEmail());
@@ -111,5 +145,23 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
         }
 
         return convertView;
+    }
+
+    private boolean isAccommodationReviewable(Reservation reservation){
+        String dateString = reservation.getTimeSlot().getEndDate();
+        try{
+            Date inputDate = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
+            Calendar sevenDaysAgo = Calendar.getInstance();
+            sevenDaysAgo.add(Calendar.DAY_OF_MONTH, -7);
+            return reservation.getStatus().equals(ReservationStatus.Finished)&&inputDate.after(sevenDaysAgo.getTime());
+        }catch (Exception e){
+            return false;
+        }
+
+
+    }
+
+    private boolean isHostReviewable(Reservation reservation){
+        return reservation.getStatus().equals(ReservationStatus.Finished);
     }
 }

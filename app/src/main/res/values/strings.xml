@@ -97,5 +97,6 @@
     <string name="submit_review">Submit Review</string>
     <string name="comment_hint">Comment</string>
     <string name="rating">Rating</string>
+    <string name="review_accommodation">Review Accommodation</string>
 
 </resources>
