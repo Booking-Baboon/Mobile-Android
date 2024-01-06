@@ -20,6 +20,11 @@
         android:orderInCategory="100"
         app:showAsAction="ifRoom" />
 
+    <item android:id="@+id/nav_favorite_accommodations"
+        android:title="Favorites"
+        android:icon="@drawable/ic_filled_heart"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom" />
 
     <item android:id="@+id/nav_account"
         android:title="Account"
