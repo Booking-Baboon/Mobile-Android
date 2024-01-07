@@ -51,7 +51,7 @@ public interface SummaryService {
             "Content-Type:application/json"
     })
     @GET("summary/period/pdf")
-    Call<PeriodSummary> getPeriodSummaryPDF(
+    Call<ResponseBody> getPeriodSummaryPDF(
             @Query("host-id") Long hostId,
             @Query("start-date") String startDate,
             @Query("end-date") String endDate,
