@@ -16,7 +16,7 @@
 
     <ImageView
         android:background="@drawable/border_background"
-        android:id="@+id/product_image"
+        android:id="@+id/accommodation_image"
         android:layout_width="150dp"
         android:layout_height="match_parent"
         android:contentDescription="@string/accommodation_image"
