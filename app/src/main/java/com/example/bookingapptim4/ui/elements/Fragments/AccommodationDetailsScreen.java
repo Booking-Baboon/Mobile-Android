@@ -100,7 +100,6 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
 
         }
 
-
     }
 
 //    @Override

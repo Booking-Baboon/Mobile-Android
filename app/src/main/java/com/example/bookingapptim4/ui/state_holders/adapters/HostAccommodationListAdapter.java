@@ -2,14 +2,12 @@ package com.example.bookingapptim4.ui.state_holders.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,11 +17,12 @@ import androidx.navigation.Navigation;
 
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.data_layer.repositories.accommodations.AccommodationUtils;
+import com.example.bookingapptim4.data_layer.repositories.accommodations.SummaryUtils;
 import com.example.bookingapptim4.data_layer.repositories.reviews.AccommodationReviewUtils;
 import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
-import com.example.bookingapptim4.domain.models.accommodations.AccommodationFilter;
-import com.google.android.material.materialswitch.MaterialSwitch;
+import com.example.bookingapptim4.domain.models.accommodations.summaries.MonthlySummary;
+import com.example.bookingapptim4.domain.models.users.User;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
@@ -128,9 +127,44 @@ public class HostAccommodationListAdapter extends ArrayAdapter<Accommodation> {
                     Navigation.findNavController(v).navigate(R.id.nav_add_availability, bundle);
                 }
             });
+
+            Button generateSummaryButton = convertView.findViewById(R.id.generate_report_button);
+            generateSummaryButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    generateMonthlySummary(v, accommodation.getId());
+                }
+            });
         }
 
         return convertView;
+    }
+
+    private void generateMonthlySummary(View view, Long accommodationId) {
+        User user = UserUtils.getCurrentUser();
+        Call<MonthlySummary> call = SummaryUtils.summaryService.getMonthlySummary(accommodationId, "Bearer " + user.getJwt());
+        call.enqueue(new Callback<MonthlySummary>() {
+            @Override
+            public void onResponse(Call<MonthlySummary> call, Response<MonthlySummary> response) {
+                if (response.code() == 200){
+                    Log.d("SummaryUtils","Meesage recieved");
+                    MonthlySummary summary = response.body();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("monthlySummary", summary);
+
+                    Navigation.findNavController(view).navigate(R.id.nav_monthly_summary, bundle);
+
+                }else{
+                    Log.d("SummaryUtils","Meesage recieved: "+response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MonthlySummary> call, Throwable t) {
+                Log.d("SummaryUtils", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
     }
 
     public interface OnEditButtonClickListener {

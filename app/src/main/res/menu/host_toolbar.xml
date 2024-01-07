@@ -26,10 +26,17 @@
         android:orderInCategory="100"
         app:showAsAction="ifRoom" />
 
+    <item android:id="@+id/nav_summary_generator"
+        android:title="Summary generator"
+        android:icon="@drawable/ic_language"
+        android:orderInCategory="301"
+        app:showAsAction="ifRoom" />
 
     <item android:id="@+id/nav_account"
         android:title="Account"
         android:icon="@drawable/ic_language"
         android:orderInCategory="301"
         app:showAsAction="ifRoom" />
+
+
 </menu>
