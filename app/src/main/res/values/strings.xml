@@ -101,5 +101,10 @@
     <string name="submit_report">Submit Report</string>
     <string name="message_hint">Message</string>
     <string name="report_host">Report Host</string>
+    <string name="reportGuest">report guest</string>
+    <string name="approve">approve</string>
+    <string name="deny">deny</string>
+    <string name="reservation_guest">reservation_guest</string>
+    <string name="guestCancellations">5 cancellations</string>
 
 </resources>

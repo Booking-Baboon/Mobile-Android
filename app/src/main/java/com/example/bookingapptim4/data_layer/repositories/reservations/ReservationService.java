@@ -58,4 +58,20 @@ public interface ReservationService {
     })
     @GET("reservations/guest/{id}")
     Call<ArrayList<Reservation>> getAllForGuest(@Path("id") Long id, @Header("Authorization") String authorizationHeader);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("reservations/host/{id}")
+    Call<ArrayList<Reservation>> getAllForHost(@Path("id") Long id, @Header("Authorization") String authorizationHeader);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("reservations/cancellation-count/{id}")
+    Call<Long> getGuestCancellationCount(@Path("id") Long id, @Header("Authorization") String authorizationHeader);
+
+
 }
