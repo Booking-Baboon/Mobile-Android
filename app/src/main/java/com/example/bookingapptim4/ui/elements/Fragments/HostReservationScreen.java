@@ -3,6 +3,7 @@ package com.example.bookingapptim4.ui.elements.Fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -85,12 +86,12 @@ public class HostReservationScreen extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String selectedStatus = (String) parentView.getItemAtPosition(position);
-                loadReservations(selectedStatus);
+                loadReservations(selectedStatus, root);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                loadReservations("all");
+                loadReservations("all", root);
             }
         });
     }
@@ -106,7 +107,7 @@ public class HostReservationScreen extends Fragment {
     }
 
 
-    private void loadReservations(String selectedStatus) {
+    private void loadReservations(String selectedStatus, View view) {
         User user = UserUtils.getCurrentUser();
         Call<ArrayList<Reservation>> call = ReservationUtils.reservationService.getAllForHost(user.getId(),"Bearer " + user.getJwt());
         call.enqueue(new Callback<ArrayList<Reservation>>() {
@@ -122,6 +123,17 @@ public class HostReservationScreen extends Fragment {
                     }
 
                     HostReservationsAdapter hostReservationsAdapter = new HostReservationsAdapter(getActivity(), reservations);
+
+                    hostReservationsAdapter.setOnReportGuestClickListener(new HostReservationsAdapter.OnReportGuestButtonClickListener() {
+                        @Override
+                        public void onReportGuestButtonClick(Reservation reservation) {
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable("selectedReservation", reservation);
+
+                            Navigation.findNavController(view).navigate(R.id.nav_report_guest, bundle);
+                        }
+                    });
+
                     reservationsListView.setAdapter(hostReservationsAdapter);
                     hostReservationsAdapter.notifyDataSetChanged();
 

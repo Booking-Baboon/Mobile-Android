@@ -108,5 +108,6 @@
     <string name="guestCancellations">5 cancellations</string>
     <string name="report_accommodation">Report Accommodation</string>
     <string name="report_review">Report Review</string>
+    <string name="report_guest">Report Guest</string>
 
 </resources>
