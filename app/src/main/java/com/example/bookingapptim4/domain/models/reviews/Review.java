@@ -1,10 +1,15 @@
 package com.example.bookingapptim4.domain.models.reviews;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import com.example.bookingapptim4.domain.models.users.User;
 
 import java.util.Date;
 
-public class Review {
+public class Review implements Parcelable {
     protected Long id;
     protected User reviewer;
     protected Date createdOn;
@@ -63,5 +68,20 @@ public class Review {
 
     public String getCreatedOn() {
         return createdOn.toString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeParcelable(reviewer, flags);
+        dest.writeString(createdOn.toString());
+        dest.writeInt(rating);
+        dest.writeString(comment);
+
     }
 }

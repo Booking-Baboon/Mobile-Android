@@ -85,5 +85,14 @@
         app:popUpToInclusive="true"
         />
 
+    <fragment
+        android:id="@+id/nav_report_review"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.ReviewReportFragment"
+        android:label="ReportReview"
+        tools:layout="@layout/fragment_review_report"
+        app:popUpTo="@+id/nav_host"
+        app:popUpToInclusive="true"
+        />
+
 
 </navigation>

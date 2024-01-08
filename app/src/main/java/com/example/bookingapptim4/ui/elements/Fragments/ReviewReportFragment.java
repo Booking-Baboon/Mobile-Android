@@ -14,13 +14,18 @@ import android.widget.Toast;
 
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.data_layer.repositories.reports.HostReportUtils;
+import com.example.bookingapptim4.data_layer.repositories.reports.ReviewReportUtils;
 import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
 import com.example.bookingapptim4.databinding.FragmentHostReportBinding;
+import com.example.bookingapptim4.databinding.FragmentReviewReportBinding;
 import com.example.bookingapptim4.domain.dtos.reports.CreateHostReportRequest;
+import com.example.bookingapptim4.domain.dtos.reports.CreateReviewReportRequest;
+import com.example.bookingapptim4.domain.dtos.reviews.ReviewReference;
 import com.example.bookingapptim4.domain.dtos.users.UserReference;
 import com.example.bookingapptim4.domain.models.reports.HostReport;
 import com.example.bookingapptim4.domain.models.reports.ReportStatus;
-import com.example.bookingapptim4.domain.models.reservations.Reservation;
+import com.example.bookingapptim4.domain.models.reports.ReviewReport;
+import com.example.bookingapptim4.domain.models.reviews.Review;
 import com.example.bookingapptim4.ui.state_holders.text_watchers.RequiredFieldTextWatcher;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -35,29 +40,29 @@ import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link HostReportFragment#newInstance} factory method to
+ * Use the {@link ReviewReportFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HostReportFragment extends Fragment {
+public class ReviewReportFragment extends Fragment {
 
-    private static final String RESERVATION_PARAM = "selectedReservation";
+    private static final String REVIEW_PARAM = "selectedReview";
 
-    private FragmentHostReportBinding binding;
+    private FragmentReviewReportBinding binding;
 
-    private Reservation reservation;
+    private Review review;
 
     private TextInputLayout textInputMessage;
 
 
     private FragmentManager fragmentManager;
 
-    public HostReportFragment() {
+    public ReviewReportFragment() {
         // Required empty public constructor
     }
 
 
-    public static HostReportFragment newInstance() {
-        HostReportFragment fragment = new HostReportFragment();
+    public static ReviewReportFragment newInstance() {
+        ReviewReportFragment fragment = new ReviewReportFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -67,19 +72,19 @@ public class HostReportFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
-        if (args != null && args.containsKey(RESERVATION_PARAM)) {
-            reservation = args.getParcelable(RESERVATION_PARAM);
+        if (args != null && args.containsKey(REVIEW_PARAM)) {
+            review = args.getParcelable(REVIEW_PARAM);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentHostReportBinding.inflate(inflater, container, false);
+        binding = FragmentReviewReportBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-        textInputMessage = view.findViewById(R.id.report_host_message);
+        textInputMessage = view.findViewById(R.id.report_review_message);
         textInputMessage.getEditText().addTextChangedListener(new RequiredFieldTextWatcher(textInputMessage));
-        Button submitButton = view.findViewById(R.id.host_report_submit_button);
+        Button submitButton = view.findViewById(R.id.review_report_submit_button);
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
         Date today = Calendar.getInstance().getTime();
@@ -88,7 +93,7 @@ public class HostReportFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(!areFieldsValid()) return;
-                CreateHostReportRequest report = new CreateHostReportRequest(new UserReference(UserUtils.getCurrentUser().getId()), todayAsString, ReportStatus.Pending, textInputMessage.getEditText().getText().toString(), new UserReference(reservation.getAccommodation().getHost().getId()) );
+                CreateReviewReportRequest report = new CreateReviewReportRequest(new UserReference(UserUtils.getCurrentUser().getId()), todayAsString, ReportStatus.Pending, textInputMessage.getEditText().getText().toString(), new ReviewReference(ReviewReportFragment.this.review.getId()) );
                 submitReport(report);
             }
         });
@@ -97,12 +102,12 @@ public class HostReportFragment extends Fragment {
 
     }
 
-    private void submitReport(CreateHostReportRequest report) {
-        Call<HostReport> call = HostReportUtils.hostReportService.create(report, "Bearer " + UserUtils.getCurrentUser().getJwt());
+    private void submitReport(CreateReviewReportRequest report) {
+        Call<ReviewReport> call = ReviewReportUtils.reviewReportService.create(report, "Bearer " + UserUtils.getCurrentUser().getJwt());
 
-        call.enqueue(new Callback<HostReport>() {
+        call.enqueue(new Callback<ReviewReport>() {
             @Override
-            public void onResponse(Call<HostReport> call, Response<HostReport> response) {
+            public void onResponse(Call<ReviewReport> call, Response<ReviewReport> response) {
                 if (response.code() == 200){
                     Log.d("REZ","Meesage recieved");
                     System.out.println(response.body());
@@ -118,7 +123,7 @@ public class HostReportFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<HostReport>call, Throwable t) {
+            public void onFailure(Call<ReviewReport>call, Throwable t) {
                 Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
             }
         });

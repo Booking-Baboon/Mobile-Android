@@ -37,4 +37,13 @@
         android:layout_marginTop="8dp"
         android:text="Review Message:"/>
 
+    <Button
+        android:id="@+id/accommodation_report_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/report_review"
+        android:theme="@style/Button.RedCurved"
+        android:layout_marginTop="16dp"
+        />
+
 </LinearLayout>
