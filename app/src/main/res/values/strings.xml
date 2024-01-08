@@ -93,6 +93,14 @@
     <string name="reviewHost">review host</string>
     <string name="reportHost">report host</string>
     <string name="reviewAccommodation">review accommodation\n</string>
+    <string name="review_host">Review Host</string>
+    <string name="submit_review">Submit Review</string>
+    <string name="comment_hint">Comment</string>
+    <string name="rating">Rating</string>
+    <string name="review_accommodation">Review Accommodation</string>
+    <string name="submit_report">Submit Report</string>
+    <string name="message_hint">Message</string>
+    <string name="report_host">Report Host</string>
     <string name="reportGuest">report guest</string>
     <string name="approve">approve</string>
     <string name="deny">deny</string>

@@ -5,56 +5,21 @@ import com.example.bookingapptim4.domain.models.users.User;
 
 import java.util.Date;
 
-public class AccommodationReview {
-    private Long id;
-    private User reviewer;
-    private String createdOn;
-    private short rating;
-    private String comment;
+public class AccommodationReview extends Review{
+
     private Accommodation reviewedAccommodation;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getReviewer() {
-        return reviewer;
-    }
-
-    public void setReviewer(User reviewer) {
-        this.reviewer = reviewer;
-    }
-
-    public String getCreatedOn() {
-        return createdOn;
-    }
-
-    public void setCreatedOn(String createdOn) {
-        this.createdOn = createdOn;
-    }
-
-    public short getRating() {
-        return rating;
-    }
-
-    public void setRating(short rating) {
-        this.rating = rating;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
 
     public Accommodation getReviewedAccommodation() {
         return reviewedAccommodation;
+    }
+
+    public AccommodationReview(Accommodation reviewedAccommodation) {
+        this.reviewedAccommodation = reviewedAccommodation;
+    }
+
+    public AccommodationReview(User reviewer, Date createdOn, short rating, String comment, Accommodation reviewedAccommodation) {
+        super(reviewer, createdOn, rating, comment);
+        this.reviewedAccommodation = reviewedAccommodation;
     }
 
     public void setReviewedAccommodation(Accommodation reviewedAccommodation) {

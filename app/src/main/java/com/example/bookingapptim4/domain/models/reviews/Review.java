@@ -5,11 +5,21 @@ import com.example.bookingapptim4.domain.models.users.User;
 import java.util.Date;
 
 public class Review {
-    private Long id;
-    private User reviewer;
-    private Date createdOn;
-    private short rating;
-    private String comment;
+    protected Long id;
+    protected User reviewer;
+    protected Date createdOn;
+    protected short rating;
+    protected String comment;
+
+    public Review() {
+    }
+
+    public Review(User reviewer, Date createdOn, short rating, String comment) {
+        this.reviewer = reviewer;
+        this.createdOn = createdOn;
+        this.rating = rating;
+        this.comment = comment;
+    }
 
     public Long getId() {
         return id;
@@ -27,7 +37,7 @@ public class Review {
         this.reviewer = reviewer;
     }
 
-    public Date getCreatedOn() {
+    public Date getCreatedOnDate() {
         return createdOn;
     }
 
@@ -49,5 +59,9 @@ public class Review {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getCreatedOn() {
+        return createdOn.toString();
     }
 }
