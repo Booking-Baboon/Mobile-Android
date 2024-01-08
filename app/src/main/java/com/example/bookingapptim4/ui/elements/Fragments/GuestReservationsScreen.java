@@ -148,6 +148,17 @@ public class GuestReservationsScreen extends Fragment {
                         }
                     });
 
+                    guestReservationsAdapter.setOnReportHostClickListener(new GuestReservationsAdapter.OnReportHostButtonClickListener() {
+
+
+                        @Override
+                        public void onReportHostButtonClick(Reservation reservation) {
+                            Bundle bundle = new Bundle();
+
+                            Navigation.findNavController(view).navigate(R.id.nav_report_host, bundle);
+                        }
+                    });
+
 
                     guestReservationsAdapter.setOnReviewAccommodationClickListener(new GuestReservationsAdapter.OnReviewAccommodationButtonClickListener() {
 

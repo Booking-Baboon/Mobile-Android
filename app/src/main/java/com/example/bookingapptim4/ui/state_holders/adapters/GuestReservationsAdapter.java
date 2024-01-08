@@ -33,12 +33,18 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
 
     private OnReviewAccommodationButtonClickListener reviewAccommodationButtonClickListener;
 
+    private OnReportHostButtonClickListener reportHostButtonClickListener;
+
     public interface OnReviewHostButtonClickListener {
         void onReviewHostButtonClick(Reservation reservation);
     }
 
     public interface OnReviewAccommodationButtonClickListener {
         void onReviewAccommodationButtonClick(Reservation reservation);
+    }
+
+    public interface OnReportHostButtonClickListener {
+        void onReportHostButtonClick(Reservation reservation);
     }
 
     public GuestReservationsAdapter(Context context, ArrayList<Reservation> reservations) {
@@ -72,6 +78,10 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
 
     public void setOnReviewAccommodationClickListener(OnReviewAccommodationButtonClickListener listener) {
         this.reviewAccommodationButtonClickListener = listener;
+    }
+
+    public void setOnReportHostClickListener(OnReportHostButtonClickListener listener) {
+        this.reportHostButtonClickListener = listener;
     }
 
     @NonNull
@@ -134,6 +144,22 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
 
             reviewAccommodation.setEnabled(isAccommodationReviewable(reservation));
 
+            Button reportHost = convertView.findViewById(R.id.guest_reservation_report_host_button);
+            reportHost.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (reportHostButtonClickListener != null) {
+                        reportHostButtonClickListener.onReportHostButtonClick(getItem(position));
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("selectedReservation", reservation);
+
+                        Navigation.findNavController(v).navigate(R.id.nav_report_host, bundle);
+                    }
+                }
+            });
+
+            reportHost.setEnabled(isHostReportable(reservation));
+
             accommodationName.setText(reservation.getAccommodation().getName());
             status.setText(reservation.getStatus().toString());
             accommodationHost.setText(reservation.getAccommodation().getHost().getEmail());
@@ -162,6 +188,10 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
     }
 
     private boolean isHostReviewable(Reservation reservation){
+        return reservation.getStatus().equals(ReservationStatus.Finished);
+    }
+
+    private boolean isHostReportable(Reservation reservation){
         return reservation.getStatus().equals(ReservationStatus.Finished);
     }
 }
