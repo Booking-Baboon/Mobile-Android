@@ -56,7 +56,6 @@ public class HostReviewFragment extends Fragment {
 
     private short rating;
 
-    private FragmentManager fragmentManager;
 
     public HostReviewFragment() {
         // Required empty public constructor
@@ -113,12 +112,11 @@ public class HostReviewFragment extends Fragment {
         call.enqueue(new Callback<HostReview>() {
             @Override
             public void onResponse(Call<HostReview> call, Response<HostReview> response) {
-                if (response.code() == 200){
+                if (response.code() == 201){
                     Log.d("REZ","Meesage recieved");
                     System.out.println(response.body());
                     Toast toast = Toast.makeText(getContext(), "Review submitted!", Toast.LENGTH_LONG);
                     toast.show();
-                    fragmentManager.popBackStack();
 
                 }else{
                     Log.d("REZ","Meesage recieved: "+response.code());

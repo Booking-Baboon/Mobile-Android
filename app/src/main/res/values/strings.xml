@@ -109,5 +109,6 @@
     <string name="report_accommodation">Report Accommodation</string>
     <string name="report_review">Report Review</string>
     <string name="report_guest">Report Guest</string>
+    <string name="host_reviews">Host Reviews</string>
 
 </resources>

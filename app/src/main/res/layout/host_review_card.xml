@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <RatingBar
+        android:id="@+id/host_review_rating_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:layout_marginTop="8dp"
+        android:numStars="5"
+        android:progressDrawable="@drawable/custom_rating_bar"
+        android:stepSize="0.5" />
+
+    <TextView
+        android:id="@+id/host_review_reviewer_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="Reviewer:"/>
+
+    <TextView
+        android:id="@+id/host_review_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
+        android:text="Date:"/>
+
+
+    <TextView
+        android:id="@+id/host_review_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Review Message:"/>
+
+    <Button
+        android:id="@+id/host_review_report_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/report_review"
+        android:theme="@style/Button.RedCurved"
+        android:layout_marginTop="16dp"
+        />
+
+</LinearLayout>

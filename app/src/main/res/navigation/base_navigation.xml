@@ -83,4 +83,12 @@
         app:popUpTo="@+id/nav_reservations"
         />
 
+    <fragment
+        android:id="@+id/nav_host_reviews_list"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.HostReviewsListFragment"
+        android:label="HostReviews"
+        tools:layout="@layout/fragment_host_reviews_list"
+        app:popUpTo="@+id/nav_main"
+        />
+
 </navigation>

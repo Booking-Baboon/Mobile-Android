@@ -52,9 +52,6 @@ public class GuestReportFragment extends Fragment {
 
     private TextInputLayout textInputMessage;
 
-
-    private FragmentManager fragmentManager;
-
     public GuestReportFragment() {
         // Required empty public constructor
     }
@@ -107,12 +104,11 @@ public class GuestReportFragment extends Fragment {
         call.enqueue(new Callback<GuestReport>() {
             @Override
             public void onResponse(Call<GuestReport> call, Response<GuestReport> response) {
-                if (response.code() == 200){
+                if (response.code() == 201){
                     Log.d("REZ","Message recieved");
                     System.out.println(response.body());
                     Toast toast = Toast.makeText(getContext(), "Report submitted!", Toast.LENGTH_LONG);
                     toast.show();
-                    fragmentManager.popBackStack();
 
                 }else{
                     Log.d("REZ","Message recieved: "+response.code());

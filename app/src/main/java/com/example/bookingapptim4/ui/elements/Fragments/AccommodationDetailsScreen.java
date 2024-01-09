@@ -138,6 +138,17 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
             makeReservationButton.setEnabled(false);
         }
 
+        Button hostReviewsButton = view.findViewById(R.id.host_reviews_button);
+        hostReviewsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("selectedHost", accommodation.getHost().getId());
+
+                Navigation.findNavController(v).navigate(R.id.nav_host_reviews_list, bundle);
+            }
+        });
+
 
         return view;
     }

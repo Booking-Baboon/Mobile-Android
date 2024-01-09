@@ -51,7 +51,6 @@ public class AccommodationReviewFragment extends Fragment {
 
     private short rating;
 
-    private FragmentManager fragmentManager;
 
     public AccommodationReviewFragment() {
         // Required empty public constructor
@@ -108,12 +107,11 @@ public class AccommodationReviewFragment extends Fragment {
         call.enqueue(new Callback<AccommodationReview>() {
             @Override
             public void onResponse(Call<AccommodationReview> call, Response<AccommodationReview> response) {
-                if (response.code() == 200){
+                if (response.code() == 201){
                     Log.d("REZ","Meesage recieved");
                     System.out.println(response.body());
                     Toast toast = Toast.makeText(getContext(), "Review submitted!", Toast.LENGTH_LONG);
                     toast.show();
-                    fragmentManager.popBackStack();
 
                 }else{
                     Log.d("REZ","Meesage recieved: "+response.code());
