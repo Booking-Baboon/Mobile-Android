@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
+import com.example.bookingapptim4.BuildConfig;
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
 import com.example.bookingapptim4.domain.models.notifications.Notification;
@@ -50,12 +51,14 @@ public class NotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         notificationManager = getSystemService(NotificationManager.class);
-        if (intent != null)
-        {
+        if (intent != null) {
             String action = intent.getAction();
             Log.i("SERVICE STARTED", "YES");
-            startForegroundService();
 
+            if (ACTION_START_FOREGROUND_SERVICE.equals(action)) {
+                startForegroundService();
+                startWebSocket();
+            }
         }
         return START_NOT_STICKY;
     }
@@ -63,13 +66,13 @@ public class NotificationService extends Service {
     private void startWebSocket() {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("ws://your-backend-url/your-websocket-endpoint")
+                .url("ws://"+ BuildConfig.IP_ADDR +":8080/notifications-socket")
                 .build();
-
         webSocket = client.newWebSocket(request, new WebSocketListener() {
             @Override
             public void onOpen(WebSocket webSocket, Response response) {
                 // WebSocket connection is established
+                Log.d("WebSocket", "Connection opened");
                 // Subscribe to the topic
                 String topic = "/notification-publisher/" + UserUtils.getCurrentUser().getId();  // Replace getUserId() with your actual method to get the user ID
                 webSocket.send("SUBSCRIBE " + topic);
@@ -152,6 +155,10 @@ public class NotificationService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Toast.makeText(getApplicationContext(), "Stop foreground service.", Toast.LENGTH_LONG).show();
+
+        if (webSocket != null) {
+            webSocket.close(1000, "Service destroyed");
+        }
 
         stopForeground(true);
         stopSelf();

@@ -67,5 +67,7 @@ dependencies {
     implementation ("org.imaginativeworld.whynotimagecarousel:whynotimagecarousel:2.1.0")
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation ("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
 
 }
