@@ -3,12 +3,31 @@ package com.example.bookingapptim4.ui.elements.Fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.example.bookingapptim4.R;
+import com.example.bookingapptim4.data_layer.repositories.reservations.ReservationUtils;
+import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
+import com.example.bookingapptim4.databinding.FragmentHostReservationScreenBinding;
+import com.example.bookingapptim4.domain.models.reservations.Reservation;
+import com.example.bookingapptim4.domain.models.users.User;
+import com.example.bookingapptim4.ui.state_holders.adapters.GuestReservationsAdapter;
+import com.example.bookingapptim4.ui.state_holders.adapters.HostReservationsAdapter;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,50 +36,116 @@ import com.example.bookingapptim4.R;
  */
 public class HostReservationScreen extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private ArrayList<Reservation> reservations = new ArrayList<>();
+    private FragmentHostReservationScreenBinding binding;
+    ListView reservationsListView;
+    private Spinner statusSpinner;
 
     public HostReservationScreen() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HostReservationScreen.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HostReservationScreen newInstance(String param1, String param2) {
-        HostReservationScreen fragment = new HostReservationScreen();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static HostReservationScreen newInstance() {
+        return new HostReservationScreen();
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_host_reservation_screen, container, false);
+
+        binding = FragmentHostReservationScreenBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
+        reservationsListView = root.findViewById(R.id.host_reservations_list);
+
+        loadSpinner(root);
+
+        return root;
+    }
+
+    private void loadSpinner(View root) {
+        statusSpinner = root.findViewById(R.id.host_reservation_status_spinner);
+        reservationsListView = root.findViewById(R.id.host_reservations_list);
+
+        // Set up the spinner with status options
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.reservation_status_options,
+                android.R.layout.simple_spinner_item
+        );
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        statusSpinner.setAdapter(spinnerAdapter);
+
+        statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String selectedStatus = (String) parentView.getItemAtPosition(position);
+                loadReservations(selectedStatus, root);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                loadReservations("all", root);
+            }
+        });
+    }
+
+    private ArrayList<Reservation> filterReservationsByStatus(ArrayList<Reservation> reservations, String selectedStatus) {
+        ArrayList<Reservation> filteredReservations = new ArrayList<>();
+        for (Reservation reservation : reservations) {
+            if (reservation.getStatus().toString().equalsIgnoreCase(selectedStatus)) {
+                filteredReservations.add(reservation);
+            }
+        }
+        return filteredReservations;
+    }
+
+
+    private void loadReservations(String selectedStatus, View view) {
+        User user = UserUtils.getCurrentUser();
+        Call<ArrayList<Reservation>> call = ReservationUtils.reservationService.getAllForHost(user.getId(),"Bearer " + user.getJwt());
+        call.enqueue(new Callback<ArrayList<Reservation>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Reservation>> call, Response<ArrayList<Reservation>> response) {
+                if (response.code() == 200){
+                    Log.d("ReservationUtils","Meesage recieved");
+                    System.out.println(response.body());
+                    reservations = response.body();
+
+                    if(!"all".equalsIgnoreCase(selectedStatus)){
+                        reservations = filterReservationsByStatus(reservations, selectedStatus);
+                    }
+
+                    HostReservationsAdapter hostReservationsAdapter = new HostReservationsAdapter(getActivity(), reservations);
+
+                    hostReservationsAdapter.setOnReportGuestClickListener(new HostReservationsAdapter.OnReportGuestButtonClickListener() {
+                        @Override
+                        public void onReportGuestButtonClick(Reservation reservation) {
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable("selectedReservation", reservation);
+
+                            Navigation.findNavController(view).navigate(R.id.nav_report_guest, bundle);
+                        }
+                    });
+
+                    reservationsListView.setAdapter(hostReservationsAdapter);
+                    hostReservationsAdapter.notifyDataSetChanged();
+
+                }else{
+                    Log.d("ReservationUtils","Meesage recieved: "+response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Reservation>> call, Throwable t) {
+                Log.d("ReservationUtils", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
     }
 }

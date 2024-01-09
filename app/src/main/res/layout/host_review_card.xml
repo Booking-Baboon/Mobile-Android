@@ -7,7 +7,7 @@
     android:padding="16dp">
 
     <RatingBar
-        android:id="@+id/ratingBarAccommodationReview"
+        android:id="@+id/host_review_rating_bar"
         android:layout_width="wrap_content"
         android:layout_height="27dp"
         android:layout_marginTop="8dp"
@@ -16,14 +16,14 @@
         android:stepSize="0.5" />
 
     <TextView
-        android:id="@+id/textViewAccommodationReviewer"
+        android:id="@+id/host_review_reviewer_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:text="Reviewer:"/>
 
     <TextView
-        android:id="@+id/textViewAccommodationReviewDate"
+        android:id="@+id/host_review_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="italic"
@@ -31,14 +31,14 @@
 
 
     <TextView
-        android:id="@+id/textViewAccommodationReviewComment"
+        android:id="@+id/host_review_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Review Message:"/>
 
     <Button
-        android:id="@+id/accommodation_report_button"
+        android:id="@+id/host_review_report_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/report_review"

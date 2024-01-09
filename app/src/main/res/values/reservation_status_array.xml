@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="reservation_status_options">
+        <item>All</item>
+        <item>Approved</item>
+        <item>Finished</item>
+        <item>Denied</item>
+        <item>Canceled</item>
+        <item>Pending</item>
+    </string-array>
+</resources>
