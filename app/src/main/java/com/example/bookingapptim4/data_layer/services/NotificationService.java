@@ -74,12 +74,14 @@ public class NotificationService extends Service {
                 // WebSocket connection is established
                 Log.d("WebSocket", "Connection opened");
                 // Subscribe to the topic
-                String topic = "/notification-publisher/" + UserUtils.getCurrentUser().getId();  // Replace getUserId() with your actual method to get the user ID
+//                String topic = "/user/notification-publisher/" + UserUtils.getCurrentUser().getId();  // Replace getUserId() with your actual method to get the user ID
+                String topic = "/notification-publisher" ;
                 webSocket.send("SUBSCRIBE " + topic);
             }
 
             @Override
             public void onMessage(WebSocket webSocket, String text) {
+                Log.d("WebSocket", "Connection Message");
                 // Handle incoming messages
                 // The 'text' parameter contains the message received from the server
                 // Handle the notification logic here
@@ -91,11 +93,13 @@ public class NotificationService extends Service {
 
             @Override
             public void onClosed(WebSocket webSocket, int code, String reason) {
+                Log.d("WebSocket", "Connection Closed");
                 // WebSocket connection is closed
             }
 
             @Override
             public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+                Log.d("WebSocket", "Connection Failure");
                 // Handle connection failure
             }
         });
@@ -157,6 +161,7 @@ public class NotificationService extends Service {
         Toast.makeText(getApplicationContext(), "Stop foreground service.", Toast.LENGTH_LONG).show();
 
         if (webSocket != null) {
+            Log.d("WebSocket", "Connection closed");
             webSocket.close(1000, "Service destroyed");
         }
 
