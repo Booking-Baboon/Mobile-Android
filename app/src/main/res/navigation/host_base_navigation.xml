@@ -90,6 +90,12 @@
         android:name="com.example.bookingapptim4.ui.elements.Fragments.ReviewReportFragment"
         android:label="ReportReview"
         tools:layout="@layout/fragment_review_report"
+  />
+      <fragment
+        android:id="@+id/nav_monthly_summary"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.MonthlySummaryFragment"
+        android:label="MonthlySummary"
+        tools:layout="@layout/fragment_monthly_summary"
         app:popUpTo="@+id/nav_host"
         app:popUpToInclusive="true"
         />
@@ -100,6 +106,13 @@
         android:label="ReportGuest"
         tools:layout="@layout/fragment_guest_report"
         app:popUpTo="@+id/nav_reservations"
+       />
+      <fragment
+        android:id="@+id/nav_summary_generator"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.SummaryGeneratorFragment"
+        android:label="MonthlySummary"
+        tools:layout="@layout/fragment_summary_generator"
+        app:popUpTo="@+id/nav_host"
         app:popUpToInclusive="true"
         />
 
@@ -109,6 +122,14 @@
         android:label="HostReviews"
         tools:layout="@layout/fragment_host_reviews_list"
         app:popUpTo="@+id/nav_host"
+               />
+    <fragment
+        android:id="@+id/nav_period_summary"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.PeriodSummaryFragment"
+        android:label="MonthlySummary"
+        tools:layout="@layout/fragment_period_summary"
+        app:popUpTo="@+id/nav_host"
+        app:popUpToInclusive="true"
         />
 
 

@@ -110,5 +110,9 @@
     <string name="report_review">Report Review</string>
     <string name="report_guest">Report Guest</string>
     <string name="host_reviews">Host Reviews</string>
+    <string name="favorites_icon_description">favorites icon</string>
+    <string name="Summary">Summary\n</string>
+    <string name="Period">2023.01.25 - 2024.01.25</string>
+    <string name="donwloadPDF">Download PDF</string>
 
 </resources>

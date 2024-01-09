@@ -44,9 +44,8 @@ android {
     }
 }
 
+
 dependencies {
-
-
     implementation("androidx.core:core:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
@@ -66,6 +65,6 @@ dependencies {
     implementation ("io.jsonwebtoken:jjwt-jackson:0.11.2")
     implementation ("com.fasterxml.jackson.core:jackson-databind:2.13.0")
     implementation ("org.imaginativeworld.whynotimagecarousel:whynotimagecarousel:2.1.0")
-
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
 }

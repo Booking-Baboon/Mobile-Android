@@ -3,12 +3,17 @@ package com.example.bookingapptim4.ui.state_holders.adapters;
 import static android.app.PendingIntent.getActivity;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,11 +22,20 @@ import androidx.annotation.Nullable;
 import androidx.navigation.Navigation;
 
 import com.example.bookingapptim4.R;
+import com.example.bookingapptim4.data_layer.repositories.shared.ImageUtils;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 import com.example.bookingapptim4.domain.models.accommodations.AccommodationModification;
 import com.example.bookingapptim4.domain.models.accommodations.AccommodationModificationStatus;
 
+import org.imaginativeworld.whynotimagecarousel.model.CarouselItem;
+
+import java.io.IOException;
 import java.util.ArrayList;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
     private ArrayList<Accommodation> accommodations;
@@ -86,6 +100,14 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
         TextView accommodationTotalPrice = convertView.findViewById(R.id.accommodation_total_price);
         TextView accommodationPricePerNight = convertView.findViewById(R.id.accommodation_price_per_night);
         TextView accommodationRating = convertView.findViewById(R.id.accommodation_rating);
+        ImageView accommodationImage = convertView.findViewById(R.id.accommodation_image);
+
+
+        if(!accommodation.getImages().isEmpty()){
+            loadImage(accommodation.getImages().get(0).getId(),accommodationImage);
+        } else {
+            accommodationImage.setImageResource(R.drawable.accommodation_image_example);
+        }
 
 
         if (accommodation != null) {
@@ -112,5 +134,33 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
         }
 
         return convertView;
+    }
+
+    private void loadImage(Long imageId, ImageView imageView){
+        Call<ResponseBody> call = ImageUtils.imageService.getById(imageId);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.code() == 200){
+
+                    try {
+                        Log.d("REZ","Meesage recieved");
+                        byte[] imageContent = response.body().bytes();
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(imageContent, 0, imageContent.length);
+                        imageView.setImageBitmap(bitmap);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }else{
+                    Log.d("ImageUtils","Meesage recieved: "+response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d("ImageUtils", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
     }
 }

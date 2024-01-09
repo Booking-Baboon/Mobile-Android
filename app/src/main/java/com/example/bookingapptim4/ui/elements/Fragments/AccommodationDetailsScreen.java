@@ -18,14 +18,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.bookingapptim4.R;
+import com.example.bookingapptim4.data_layer.repositories.accommodations.AccommodationUtils;
 import com.example.bookingapptim4.data_layer.repositories.accommodations.AmenityUtils;
 import com.example.bookingapptim4.data_layer.repositories.reviews.AccommodationReviewUtils;
 import com.example.bookingapptim4.data_layer.repositories.shared.ImageUtils;
+import com.example.bookingapptim4.data_layer.repositories.users.GuestUtils;
 import com.example.bookingapptim4.data_layer.repositories.users.HostUtils;
 import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
@@ -33,8 +36,11 @@ import com.example.bookingapptim4.domain.models.accommodations.Amenity;
 
 import com.example.bookingapptim4.domain.models.reviews.AccommodationReview;
 import com.example.bookingapptim4.domain.models.shared.Image;
+import com.example.bookingapptim4.domain.models.users.Guest;
 import com.example.bookingapptim4.domain.models.users.Host;
 import com.example.bookingapptim4.domain.models.users.Role;
+import com.example.bookingapptim4.domain.models.users.User;
+import com.example.bookingapptim4.ui.state_holders.adapters.AccommodationListAdapter;
 import com.example.bookingapptim4.ui.state_holders.adapters.AccommodationReviewAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -49,6 +55,7 @@ import org.imaginativeworld.whynotimagecarousel.model.CarouselItem;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -92,7 +99,6 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
             accommodation = args.getParcelable("selectedAccommodation");
 
         }
-
 
     }
 
@@ -196,7 +202,107 @@ public class AccommodationDetailsScreen extends Fragment implements OnMapReadyCa
 
         //REVIEWS
         loadReviews(view);
+
+        //FAVORITE BUTTON
+        loadFavoriteButton(view);
     }
+
+    private void loadFavoriteButton(View view) {
+        User user = UserUtils.getCurrentUser();
+        Call<ArrayList<Accommodation>> call = GuestUtils.guestService.getFavorites(user.getId(), "Bearer " + user.getJwt());
+        call.enqueue(new Callback<ArrayList<Accommodation>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Accommodation>> call, Response<ArrayList<Accommodation>> response) {
+                if (response.code() == 200){
+                    Log.d("GuestUtils","Meesage recieved");
+                    ArrayList<Accommodation> favorites = response.body();
+
+                    //Check if accommodation is in favorites
+                    boolean isFavorite = false;
+                    for (Accommodation favorite : favorites) {
+                        if (Objects.equals(favorite.getId(), accommodation.getId())) {
+                            isFavorite = true;
+                            break;
+                        }
+                    }
+
+                    setupHeartIcon(view, isFavorite);
+
+                }else{
+                    Log.d("GuestUtils","Meesage recieved: "+response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Accommodation>> call, Throwable t) {
+                Log.d("GuestUtils", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
+
+    }
+    private void setupHeartIcon(View view, boolean isFavorite) {
+        ImageView heartIcon = view.findViewById(R.id.heartIcon);
+
+        if (isFavorite) {
+            heartIcon.setImageResource(R.drawable.ic_filled_heart);
+        } else {
+            heartIcon.setImageResource(R.drawable.ic_empty_heart);
+        }
+
+        heartIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean newFavoriteStatus = !isFavorite;
+
+                if (newFavoriteStatus) {
+                    heartIcon.setImageResource(R.drawable.ic_filled_heart);
+                    addToFavorites();
+                } else {
+                    heartIcon.setImageResource(R.drawable.ic_empty_heart);
+                    removeFromFavorites();
+                }
+            }
+        });
+    }
+    private void addToFavorites() {
+        User user = UserUtils.getCurrentUser();
+        Call<Guest> call = GuestUtils.guestService.addFavorite(user.getId(), accommodation.getId(), "Bearer " + user.getJwt());
+        call.enqueue(new Callback<Guest>() {
+            @Override
+            public void onResponse(Call<Guest> call, Response<Guest> response) {
+                if (response.code() == 200){
+                    Log.d("GuestUtils","Added to favorites");
+
+                }else{
+                    Log.d("GuestUtils","Meesage recieved: "+response.code());
+                }
+            }
+            @Override
+            public void onFailure(Call<Guest> call, Throwable t) {
+                Log.d("GuestUtils", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
+    }
+    private void removeFromFavorites() {
+        User user = UserUtils.getCurrentUser();
+        Call<Guest> call = GuestUtils.guestService.removeFavorite(user.getId(), accommodation.getId(), "Bearer " + user.getJwt());
+        call.enqueue(new Callback<Guest>() {
+            @Override
+            public void onResponse(Call<Guest> call, Response<Guest> response) {
+                if (response.code() == 200){
+                    Log.d("GuestUtils","Removed from favorites");
+
+                }else{
+                    Log.d("GuestUtils","Meesage recieved: "+response.code());
+                }
+            }
+            @Override
+            public void onFailure(Call<Guest> call, Throwable t) {
+                Log.d("GuestUtils", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
+    }
+
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         GoogleMap mMap = googleMap;
