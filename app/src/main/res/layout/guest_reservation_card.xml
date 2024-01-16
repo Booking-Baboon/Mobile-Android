@@ -89,7 +89,7 @@
             />
 
         <Button
-            android:id="@+id/generate_report_button"
+            android:id="@+id/cancel_reservation_button"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:text="@string/cancelButton"

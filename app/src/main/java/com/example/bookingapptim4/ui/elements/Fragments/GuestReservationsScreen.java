@@ -137,6 +137,16 @@ public class GuestReservationsScreen extends Fragment {
 
                     GuestReservationsAdapter guestReservationsAdapter = new GuestReservationsAdapter(getActivity(), reservations);
 
+                    guestReservationsAdapter.setOnCancelReservationClickListener(new GuestReservationsAdapter.OnCancelReservationClickListener() {
+
+
+                        @Override
+                        public void onCancelReservationCancelButtonClick(Reservation reservation) {
+                            Bundle bundle = new Bundle();
+
+                        }
+                    });
+
                     guestReservationsAdapter.setOnReviewHostClickListener(new GuestReservationsAdapter.OnReviewHostButtonClickListener() {
 
 

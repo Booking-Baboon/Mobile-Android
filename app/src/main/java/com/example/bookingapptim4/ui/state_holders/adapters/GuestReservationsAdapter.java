@@ -1,6 +1,7 @@
 package com.example.bookingapptim4.ui.state_holders.adapters;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,8 @@ import com.example.bookingapptim4.domain.models.reservations.ReservationStatus;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,8 +35,13 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
     private OnReviewHostButtonClickListener reviewHostButtonClickListener;
 
     private OnReviewAccommodationButtonClickListener reviewAccommodationButtonClickListener;
+    private OnCancelReservationClickListener cancelReservationClickListener;
 
     private OnReportHostButtonClickListener reportHostButtonClickListener;
+
+    public interface OnCancelReservationClickListener {
+        void onCancelReservationCancelButtonClick(Reservation reservation);
+    }
 
     public interface OnReviewHostButtonClickListener {
         void onReviewHostButtonClick(Reservation reservation);
@@ -70,6 +78,10 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    public void setOnCancelReservationClickListener(OnCancelReservationClickListener listener) {
+        this.cancelReservationClickListener = listener;
     }
 
     public void setOnReviewHostClickListener(OnReviewHostButtonClickListener listener) {
@@ -109,6 +121,23 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
             } else {
                 status.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
             }
+
+            Button cancelReservation = convertView.findViewById(R.id.cancel_reservation_button);
+
+            cancelReservation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (cancelReservationClickListener != null) {
+                        cancelReservationClickListener.onCancelReservationCancelButtonClick(getItem(position));
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("selectedReservation", reservation);
+
+                        Navigation.findNavController(v).navigate(R.id.nav_review_host, bundle);
+                    }
+                }
+            });
+
+            cancelReservation.setEnabled(isReservationCancellable(reservation));
 
             Button reviewHost = convertView.findViewById(R.id.guest_reservation_review_host_button);
 
@@ -189,6 +218,29 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
 
     private boolean isHostReviewable(Reservation reservation){
         return reservation.getStatus().equals(ReservationStatus.Finished);
+    }
+
+    private boolean isReservationCancellable(Reservation reservation) {
+        boolean result = true;
+        ReservationStatus status = reservation.getStatus();
+        boolean isStatusCancellable = ("Pending".equals(status) || "Approved".equals(status));
+
+        if (isStatusCancellable && reservation.getAccommodation() != null) {
+            int deadlineDays = reservation.getAccommodation().getCancellationDeadline();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (LocalDate.parse(reservation.getTimeSlot().getStartDate(), DateTimeFormatter.ISO_DATE).minusDays(deadlineDays).isBefore(LocalDate.now()) && "Approved".equals(status)) {
+                    // If deadline date has passed, the guest cannot cancel
+                    result = false;
+                } else {
+                    result = true;
+                }
+            }
+        } else {
+            return false;
+        }
+
+        return result;
     }
 
     private boolean isHostReportable(Reservation reservation){
