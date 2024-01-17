@@ -3,6 +3,7 @@ package com.example.bookingapptim4.ui.state_holders.adapters;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import androidx.core.content.ContextCompat;
 import androidx.navigation.Navigation;
 
 import com.example.bookingapptim4.R;
+import com.example.bookingapptim4.data_layer.repositories.reservations.ReservationUtils;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 import com.example.bookingapptim4.domain.models.reservations.Reservation;
 import com.example.bookingapptim4.domain.models.reservations.ReservationStatus;
@@ -28,6 +30,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
     private ArrayList<Reservation> reservations;
@@ -129,10 +135,8 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
                 public void onClick(View v) {
                     if (cancelReservationClickListener != null) {
                         cancelReservationClickListener.onCancelReservationCancelButtonClick(getItem(position));
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable("selectedReservation", reservation);
-
-                        Navigation.findNavController(v).navigate(R.id.nav_review_host, bundle);
+                        notifyDataSetChanged();
+                        cancelReservation.setEnabled(false);
                     }
                 }
             });
@@ -223,7 +227,7 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
     private boolean isReservationCancellable(Reservation reservation) {
         boolean result = true;
         ReservationStatus status = reservation.getStatus();
-        boolean isStatusCancellable = ("Pending".equals(status) || "Approved".equals(status));
+        boolean isStatusCancellable = (ReservationStatus.Pending.equals(status) || ReservationStatus.Approved.equals(status));
 
         if (isStatusCancellable && reservation.getAccommodation() != null) {
             int deadlineDays = reservation.getAccommodation().getCancellationDeadline();

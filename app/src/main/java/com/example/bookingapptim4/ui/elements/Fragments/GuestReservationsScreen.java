@@ -142,7 +142,18 @@ public class GuestReservationsScreen extends Fragment {
 
                         @Override
                         public void onCancelReservationCancelButtonClick(Reservation reservation) {
-                            Bundle bundle = new Bundle();
+                            Call<Reservation> call = ReservationUtils.reservationService.cancel(reservation.getId(),"Bearer " + user.getJwt());
+                            call.enqueue(new Callback<Reservation>() {
+                                @Override
+                                public void onResponse(Call<Reservation> call, Response<Reservation> response) {
+                                    Log.d("ReservationUtils","Reservation cancelled");
+                                }
+
+                                @Override
+                                public void onFailure(Call<Reservation> call, Throwable t) {
+
+                                }
+                            });
 
                         }
                     });
