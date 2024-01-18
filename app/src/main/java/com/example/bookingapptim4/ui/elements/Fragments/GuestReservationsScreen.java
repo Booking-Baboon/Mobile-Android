@@ -27,6 +27,7 @@ import com.example.bookingapptim4.databinding.FragmentGuestMainScreenBinding;
 import com.example.bookingapptim4.databinding.FragmentGuestReservationsScreenBinding;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 import com.example.bookingapptim4.domain.models.reservations.Reservation;
+import com.example.bookingapptim4.domain.models.reservations.ReservationStatus;
 import com.example.bookingapptim4.domain.models.users.User;
 import com.example.bookingapptim4.ui.state_holders.adapters.AccommodationListAdapter;
 import com.example.bookingapptim4.ui.state_holders.adapters.GuestReservationsAdapter;
@@ -146,7 +147,7 @@ public class GuestReservationsScreen extends Fragment {
                             call.enqueue(new Callback<Reservation>() {
                                 @Override
                                 public void onResponse(Call<Reservation> call, Response<Reservation> response) {
-                                    Log.d("ReservationUtils","Reservation cancelled");
+                                    guestReservationsAdapter.updateStatus(reservation.getId(), ReservationStatus.Canceled);
                                 }
 
                                 @Override

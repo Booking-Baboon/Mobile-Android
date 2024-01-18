@@ -20,6 +20,8 @@ import androidx.navigation.Navigation;
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.data_layer.repositories.reservations.ReservationUtils;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
+import com.example.bookingapptim4.domain.models.accommodations.AccommodationModification;
+import com.example.bookingapptim4.domain.models.accommodations.AccommodationModificationStatus;
 import com.example.bookingapptim4.domain.models.reservations.Reservation;
 import com.example.bookingapptim4.domain.models.reservations.ReservationStatus;
 
@@ -204,6 +206,16 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
         }
 
         return convertView;
+    }
+
+    public void updateStatus(long reservationId, ReservationStatus status) {
+        for (Reservation reservation : reservations) {
+            if (reservation.getId() == reservationId) {
+                reservation.setStatus(status);
+                notifyDataSetChanged();
+                break;
+            }
+        }
     }
 
     private boolean isAccommodationReviewable(Reservation reservation){
