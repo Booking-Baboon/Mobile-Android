@@ -27,6 +27,7 @@ import com.example.bookingapptim4.databinding.FragmentGuestMainScreenBinding;
 import com.example.bookingapptim4.databinding.FragmentGuestReservationsScreenBinding;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 import com.example.bookingapptim4.domain.models.reservations.Reservation;
+import com.example.bookingapptim4.domain.models.reservations.ReservationStatus;
 import com.example.bookingapptim4.domain.models.users.User;
 import com.example.bookingapptim4.ui.state_holders.adapters.AccommodationListAdapter;
 import com.example.bookingapptim4.ui.state_holders.adapters.GuestReservationsAdapter;
@@ -136,6 +137,27 @@ public class GuestReservationsScreen extends Fragment {
 
 
                     GuestReservationsAdapter guestReservationsAdapter = new GuestReservationsAdapter(getActivity(), reservations);
+
+                    guestReservationsAdapter.setOnCancelReservationClickListener(new GuestReservationsAdapter.OnCancelReservationClickListener() {
+
+
+                        @Override
+                        public void onCancelReservationCancelButtonClick(Reservation reservation) {
+                            Call<Reservation> call = ReservationUtils.reservationService.cancel(reservation.getId(),"Bearer " + user.getJwt());
+                            call.enqueue(new Callback<Reservation>() {
+                                @Override
+                                public void onResponse(Call<Reservation> call, Response<Reservation> response) {
+                                    guestReservationsAdapter.updateStatus(reservation.getId(), ReservationStatus.Canceled);
+                                }
+
+                                @Override
+                                public void onFailure(Call<Reservation> call, Throwable t) {
+
+                                }
+                            });
+
+                        }
+                    });
 
                     guestReservationsAdapter.setOnReviewHostClickListener(new GuestReservationsAdapter.OnReviewHostButtonClickListener() {
 

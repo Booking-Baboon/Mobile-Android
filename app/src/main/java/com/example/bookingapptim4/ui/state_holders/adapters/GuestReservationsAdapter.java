@@ -1,7 +1,9 @@
 package com.example.bookingapptim4.ui.state_holders.adapters;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +18,24 @@ import androidx.core.content.ContextCompat;
 import androidx.navigation.Navigation;
 
 import com.example.bookingapptim4.R;
+import com.example.bookingapptim4.data_layer.repositories.reservations.ReservationUtils;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
+import com.example.bookingapptim4.domain.models.accommodations.AccommodationModification;
+import com.example.bookingapptim4.domain.models.accommodations.AccommodationModificationStatus;
 import com.example.bookingapptim4.domain.models.reservations.Reservation;
 import com.example.bookingapptim4.domain.models.reservations.ReservationStatus;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
     private ArrayList<Reservation> reservations;
@@ -32,8 +43,13 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
     private OnReviewHostButtonClickListener reviewHostButtonClickListener;
 
     private OnReviewAccommodationButtonClickListener reviewAccommodationButtonClickListener;
+    private OnCancelReservationClickListener cancelReservationClickListener;
 
     private OnReportHostButtonClickListener reportHostButtonClickListener;
+
+    public interface OnCancelReservationClickListener {
+        void onCancelReservationCancelButtonClick(Reservation reservation);
+    }
 
     public interface OnReviewHostButtonClickListener {
         void onReviewHostButtonClick(Reservation reservation);
@@ -70,6 +86,10 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    public void setOnCancelReservationClickListener(OnCancelReservationClickListener listener) {
+        this.cancelReservationClickListener = listener;
     }
 
     public void setOnReviewHostClickListener(OnReviewHostButtonClickListener listener) {
@@ -109,6 +129,21 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
             } else {
                 status.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
             }
+
+            Button cancelReservation = convertView.findViewById(R.id.cancel_reservation_button);
+
+            cancelReservation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (cancelReservationClickListener != null) {
+                        cancelReservationClickListener.onCancelReservationCancelButtonClick(getItem(position));
+                        notifyDataSetChanged();
+                        cancelReservation.setEnabled(false);
+                    }
+                }
+            });
+
+            cancelReservation.setEnabled(isReservationCancellable(reservation));
 
             Button reviewHost = convertView.findViewById(R.id.guest_reservation_review_host_button);
 
@@ -173,6 +208,16 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
         return convertView;
     }
 
+    public void updateStatus(long reservationId, ReservationStatus status) {
+        for (Reservation reservation : reservations) {
+            if (reservation.getId() == reservationId) {
+                reservation.setStatus(status);
+                notifyDataSetChanged();
+                break;
+            }
+        }
+    }
+
     private boolean isAccommodationReviewable(Reservation reservation){
         String dateString = reservation.getTimeSlot().getEndDate();
         try{
@@ -189,6 +234,29 @@ public class GuestReservationsAdapter extends ArrayAdapter<Reservation> {
 
     private boolean isHostReviewable(Reservation reservation){
         return reservation.getStatus().equals(ReservationStatus.Finished);
+    }
+
+    private boolean isReservationCancellable(Reservation reservation) {
+        boolean result = true;
+        ReservationStatus status = reservation.getStatus();
+        boolean isStatusCancellable = (ReservationStatus.Pending.equals(status) || ReservationStatus.Approved.equals(status));
+
+        if (isStatusCancellable && reservation.getAccommodation() != null) {
+            int deadlineDays = reservation.getAccommodation().getCancellationDeadline();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (LocalDate.parse(reservation.getTimeSlot().getStartDate(), DateTimeFormatter.ISO_DATE).minusDays(deadlineDays).isBefore(LocalDate.now()) && "Approved".equals(status)) {
+                    // If deadline date has passed, the guest cannot cancel
+                    result = false;
+                } else {
+                    result = true;
+                }
+            }
+        } else {
+            return false;
+        }
+
+        return result;
     }
 
     private boolean isHostReportable(Reservation reservation){
