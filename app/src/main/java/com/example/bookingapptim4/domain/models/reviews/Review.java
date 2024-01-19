@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
+import com.example.bookingapptim4.domain.models.users.Host;
 import com.example.bookingapptim4.domain.models.users.User;
 
 import java.util.Date;
@@ -15,6 +17,8 @@ public class Review implements Parcelable {
     protected Date createdOn;
     protected short rating;
     protected String comment;
+    protected Accommodation reviewedAccommodation;
+    protected Host reviewedHost;
 
     public Review() {
     }
@@ -24,6 +28,22 @@ public class Review implements Parcelable {
         this.createdOn = createdOn;
         this.rating = rating;
         this.comment = comment;
+    }
+
+    public Review(User reviewer, Date createdOn, short rating, String comment, Accommodation reviewedAccommodation) {
+        this.reviewer = reviewer;
+        this.createdOn = createdOn;
+        this.rating = rating;
+        this.comment = comment;
+        this.reviewedAccommodation = reviewedAccommodation;
+    }
+
+    public Review(User reviewer, Date createdOn, short rating, String comment, Host reviewedHost) {
+        this.reviewer = reviewer;
+        this.createdOn = createdOn;
+        this.rating = rating;
+        this.comment = comment;
+        this.reviewedHost = reviewedHost;
     }
 
     public Long getId() {
@@ -68,6 +88,14 @@ public class Review implements Parcelable {
 
     public String getCreatedOn() {
         return createdOn.toString();
+    }
+
+    public Accommodation getReviewedAccommodation() {
+        return reviewedAccommodation;
+    }
+
+    public Host getReviewedHost() {
+        return reviewedHost;
     }
 
     @Override
