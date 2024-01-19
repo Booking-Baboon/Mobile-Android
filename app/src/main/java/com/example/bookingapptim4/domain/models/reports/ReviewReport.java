@@ -17,4 +17,12 @@ public class ReviewReport extends Report{
     public ReviewReport(User reportee, Date createdOn, ReportStatus status, String message) {
         super(reportee, createdOn, status, message);
     }
+
+    public Review getReportedReview() {
+        return reportedReview;
+    }
+
+    public void setReportedReview(Review reportedReview) {
+        this.reportedReview = reportedReview;
+    }
 }

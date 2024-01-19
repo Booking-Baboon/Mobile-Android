@@ -103,7 +103,7 @@ public class ReportedCommentsListAdapter extends ArrayAdapter<ReviewReport> {
         message.setText(reviewReport.getMessage());
         reportee.setText(reviewReport.getReportee().getEmail());
         createdOn.setText(reviewReport.getCreatedOn().toString());
-        rating.setText(reviewReport.getReportedReview().getRating());
+        rating.setText(String.valueOf(reviewReport.getReportedReview().getRating()));
         reviewer.setText(reviewReport.getReportedReview().getReviewer().getEmail());
         createdOn.setText(reviewReport.getCreatedOn().toString());
 
