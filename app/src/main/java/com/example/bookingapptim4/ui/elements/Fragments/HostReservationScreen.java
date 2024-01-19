@@ -19,6 +19,7 @@ import com.example.bookingapptim4.data_layer.repositories.reservations.Reservati
 import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
 import com.example.bookingapptim4.databinding.FragmentHostReservationScreenBinding;
 import com.example.bookingapptim4.domain.models.reservations.Reservation;
+import com.example.bookingapptim4.domain.models.reservations.ReservationStatus;
 import com.example.bookingapptim4.domain.models.users.User;
 import com.example.bookingapptim4.ui.state_holders.adapters.GuestReservationsAdapter;
 import com.example.bookingapptim4.ui.state_holders.adapters.HostReservationsAdapter;
@@ -131,6 +132,42 @@ public class HostReservationScreen extends Fragment {
                             bundle.putParcelable("selectedReservation", reservation);
 
                             Navigation.findNavController(view).navigate(R.id.nav_report_guest, bundle);
+                        }
+                    });
+
+                    hostReservationsAdapter.setOnApproveReservationClickListener(new HostReservationsAdapter.OnApproveReservationButtonClickListener() {
+                        @Override
+                        public void onApproveReservationButtonClick(Reservation reservation) {
+                            Call<Reservation> call = ReservationUtils.reservationService.approve(reservation.getId(),"Bearer " + user.getJwt());
+                            call.enqueue(new Callback<Reservation>() {
+                                @Override
+                                public void onResponse(Call<Reservation> call, Response<Reservation> response) {
+                                    hostReservationsAdapter.updateStatus(reservation.getId(), ReservationStatus.Approved);
+                                }
+
+                                @Override
+                                public void onFailure(Call<Reservation> call, Throwable t) {
+
+                                }
+                            });
+                        }
+                    });
+
+                    hostReservationsAdapter.setOnDenyReservationClickListener(new HostReservationsAdapter.OnDenyReservationButtonClickListener() {
+                        @Override
+                        public void onDenyReservationButtonClick(Reservation reservation) {
+                            Call<Reservation> call = ReservationUtils.reservationService.deny(reservation.getId(),"Bearer " + user.getJwt());
+                            call.enqueue(new Callback<Reservation>() {
+                                @Override
+                                public void onResponse(Call<Reservation> call, Response<Reservation> response) {
+                                    hostReservationsAdapter.updateStatus(reservation.getId(), ReservationStatus.Denied);
+                                }
+
+                                @Override
+                                public void onFailure(Call<Reservation> call, Throwable t) {
+
+                                }
+                            });
                         }
                     });
 
