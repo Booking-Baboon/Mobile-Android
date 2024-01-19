@@ -19,6 +19,7 @@ import androidx.navigation.Navigation;
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
 import com.example.bookingapptim4.domain.models.reports.ReviewReport;
+import com.example.bookingapptim4.domain.models.reservations.Reservation;
 import com.example.bookingapptim4.domain.models.users.Guest;
 import com.example.bookingapptim4.domain.models.users.User;
 
@@ -32,6 +33,16 @@ public class ReportedCommentsListAdapter extends ArrayAdapter<ReviewReport> {
     private ArrayList<ReviewReport> reviewReports;
 
     private OnDeleteReviewReportButtonClickListener deleteReviewReportButtonClickListener;
+
+    public void removeFromList(ReviewReport report) {
+        for (ReviewReport reviewReport : reviewReports) {
+            if (reviewReport.equals(report)) {
+                reviewReports.remove(report);
+                notifyDataSetChanged();
+                break;
+            }
+        }
+    }
 
     public interface OnDeleteReviewReportButtonClickListener {
         void onDeleteReviewReportButtonClickListener(ReviewReport reviewReport);

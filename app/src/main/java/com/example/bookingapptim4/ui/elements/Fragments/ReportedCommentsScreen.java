@@ -25,6 +25,7 @@ import com.example.bookingapptim4.domain.models.reservations.ReservationStatus;
 import com.example.bookingapptim4.domain.models.users.User;
 import com.example.bookingapptim4.ui.state_holders.adapters.HostReservationsAdapter;
 import com.example.bookingapptim4.ui.state_holders.adapters.ReportedCommentsListAdapter;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -86,8 +87,20 @@ public class ReportedCommentsScreen extends Fragment {
 
                     reportedCommentsListAdapter.setOnDeleteReviewReportButtonClickListener(new ReportedCommentsListAdapter.OnDeleteReviewReportButtonClickListener() {
                         @Override
-                        public void onDeleteReviewReportButtonClickListener(ReviewReport reservation) {
+                        public void onDeleteReviewReportButtonClickListener(ReviewReport reviewReport) {
+                            Call<ReviewReport> call = ReviewReportUtils.reviewReportService.remove(reviewReport.getId(),"Bearer " + user.getJwt());
+                            call.enqueue(new Callback<ReviewReport>() {
+                                @Override
+                                public void onResponse(Call<ReviewReport> call, Response<ReviewReport> response) {
+                                    reportedCommentsListAdapter.removeFromList(reviewReport);
+                                    showSnackbar(view, "Review reported deleted succesfully");
+                                }
 
+                                @Override
+                                public void onFailure(Call<ReviewReport> call, Throwable t) {
+
+                                }
+                            });
                         }
                     });
 
@@ -104,5 +117,10 @@ public class ReportedCommentsScreen extends Fragment {
                 Log.d("ReviewReportUtils", t.getMessage() != null?t.getMessage():"error");
             }
         });
+
+    }
+
+    private void showSnackbar(View view, String message) {
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
     }
 }
