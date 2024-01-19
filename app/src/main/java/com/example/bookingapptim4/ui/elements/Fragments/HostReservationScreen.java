@@ -142,7 +142,25 @@ public class HostReservationScreen extends Fragment {
                             call.enqueue(new Callback<Reservation>() {
                                 @Override
                                 public void onResponse(Call<Reservation> call, Response<Reservation> response) {
-                                    hostReservationsAdapter.updateStatus(reservation.getId(), ReservationStatus.Canceled);
+                                    hostReservationsAdapter.updateStatus(reservation.getId(), ReservationStatus.Approved);
+                                }
+
+                                @Override
+                                public void onFailure(Call<Reservation> call, Throwable t) {
+
+                                }
+                            });
+                        }
+                    });
+
+                    hostReservationsAdapter.setOnDenyReservationClickListener(new HostReservationsAdapter.OnDenyReservationButtonClickListener() {
+                        @Override
+                        public void onDenyReservationButtonClick(Reservation reservation) {
+                            Call<Reservation> call = ReservationUtils.reservationService.deny(reservation.getId(),"Bearer " + user.getJwt());
+                            call.enqueue(new Callback<Reservation>() {
+                                @Override
+                                public void onResponse(Call<Reservation> call, Response<Reservation> response) {
+                                    hostReservationsAdapter.updateStatus(reservation.getId(), ReservationStatus.Denied);
                                 }
 
                                 @Override

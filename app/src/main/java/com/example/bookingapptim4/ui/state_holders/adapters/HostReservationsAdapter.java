@@ -35,6 +35,7 @@ public class HostReservationsAdapter extends ArrayAdapter<Reservation> {
 
     private OnReportGuestButtonClickListener reportGuestButtonClickListener;
     private OnApproveReservationButtonClickListener approveReservationButtonClickListener;
+    private OnDenyReservationButtonClickListener denyReservationButtonClickListener;
 
     public interface OnReportGuestButtonClickListener {
         void onReportGuestButtonClick(Reservation reservation);
@@ -50,6 +51,14 @@ public class HostReservationsAdapter extends ArrayAdapter<Reservation> {
 
     public void setOnApproveReservationClickListener(OnApproveReservationButtonClickListener listener) {
         this.approveReservationButtonClickListener = listener;
+    }
+
+    public interface OnDenyReservationButtonClickListener {
+        void onDenyReservationButtonClick(Reservation reservation);
+    }
+
+    public void setOnDenyReservationClickListener(OnDenyReservationButtonClickListener listener) {
+        this.denyReservationButtonClickListener = listener;
     }
 
     public HostReservationsAdapter(Context context, ArrayList<Reservation> reservations) {
@@ -95,6 +104,7 @@ public class HostReservationsAdapter extends ArrayAdapter<Reservation> {
         TextView period = convertView.findViewById(R.id.host_reservation_period);
         Button reportGuest = convertView.findViewById(R.id.host_reservation_report_guest_button);
         Button approveReservation = convertView.findViewById(R.id.host_reservation_approve_button);
+        Button denyReservation = convertView.findViewById(R.id.host_reservation_deny_button);
 
 
         if (reservation != null) {
@@ -143,6 +153,18 @@ public class HostReservationsAdapter extends ArrayAdapter<Reservation> {
             });
 
             approveReservation.setEnabled(isReservationApprovable(reservation));
+
+            denyReservation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (denyReservationButtonClickListener != null) {
+                        denyReservationButtonClickListener.onDenyReservationButtonClick(getItem(position));
+
+                    }
+                }
+            });
+
+            denyReservation.setEnabled(isReservationApprovable(reservation));
         }
 
         return convertView;
