@@ -34,6 +34,7 @@ public class HostReservationsAdapter extends ArrayAdapter<Reservation> {
     private ArrayList<Reservation> reservations;
 
     private OnReportGuestButtonClickListener reportGuestButtonClickListener;
+    private OnApproveReservationButtonClickListener approveReservationButtonClickListener;
 
     public interface OnReportGuestButtonClickListener {
         void onReportGuestButtonClick(Reservation reservation);
@@ -41,6 +42,14 @@ public class HostReservationsAdapter extends ArrayAdapter<Reservation> {
 
     public void setOnReportGuestClickListener(OnReportGuestButtonClickListener listener) {
         this.reportGuestButtonClickListener = listener;
+    }
+
+    public interface OnApproveReservationButtonClickListener {
+        void onApproveReservationButtonClick(Reservation reservation);
+    }
+
+    public void setOnApproveReservationClickListener(OnApproveReservationButtonClickListener listener) {
+        this.approveReservationButtonClickListener = listener;
     }
 
     public HostReservationsAdapter(Context context, ArrayList<Reservation> reservations) {
@@ -85,6 +94,7 @@ public class HostReservationsAdapter extends ArrayAdapter<Reservation> {
         TextView guestCancellations = convertView.findViewById(R.id.host_reservation_guest_cancellations);
         TextView period = convertView.findViewById(R.id.host_reservation_period);
         Button reportGuest = convertView.findViewById(R.id.host_reservation_report_guest_button);
+        Button approveReservation = convertView.findViewById(R.id.host_reservation_approve_button);
 
 
         if (reservation != null) {
@@ -121,6 +131,18 @@ public class HostReservationsAdapter extends ArrayAdapter<Reservation> {
             });
 
             reportGuest.setEnabled(isGuestReportable(reservation));
+
+            approveReservation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (approveReservationButtonClickListener != null) {
+                        approveReservationButtonClickListener.onApproveReservationButtonClick(getItem(position));
+
+                    }
+                }
+            });
+
+            approveReservation.setEnabled(isReservationApprovable(reservation));
         }
 
         return convertView;
@@ -128,6 +150,20 @@ public class HostReservationsAdapter extends ArrayAdapter<Reservation> {
 
     private boolean isGuestReportable(Reservation reservation) {
         return reservation.getStatus().equals(ReservationStatus.Finished);
+    }
+
+    private boolean isReservationApprovable(Reservation reservation) {
+        return reservation.getStatus().equals(ReservationStatus.Pending);
+    }
+
+    public void updateStatus(long reservationId, ReservationStatus status) {
+        for (Reservation reservation : reservations) {
+            if (reservation.getId() == reservationId) {
+                reservation.setStatus(status);
+                notifyDataSetChanged();
+                break;
+            }
+        }
     }
 
     private void loadCancellations(TextView guestCancellations, Guest guest) {
