@@ -109,6 +109,7 @@
     <string name="report_accommodation">Report Accommodation</string>
     <string name="report_review">Report Review</string>
     <string name="report_guest">Report Guest</string>
+    <string name="dateExample">Jan 4, 2024, 6:05:53 PM</string>
     <string name="host_reviews">Host Reviews</string>
     <string name="favorites_icon_description">favorites icon</string>
     <string name="Summary">Summary\n</string>
