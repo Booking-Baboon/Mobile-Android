@@ -11,10 +11,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.domain.models.reports.UserReport;
 import com.example.bookingapptim4.domain.models.reports.UserReport;
+import com.example.bookingapptim4.domain.models.reservations.Reservation;
+import com.example.bookingapptim4.domain.models.reservations.ReservationStatus;
+import com.example.bookingapptim4.domain.models.users.User;
+import com.example.bookingapptim4.domain.models.users.UserStatus;
 
 import java.util.ArrayList;
 
@@ -24,14 +29,19 @@ public class ReportedUsersListAdapter extends ArrayAdapter<UserReport> {
     private ReportedUsersListAdapter.OnBlockUserButtonClickListener blockUserButtonClickListener;
     private ReportedUsersListAdapter.OnUnBlockUserButtonClickListener unBlockUserButtonClickListener;
 
-    public void updateStatus(UserReport report) {
+    public void updateStatus(String userEmail, UserStatus status) {
         for (UserReport userReport : userReports) {
-            if (userReport.equals(report)) {
-                userReports.remove(report);
-                notifyDataSetChanged();
-                break;
+            if (userReport.getReportedGuest() == null) {
+                if (userReport.getReportedHost().getEmail().equals(userEmail)) {
+                    userReport.getReportedHost().setStatus(status);
+                }
+            } else {
+                if (userReport.getReportedGuest().getEmail().equals(userEmail)) {
+                    userReport.getReportedGuest().setStatus(status);
+                }
             }
         }
+        notifyDataSetChanged();
     }
 
     public interface OnBlockUserButtonClickListener {
@@ -89,28 +99,43 @@ public class ReportedUsersListAdapter extends ArrayAdapter<UserReport> {
         TextView reportedUser = convertView.findViewById(R.id.user_report_reported_email);
         TextView reportee = convertView.findViewById(R.id.user_report_reportee);
         TextView message = convertView.findViewById(R.id.user_report_message);
+        TextView userStatus = convertView.findViewById(R.id.user_report_user_status);
         TextView createdOn = convertView.findViewById(R.id.user_report_created_on);
         Button blockUserButton = convertView.findViewById(R.id.user_report_block_button);
         Button unBlockUserButton = convertView.findViewById(R.id.user_report_unblock_button);
 
 
-/*        if (userReport != null) {
-            if ("approved".equalsIgnoreCase(userReport.getStatus().toString())) {
-                status.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
-            } else if ("denied".equalsIgnoreCase(userReport.getStatus().toString())) {
-                status.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
-            } else {
-                status.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
-            }*/
+        if (userReport != null) {
+            if (userReport.getReportedGuest() == null) {
 
-        if(userReport.getReportedGuest().equals(null)) {
-            reportedUser.setText(userReport.getReportedHost().getEmail());
-        } else {
-            reportedUser.setText(userReport.getReportedGuest().getEmail());
+                reportedUser.setText(userReport.getReportedHost().getEmail());
+                userStatus.setText(userReport.getReportedHost().getStatus().toString());
+
+                if (userReport.getReportedHost().getStatus().equals(UserStatus.Active)) {
+                    userStatus.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
+                } else if (userReport.getReportedHost().getStatus().equals(UserStatus.Blocked)) {
+                    userStatus.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+                } else {
+                    userStatus.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+                }
+
+            } else {
+                reportedUser.setText(userReport.getReportedGuest().getEmail());
+                userStatus.setText(userReport.getReportedGuest().getStatus().toString());
+
+                if (userReport.getReportedGuest().getStatus().equals(UserStatus.Active)) {
+                    userStatus.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
+                } else if (userReport.getReportedGuest().getStatus().equals(UserStatus.Blocked)) {
+                    userStatus.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
+                } else {
+                    userStatus.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+                }
+            }
+            message.setText(userReport.getMessage());
+            reportee.setText(userReport.getReportee().getEmail());
+            createdOn.setText(userReport.getCreatedOn().toString());
         }
-        message.setText(userReport.getMessage());
-        reportee.setText(userReport.getReportee().getEmail());
-        createdOn.setText(userReport.getCreatedOn().toString());
+
 
 
         blockUserButton.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +156,14 @@ public class ReportedUsersListAdapter extends ArrayAdapter<UserReport> {
             }
         });
 
+        blockUserButton.setEnabled(isUserBlockable(userReport.getReportedGuest() != null ? userReport.getReportedGuest() : userReport.getReportedHost()));
+        unBlockUserButton.setEnabled(!isUserBlockable(userReport.getReportedGuest() != null ? userReport.getReportedGuest() : userReport.getReportedHost()));
+
         return convertView;
     }
+
+    private boolean isUserBlockable(User user) {
+        return user.getStatus().equals(UserStatus.Active) || user.getStatus().equals(UserStatus.Inactive);
+    }
+
 }
