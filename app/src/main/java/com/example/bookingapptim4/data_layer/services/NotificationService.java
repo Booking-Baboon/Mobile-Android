@@ -18,6 +18,7 @@ import com.example.bookingapptim4.BuildConfig;
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
 import com.example.bookingapptim4.domain.models.notifications.Notification;
+import com.example.bookingapptim4.domain.models.notifications.NotificationType;
 import com.google.gson.Gson;
 
 import okhttp3.OkHttpClient;
@@ -56,7 +57,21 @@ public class NotificationService extends Service {
             Log.i("SERVICE STARTED", "YES");
 
             if (ACTION_START_FOREGROUND_SERVICE.equals(action)) {
-                startForegroundService();
+                android.app.Notification notificationBasic = new NotificationCompat.Builder(this, CHANNEL_ID)
+                        .setContentTitle("Notification Service")
+                        .setContentText("Service is running in the foreground")
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .build();
+
+                // Start the service in the foreground
+                startForeground(notificationID, notificationBasic);
+
+                Notification notification2 = new Notification();
+                notification2.setId(2L);
+                notification2.setMessage("Test");
+                notification2.setType(NotificationType.ReservationCancelled);
+
+                showNotification(notification2);
                 startWebSocket();
             }
         }
@@ -66,26 +81,19 @@ public class NotificationService extends Service {
     private void startWebSocket() {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("ws://"+ BuildConfig.IP_ADDR +":8080/notifications-socket")
+                .url("http://" + BuildConfig.IP_ADDR + ":8080/notifications-socket")
                 .build();
         webSocket = client.newWebSocket(request, new WebSocketListener() {
             @Override
             public void onOpen(WebSocket webSocket, Response response) {
-                // WebSocket connection is established
                 Log.d("WebSocket", "Connection opened");
-                // Subscribe to the topic
-//                String topic = "/user/notification-publisher/" + UserUtils.getCurrentUser().getId();  // Replace getUserId() with your actual method to get the user ID
-                String topic = "/notification-publisher" ;
+                String topic = "/notification-publisher/" + UserUtils.getCurrentUser().getId();
                 webSocket.send("SUBSCRIBE " + topic);
             }
 
             @Override
             public void onMessage(WebSocket webSocket, String text) {
                 Log.d("WebSocket", "Connection Message");
-                // Handle incoming messages
-                // The 'text' parameter contains the message received from the server
-                // Handle the notification logic here
-                // Handle incoming messages
                 Gson gson = new Gson();
                 Notification notification = gson.fromJson(text, Notification.class);
                 showNotification(notification);
@@ -100,45 +108,16 @@ public class NotificationService extends Service {
             @Override
             public void onFailure(WebSocket webSocket, Throwable t, Response response) {
                 Log.d("WebSocket", "Connection Failure");
+                t.printStackTrace();
                 // Handle connection failure
             }
         });
     }
 
-    private void startForegroundService()
-    {
-        Log.d(TAG_FOREGROUND_SERVICE, "Start foreground service.");
-
-        // Create notification default intent.
-        Intent intent = new Intent();
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, notificationID, intent, PendingIntent.FLAG_MUTABLE);
-
-        // Create notification builder.
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
-
-        // Make notification show big text.
-        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
-        bigTextStyle.setBigContentTitle("Music player implemented by foreground service.");
-        bigTextStyle.bigText("Android foreground service is a android service which can run in foreground always," +
-                "it can be controlled by user via notification.");
-        // Set big text style.
-        builder.setStyle(bigTextStyle);
-
-        builder.setWhen(System.currentTimeMillis());
-        builder.setSmallIcon(R.mipmap.ic_launcher);
-        Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        builder.setLargeIcon(largeIconBitmap);
-        // Make head-up notification.
-        builder.setFullScreenIntent(pendingIntent, true);
-
-        // Start foreground service.
-        startForeground(notificationID, builder.build());
-    }
-
     private void showNotification(Notification notification) {
         // Create notification default intent.
         Intent intent = new Intent();
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, notificationID, intent, PendingIntent.FLAG_MUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, Math.toIntExact(notification.getId()), intent, PendingIntent.FLAG_MUTABLE);
 
         // Create notification builder.
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
@@ -151,7 +130,7 @@ public class NotificationService extends Service {
         builder.setContentIntent(pendingIntent);
 
         // Trigger the notification.
-        notificationManager.notify(notificationID, builder.build());
+        notificationManager.notify(Math.toIntExact(notification.getId()), builder.build());
     }
 
 
