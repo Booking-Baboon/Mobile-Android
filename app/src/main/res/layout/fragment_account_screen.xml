@@ -161,6 +161,75 @@
                 android:inputType="textPassword"/>
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/notificationsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textStyle="bold"
+
+            android:textSize="23sp"
+            android:text="@string/notificationsTitle" />
+
+        <TextView
+            android:id="@+id/notificationsDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textStyle="normal"
+
+            android:textSize="16sp"
+            android:text="@string/notificationsDescription" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id = "@+id/accept_reservation_created_notifications"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme = "@style/SwitchMaterial"
+            android:text="@string/reservationCreatedNotification"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            />
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id = "@+id/accept_reservation_cancelled_notifications"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme = "@style/SwitchMaterial"
+            android:text="@string/reservationCancelledNotification"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            />
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id = "@+id/accept_host_review_notifications"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme = "@style/SwitchMaterial"
+            android:text="@string/hostReviewNotification"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            />
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id = "@+id/accept_accommodation_review_notifications"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme = "@style/SwitchMaterial"
+            android:text="@string/accommodationReviewNotification"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            />
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id = "@+id/accept_reservation_response_notifications"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme = "@style/SwitchMaterial"
+            android:text="@string/reservationResponseNotification"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

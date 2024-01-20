@@ -114,6 +114,16 @@
     <string name="Summary">Summary\n</string>
     <string name="Period">2023.01.25 - 2024.01.25</string>
     <string name="donwloadPDF">Download PDF</string>
+    <string name="markAsRead">Mark as read</string>
+    <string name="received">"Received: "</string>
+    <string name="titleExample">Title</string>
+    <string name="reservationCancelledNotification">Reservation cancelled</string>
+    <string name="reservationCreatedNotification">Reservation created</string>
+    <string name="hostReviewNotification">Host reviews</string>
+    <string name="accommodationReviewNotification">Accommodation reviews</string>
+    <string name="reservationResponseNotification">Reservation response</string>
+    <string name="notificationsTitle">Notifications</string>
+    <string name="notificationsDescription">Choose which notifications you would like to recieve</string>
     <string name="emailExample">example@example.com</string>
     <string name="reported_by">Reported by:</string>
     <string name="reviewed_by">Reviewed by:</string>

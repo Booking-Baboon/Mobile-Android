@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.data_layer.repositories.shared.ConfirmationDialog;
@@ -24,9 +26,11 @@ import com.example.bookingapptim4.data_layer.repositories.users.HostUtils;
 import com.example.bookingapptim4.data_layer.repositories.users.UserService;
 import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
 import com.example.bookingapptim4.domain.dtos.PasswordChangeRequest;
+import com.example.bookingapptim4.domain.models.notifications.NotificationType;
 import com.example.bookingapptim4.domain.models.users.Admin;
 import com.example.bookingapptim4.domain.models.users.Guest;
 import com.example.bookingapptim4.domain.models.users.Host;
+import com.example.bookingapptim4.domain.models.users.Role;
 import com.example.bookingapptim4.domain.models.users.User;
 import com.example.bookingapptim4.domain.models.users.UserUpdateRequest;
 import com.example.bookingapptim4.ui.elements.Activities.LoginScreen;
@@ -36,6 +40,7 @@ import com.example.bookingapptim4.ui.state_holders.text_watchers.PhoneFieldTextW
 import com.example.bookingapptim4.ui.state_holders.text_watchers.RequiredFieldTextWatcher;
 import com.example.bookingapptim4.ui.state_holders.view_models.UserViewModel;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputLayout;
 
 import retrofit2.Call;
@@ -135,12 +140,13 @@ public class AccountScreen extends Fragment {
 
                             textInputNewPassword = view.findViewById(R.id.editTextNewPassword);
                             textInputConfirmPassword = view.findViewById(R.id.editTextConfirmPassword);
-
                             setDefaultInformation();
 
                             // Add TextWatcher after initializing TextInputLayout instances
                             textInputNewPassword.getEditText().addTextChangedListener(new PasswordFieldTextWatcher(textInputNewPassword.getEditText(), textInputConfirmPassword.getEditText()));
                             textInputConfirmPassword.getEditText().addTextChangedListener(new PasswordFieldTextWatcher(textInputNewPassword.getEditText(), textInputConfirmPassword.getEditText()));
+
+                            loadNotifications(view, user.getRole());
                         }
                     }
 
@@ -214,6 +220,114 @@ public class AccountScreen extends Fragment {
 
 
         return view;
+    }
+
+    private void loadNotifications(View view,Role role) {
+        SwitchMaterial reservationCreatedSwitch = view.findViewById(R.id.accept_reservation_created_notifications);
+        SwitchMaterial reservationCancelledSwitch = view.findViewById(R.id.accept_reservation_cancelled_notifications);
+        SwitchMaterial hostReviewSwitch = view.findViewById(R.id.accept_host_review_notifications);
+        SwitchMaterial accommodationReviewSwitch = view.findViewById(R.id.accept_accommodation_review_notifications);
+        SwitchMaterial reservationResponseSwitch = view.findViewById(R.id.accept_reservation_response_notifications);
+
+        TextView notificationsDescription = view.findViewById(R.id.notificationsDescription);
+        TextView notificationsTitle = view.findViewById(R.id.notificationsTitle);
+
+        reservationCreatedSwitch.setChecked(true);
+        reservationCancelledSwitch.setChecked(true);
+        hostReviewSwitch.setChecked(true);
+        accommodationReviewSwitch.setChecked(true);
+        reservationResponseSwitch.setChecked(true);
+
+
+        for (NotificationType notificationType : userProfile.getIgnoredNotifications()) {
+            switch (notificationType.toString()) {
+                case "ReservationCreated":
+                    reservationCreatedSwitch.setChecked(false);
+                    break;
+                case "ReservationCancelled":
+                    reservationCancelledSwitch.setChecked(false);
+                    break;
+                case "HostReview":
+                    hostReviewSwitch.setChecked(false);
+                    break;
+                case "AccommodationReview":
+                    accommodationReviewSwitch.setChecked(false);
+                    break;
+                case "ReservationRequestResponse":
+                    reservationResponseSwitch.setChecked(false);
+                    break;
+                // Add more cases as needed for other notification types
+            }
+        }
+
+        if (role.equals(Role.GUEST)) {
+            reservationCreatedSwitch.setVisibility(View.GONE);
+            reservationCancelledSwitch.setVisibility(View.GONE);
+            hostReviewSwitch.setVisibility(View.GONE);
+            accommodationReviewSwitch.setVisibility(View.GONE);
+        } else if (role.equals(Role.HOST)) {
+            reservationResponseSwitch.setVisibility(View.GONE);
+        } else {
+            reservationCreatedSwitch.setVisibility(View.GONE);
+            reservationCancelledSwitch.setVisibility(View.GONE);
+            hostReviewSwitch.setVisibility(View.GONE);
+            accommodationReviewSwitch.setVisibility(View.GONE);
+            reservationResponseSwitch.setVisibility(View.GONE);
+            notificationsDescription.setVisibility(View.GONE);
+            notificationsTitle.setVisibility(View.GONE);
+        }
+
+        reservationCreatedSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                toggleNotification(NotificationType.ReservationCreated);
+            }
+        });
+
+        reservationCancelledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                toggleNotification(NotificationType.ReservationCancelled);
+            }
+        });
+
+        hostReviewSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                toggleNotification(NotificationType.HostReview);
+            }
+        });
+
+        accommodationReviewSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                toggleNotification(NotificationType.AccommodationReview);
+            }
+        });
+
+        reservationResponseSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                toggleNotification(NotificationType.ReservationRequestResponse);
+            }
+        });
+        
+    }
+
+    private void toggleNotification(NotificationType notificationType) {
+        Call<User> call = UserUtils.userService.toggleNotifications(userProfile.getId(), notificationType, "Bearer " + UserUtils.getCurrentUser().getJwt());
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
     }
 
     private void setDefaultInformation() {

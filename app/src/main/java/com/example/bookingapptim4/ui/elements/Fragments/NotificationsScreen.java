@@ -1,14 +1,39 @@
 package com.example.bookingapptim4.ui.elements.Fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.example.bookingapptim4.R;
+import com.example.bookingapptim4.data_layer.repositories.notifications.NotificationUtils;
+import com.example.bookingapptim4.data_layer.repositories.shared.ImageUtils;
+import com.example.bookingapptim4.data_layer.repositories.users.GuestUtils;
+import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
+import com.example.bookingapptim4.databinding.FragmentFavoriteAccommodationsBinding;
+import com.example.bookingapptim4.databinding.FragmentNotificationsScreenBinding;
+import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
+import com.example.bookingapptim4.domain.models.notifications.Notification;
+import com.example.bookingapptim4.domain.models.users.User;
+import com.example.bookingapptim4.ui.state_holders.adapters.AccommodationListAdapter;
+import com.example.bookingapptim4.ui.state_holders.adapters.NotificationListAdapter;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,50 +42,54 @@ import com.example.bookingapptim4.R;
  */
 public class NotificationsScreen extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private ArrayList<Notification> notifications = new ArrayList<>();
+    ListView notificationsListView;
+    private FragmentNotificationsScreenBinding binding;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public NotificationsScreen() {
-        // Required empty public constructor
+    public static NotificationsScreen newInstance() {
+        return new NotificationsScreen();
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NotificationsScreen.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static NotificationsScreen newInstance(String param1, String param2) {
-        NotificationsScreen fragment = new NotificationsScreen();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentNotificationsScreenBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
+        notificationsListView = root.findViewById(R.id.notifications_list);
+
+        loadNotifications();
+
+        return root;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notifications_screen, container, false);
+    private void loadNotifications(){
+        User user = UserUtils.getCurrentUser();
+        Call<ArrayList<Notification>> call = NotificationUtils.notificationService.getByUserId(user.getId());
+        call.enqueue(new Callback<ArrayList<Notification>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Notification>> call, Response<ArrayList<Notification>> response) {
+                if (response.code() == 200){
+                    Log.d("NotificationUtils","Meesage recieved");
+                    notifications = response.body();
+
+                    NotificationListAdapter notificationListAdapter = new NotificationListAdapter(getActivity(), notifications);
+                    notificationsListView.setAdapter(notificationListAdapter);
+                    notificationListAdapter.notifyDataSetChanged();
+
+                }else{
+                    Log.d("NotificationUtils","Meesage recieved: "+response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Notification>> call, Throwable t) {
+                Log.d("NotificationUtils", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
     }
 }

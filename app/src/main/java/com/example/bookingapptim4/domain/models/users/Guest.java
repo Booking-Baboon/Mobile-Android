@@ -10,8 +10,6 @@ import java.util.Set;
 
 public class Guest extends User {
 
-    private Set<NotificationType> ignoredNotifications = new HashSet<NotificationType>();;
-
     private Set<Accommodation> favorites = new HashSet<Accommodation>();
 
     protected Guest(Parcel in) {

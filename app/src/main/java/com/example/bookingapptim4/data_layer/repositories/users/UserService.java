@@ -1,6 +1,7 @@
 package com.example.bookingapptim4.data_layer.repositories.users;
 
 import com.example.bookingapptim4.domain.dtos.PasswordChangeRequest;
+import com.example.bookingapptim4.domain.models.notifications.NotificationType;
 import com.example.bookingapptim4.domain.models.users.User;
 
 import java.util.ArrayList;
@@ -92,4 +93,10 @@ public interface UserService {
     @PUT("users/{userId}/unblock")
     Call<User> unblock(@Path("userId") Long userId, @Header("Authorization") String authorizationHeader);
 
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("users/{userId}/toggle-notifications/{notificationType}")
+    Call<User> toggleNotifications(@Path("userId") Long userId, @Path("notificationType") NotificationType notificationType, @Header("Authorization") String authorizationHeader);
 }
