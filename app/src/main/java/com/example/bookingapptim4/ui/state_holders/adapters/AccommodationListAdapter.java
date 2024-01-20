@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.navigation.Navigation;
 
 import com.example.bookingapptim4.R;
+import com.example.bookingapptim4.data_layer.repositories.reviews.AccommodationReviewUtils;
 import com.example.bookingapptim4.data_layer.repositories.shared.ImageUtils;
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 import com.example.bookingapptim4.domain.models.accommodations.AccommodationModification;
@@ -122,7 +123,24 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
 
             accommodationTotalPrice.setText(Integer.toString(100) + "e");
             accommodationPricePerNight.setText(Integer.toString(20) + "e/night");
-            accommodationRating.setText("4.5");
+
+            Call<Float> call = AccommodationReviewUtils.accommodationReviewService.getAverateRating(accommodation.getId());
+            call.enqueue(new Callback<Float>() {
+                @Override
+                public void onResponse(Call<Float> call, Response<Float> response) {
+                    if (response.body() > 0) {
+                        accommodationRating.setText(response.body().toString());
+                    }
+                    else {
+                        accommodationRating.setText("No reviews");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Float> call, Throwable t) {
+
+                }
+            });
 
             accommodationCard.setOnClickListener(v -> {
                 // Handle click on the item at 'position'
