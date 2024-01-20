@@ -43,22 +43,22 @@
             android:orientation="horizontal">
 
             <TextView
-            android:id="@+id/notification_date_received_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="@string/received"
-            android:textSize="14sp"
-            android:textStyle="italic" />
+                android:id="@+id/notification_date_received_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/received"
+                android:textSize="14sp"
+                android:textStyle="italic" />
 
-        <TextView
-            android:id="@+id/notification_time_created"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="@string/dateExample"
-            android:textSize="14sp"
-            android:textStyle="normal" />
+            <TextView
+                android:id="@+id/notification_time_created"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/dateExample"
+                android:textSize="14sp"
+                android:textStyle="normal" />
 
         </LinearLayout>
 
@@ -81,7 +81,5 @@
             />
 
     </LinearLayout>
-
-
 
 </LinearLayout>

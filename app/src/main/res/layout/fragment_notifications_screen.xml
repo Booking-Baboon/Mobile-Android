@@ -5,10 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".ui.elements.Fragments.NotificationsScreen">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
+        android:id="@+id/notifications_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_margin="10dp"
+        tools:listitem="@layout/notification_card" />
 
 </FrameLayout>

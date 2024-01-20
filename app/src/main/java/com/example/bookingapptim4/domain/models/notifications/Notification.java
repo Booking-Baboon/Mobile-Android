@@ -63,6 +63,15 @@ public class Notification {
         this.user = user;
     }
 
+    public Notification(Long id, String message, NotificationType type, Date timeCreated, Boolean isRead, User user) {
+        this.id = id;
+        this.message = message;
+        this.type = type;
+        this.timeCreated = timeCreated;
+        this.isRead = isRead;
+        this.user = user;
+    }
+
     public Notification(String message, NotificationType type, Date timeCreated, User user) {
         this.message = message;
         this.type = type;
