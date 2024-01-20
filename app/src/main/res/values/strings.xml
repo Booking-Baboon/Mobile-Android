@@ -114,5 +114,9 @@
     <string name="Summary">Summary\n</string>
     <string name="Period">2023.01.25 - 2024.01.25</string>
     <string name="donwloadPDF">Download PDF</string>
+    <string name="markAsRead">Mark as read</string>
+    <string name="dateExample">05.01.2024.</string>
+    <string name="received">"Received: "</string>
+    <string name="titleExample">Title</string>
 
 </resources>
