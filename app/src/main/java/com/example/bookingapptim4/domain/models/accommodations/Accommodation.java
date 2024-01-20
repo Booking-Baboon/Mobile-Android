@@ -27,8 +27,11 @@ public class Accommodation implements Parcelable {
     private boolean isAutomaticallyAccepted;
     private boolean isBeingEdited;
     private List<Image> images;
+    private int cancellationDeadline;
 
-    public Accommodation(Long id, String name, String description, Host host, Location location, List<Amenity> amenities, List<AvailablePeriod> availablePeriods, Integer minGuests, Integer maxGuests, Boolean pricingPerPerson, AccommodationType type, boolean isAutomaticallyAccepted, boolean isBeingEdited, List<Image> images) {
+
+
+    public Accommodation(Long id, String name, String description, Host host, Location location, List<Amenity> amenities, List<AvailablePeriod> availablePeriods, Integer minGuests, Integer maxGuests, Boolean pricingPerPerson, AccommodationType type, boolean isAutomaticallyAccepted, boolean isBeingEdited, List<Image> images, int cancellationDeadline) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -43,6 +46,7 @@ public class Accommodation implements Parcelable {
         this.isAutomaticallyAccepted = isAutomaticallyAccepted;
         this.isBeingEdited = isBeingEdited;
         this.images = images;
+        this.cancellationDeadline = cancellationDeadline;
     }
 
     public Accommodation( String name, String description, Host host, Location location, List<Amenity> amenities, Integer minGuests, Integer maxGuests, Boolean pricingPerPerson, AccommodationType type) {
@@ -86,6 +90,15 @@ public class Accommodation implements Parcelable {
         // Read ArrayList instead of List
         images = new ArrayList<>();
         in.readList(images, Image.class.getClassLoader());
+        cancellationDeadline = in.readInt();
+    }
+
+    public int getCancellationDeadline() {
+        return cancellationDeadline;
+    }
+
+    public void setCancellationDeadline(int cancellationDeadline) {
+        this.cancellationDeadline = cancellationDeadline;
     }
 
     public Long getId() {

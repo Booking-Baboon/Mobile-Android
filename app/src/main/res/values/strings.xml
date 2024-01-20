@@ -115,7 +115,6 @@
     <string name="Period">2023.01.25 - 2024.01.25</string>
     <string name="donwloadPDF">Download PDF</string>
     <string name="markAsRead">Mark as read</string>
-    <string name="dateExample">05.01.2024.</string>
     <string name="received">"Received: "</string>
     <string name="titleExample">Title</string>
     <string name="reservationCancelledNotification">Reservation cancelled</string>
@@ -125,5 +124,12 @@
     <string name="reservationResponseNotification">Reservation response</string>
     <string name="notificationsTitle">Notifications</string>
     <string name="notificationsDescription">Choose which notifications you would like to recieve</string>
+    <string name="emailExample">example@example.com</string>
+    <string name="reported_by">Reported by:</string>
+    <string name="reviewed_by">Reviewed by:</string>
+    <string name="date_example">Jan 4, 2024, 6:05:53 PM</string>
+    <string name="block">Block</string>
+    <string name="unblock">Unblock</string>
+    <string name="userStatus">User status:</string>
 
 </resources>

@@ -128,7 +128,7 @@ public class HostAccommodationListAdapter extends ArrayAdapter<Accommodation> {
                 }
             });
 
-            Button generateSummaryButton = convertView.findViewById(R.id.generate_report_button);
+            Button generateSummaryButton = convertView.findViewById(R.id.cancel_reservation_button);
             generateSummaryButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

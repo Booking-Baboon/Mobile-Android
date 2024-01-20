@@ -80,6 +80,18 @@ public interface UserService {
     })
     @PUT("users/{userId}/change-password")
     Call<User> changePassword(@Path("userId") Long userId, @Body PasswordChangeRequest request, @Header("Authorization") String authorizationHeader);
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("users/{userId}/block")
+    Call<User> block(@Path("userId") Long userId, @Header("Authorization") String authorizationHeader);
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("users/{userId}/unblock")
+    Call<User> unblock(@Path("userId") Long userId, @Header("Authorization") String authorizationHeader);
 
     @Headers({
             "User-Agent: Mobile-Android",

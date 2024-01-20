@@ -4,11 +4,28 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.example.bookingapptim4.R;
+import com.example.bookingapptim4.data_layer.repositories.reports.UserReportUtils;
+import com.example.bookingapptim4.data_layer.repositories.users.UserService;
+import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
+import com.example.bookingapptim4.databinding.FragmentReportedUsersScreenBinding;
+import com.example.bookingapptim4.domain.models.reports.UserReport;
+import com.example.bookingapptim4.domain.models.users.User;
+import com.example.bookingapptim4.domain.models.users.UserStatus;
+import com.example.bookingapptim4.ui.state_holders.adapters.ReportedUsersListAdapter;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,50 +34,106 @@ import com.example.bookingapptim4.R;
  */
 public class ReportedUsersScreen extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private ArrayList<UserReport> userReports = new ArrayList<>();
+    private FragmentReportedUsersScreenBinding binding;
+    ListView userReportsListView;
 
     public ReportedUsersScreen() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ReportedUsersScreen.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ReportedUsersScreen newInstance(String param1, String param2) {
-        ReportedUsersScreen fragment = new ReportedUsersScreen();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static ReportedUsersScreen newInstance() {
+        return new ReportedUsersScreen();
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reported_users_screen, container, false);
+
+        binding = FragmentReportedUsersScreenBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
+        userReportsListView = root.findViewById(R.id.reported_users_list);
+
+        loadUserReports(root);
+
+        return root;
+    }
+
+    private void loadUserReports(View view) {
+        User user = UserUtils.getCurrentUser();
+        Call<ArrayList<UserReport>> call = UserReportUtils.userReportService.getAll("Bearer " + user.getJwt());
+        call.enqueue(new Callback<ArrayList<UserReport>>() {
+            @Override
+            public void onResponse(Call<ArrayList<UserReport>> call, Response<ArrayList<UserReport>> response) {
+                if (response.code() == 200){
+                    Log.d("UserReportUtils","Meesage recieved");
+                    System.out.println(response.body());
+                    userReports = response.body();
+
+                    ReportedUsersListAdapter reportedUsersListAdapter = new ReportedUsersListAdapter(getActivity(), userReports);
+
+                    reportedUsersListAdapter.setOnBlockUserButtonClickListener(new ReportedUsersListAdapter.OnBlockUserButtonClickListener() {
+                        @Override
+                        public void onBlockUserButtonClickListener(UserReport userReport) {
+                            Call<User> call = UserUtils.userService.block(userReport.getReportedGuest() != null ? userReport.getReportedGuest().getId() : userReport.getReportedHost().getId(),"Bearer " + user.getJwt());
+                            call.enqueue(new Callback<User>() {
+                                @Override
+                                public void onResponse(Call<User> call, Response<User> response) {
+                                    reportedUsersListAdapter.updateStatus(userReport.getReportedGuest() != null ? userReport.getReportedGuest().getEmail() : userReport.getReportedHost().getEmail(), UserStatus.Blocked);
+                                    showSnackbar(view, "User successfully blocked");
+                                }
+
+                                @Override
+                                public void onFailure(Call<User> call, Throwable t) {
+
+                                }
+                            });
+                        }
+                    });
+
+                    reportedUsersListAdapter.setOnUnBlockUserButtonClickListener(new ReportedUsersListAdapter.OnUnBlockUserButtonClickListener() {
+                        @Override
+                        public void onUnBlockUserButtonClickListener(UserReport userReport) {
+                            Call<User> call = UserUtils.userService.unblock(userReport.getReportedGuest() != null ? userReport.getReportedGuest().getId() : userReport.getReportedHost().getId(),"Bearer " + user.getJwt());
+                            call.enqueue(new Callback<User>() {
+                                @Override
+                                public void onResponse(Call<User> call, Response<User> response) {
+                                    reportedUsersListAdapter.updateStatus(userReport.getReportedGuest() != null ? userReport.getReportedGuest().getEmail() : userReport.getReportedHost().getEmail(), UserStatus.Active);
+                                    showSnackbar(view, "User successfully unblocked");
+                                }
+
+                                @Override
+                                public void onFailure(Call<User> call, Throwable t) {
+
+                                }
+                            });
+                        }
+                    });
+
+                    userReportsListView.setAdapter(reportedUsersListAdapter);
+                    reportedUsersListAdapter.notifyDataSetChanged();
+
+                }else{
+                    Log.d("UserReportUtils","Meesage recieved: "+response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<UserReport>> call, Throwable t) {
+                Log.d("UserReportUtils", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
+
+    }
+
+    private void showSnackbar(View view, String message) {
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
     }
 }
