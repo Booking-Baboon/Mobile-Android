@@ -118,5 +118,8 @@
     <string name="reported_by">Reported by:</string>
     <string name="reviewed_by">Reviewed by:</string>
     <string name="date_example">Jan 4, 2024, 6:05:53 PM</string>
+    <string name="block">Block</string>
+    <string name="unblock">Unblock</string>
+    <string name="userStatus">User status:</string>
 
 </resources>
