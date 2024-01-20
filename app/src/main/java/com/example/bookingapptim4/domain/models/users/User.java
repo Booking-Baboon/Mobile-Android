@@ -4,6 +4,11 @@ package com.example.bookingapptim4.domain.models.users;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.bookingapptim4.domain.models.notifications.NotificationType;
+
+import java.util.HashSet;
+import java.util.Set;
+
 public class User implements Parcelable {
 
     private Long id;
@@ -25,6 +30,8 @@ public class User implements Parcelable {
     private Role role;
 
     private String jwt;
+
+    private Set<NotificationType> ignoredNotifications = new HashSet<NotificationType>();
 
     public User(Parcel in) {
         if (in.readByte() == 0) {
@@ -123,6 +130,10 @@ public class User implements Parcelable {
 
     public String getJwt() {
         return jwt;
+    }
+
+    public Set<NotificationType> getIgnoredNotifications() {
+        return ignoredNotifications;
     }
 
     public User(String email, String password) {

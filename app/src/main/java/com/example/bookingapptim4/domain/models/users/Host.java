@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Host extends User implements Parcelable {
-    private Set<NotificationType> ignoredNotifications = new HashSet<NotificationType>();
 
     public static final Creator<Host> CREATOR = new Creator<Host>() {
         @Override
