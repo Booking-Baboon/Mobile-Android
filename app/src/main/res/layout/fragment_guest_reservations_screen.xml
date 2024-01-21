@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.Elements.Fragments.GuestReservationsScreen">
+    android:orientation="vertical"
+    android:layout_marginBottom="20dp"
+    tools:context=".ui.elements.Fragments.GuestReservationsScreen">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <Spinner
+        android:id="@+id/guest_reservation_status_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_margin="10dp" />
+
+    <ListView
+        android:id="@+id/guest_reservations_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="res" />
+        tools:listitem="@layout/guest_reservation_card" />
 
-</FrameLayout>
+</LinearLayout>

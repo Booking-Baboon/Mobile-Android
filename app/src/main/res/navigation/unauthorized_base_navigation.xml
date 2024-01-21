@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/host_base_navigation"
+    app:startDestination="@+id/nav_unauthorized"
+    >
+    <fragment
+        android:id="@+id/nav_login"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.AccountScreen"
+        android:label="Login"
+        tools:layout="@layout/fragment_login_screen"
+        app:popUpTo="@+id/nav_unauthorized"
+        app:popUpToInclusive="true"
+        />
+
+    <fragment
+        android:id="@+id/nav_unauthorized"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.FragmentHostMainScreen"
+        android:label="Main"
+        tools:layout="@layout/fragment_unauthorized_main_screen"
+        />
+
+    <fragment
+        android:id="@+id/nav_register"
+        android:name="com.example.bookingapptim4.ui.elements.Fragments.AccommodationsScreen"
+        android:label="Register"
+        tools:layout="@layout/activity_register_screen"
+        app:popUpTo="@+id/nav_unauthorized"
+        app:popUpToInclusive="true"
+        />
+
+
+</navigation>

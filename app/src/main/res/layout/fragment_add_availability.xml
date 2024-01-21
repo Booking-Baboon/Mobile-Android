@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.elements.Fragments.AddAvailabilityFragment">
+    <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20px"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_availability_date_range_button_av"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choose Date Range"
+            android:layout_weight="0"/>
+
+        <TextView
+            android:id="@+id/add_availability_date_text_view_av"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_weight="0"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/add_availability_price_av"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/add_availability_price_hint"
+            android:layout_marginBottom="14dp"
+            android:layout_weight="0">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:id="@+id/add_availability_button_av"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@string/add_availability_button"
+            android:layout_weight="0"
+            />
+
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/add_availability_chips_av"
+            >
+
+
+
+
+        </com.google.android.material.chip.ChipGroup>
+
+
+        <Button
+            android:id="@+id/submit_changes_button_av"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@string/submit_changes"
+            android:layout_weight="0"
+            android:layout_marginTop="10dp"
+            />
+
+
+    </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

@@ -1,8 +1,8 @@
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/accommodation_details_screen">
 
         <LinearLayout
@@ -10,14 +10,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-                <!-- Image View for the Accommodation Picture -->
-                <ImageView
-                    android:id="@+id/imageViewAccommodation"
+                <org.imaginativeworld.whynotimagecarousel.ImageCarousel
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/accommodation_image_example"
-                    android:contentDescription="@string/accommodation_image"/>
+                        android:id="@+id/accommodationCarousel"/>
 
                 <!-- Linear Layout for other content -->
                 <LinearLayout
@@ -26,16 +22,37 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                        <!-- Accommodation Title -->
-                        <TextView
-                            android:id="@+id/textViewTitle"
+
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:text="Accommodation Title"
-                            android:textSize="24sp"
-                            android:textStyle="bold"/>
+                            android:orientation="horizontal"
+                            android:layout_marginTop="16dp">
 
+                                <!-- Accommodation Title -->
+                                <TextView
+                                    android:id="@+id/textViewAccommodationTitle"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="Accommodation Title"
+                                    android:layout_weight="5"
+                                    android:textSize="24sp"
+                                    android:textStyle="bold"/>
+
+                                <ImageView
+                                    android:id="@+id/heartIcon"
+                                    android:layout_marginTop="4dp"
+                                    android:layout_width="0dp"
+                                    android:layout_height="24sp"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:clickable="true"
+                                    android:contentDescription="@string/favorites_icon_description"
+                                    android:src="@drawable/ic_empty_heart" />
+
+                        </LinearLayout>
 
                         <!-- RatingBar for Accommodation Rating -->
                         <RatingBar
@@ -49,20 +66,29 @@
 
                         <!-- Description -->
                         <TextView
-                            android:id="@+id/textViewDescription"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Description:Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse et lectus nulla. Vestibulum sit amet eros vulputate, porttitor tortor volutpat, rhoncus nulla. Suspendisse in lectus lacinia neque pulvinar auctor. Duis augue dolor, aliquam eget rutrum vitae, pulvinar et urna. Morbi ut auctor nibh. Cras lacus ex, venenatis a diam sed."
-                            android:layout_marginBottom="10dp"/>
+                            android:textStyle="bold"
+                            android:text="Description:"/>
+
+                        <TextView
+                            android:id="@+id/textViewAccommodationDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
 
 
                         <!-- Location Fragment -->
                         <TextView
-                            android:id="@+id/textViewLocation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="Location: location details"/>
+                            android:layout_marginTop="20dp"
+                            android:textStyle="bold"
+                            android:text="Location:"/>
+
+                        <TextView
+                            android:id="@+id/textViewAccommodationLocation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
 
                         <fragment
                             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -72,47 +98,83 @@
                             android:name="com.google.android.gms.maps.SupportMapFragment"
                             android:layout_width="match_parent"
                             android:layout_height="300dp"
-                            tools:context="com.example.bookingapptim4.UI.Elements.Fragments.NotificationsScreen" />
-
-                        <!-- Pricing Details -->
-                        <TextView
-                            android:id="@+id/textViewPricing"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="Pricing: Pricing Details"/>
+                            tools:context="com.example.bookingapptim4.ui.elements.Fragments.NotificationsScreen" />
 
                         <!-- Min and Max Guests -->
                         <TextView
-                            android:id="@+id/textViewGuests"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="Guests: Min 2 - Max 4"/>
+                            android:layout_marginTop="20dp"
+                            android:text="Guests:"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textViewAccommodationGuestsNum"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"/>
 
                         <!-- Amenities -->
                         <TextView
-                            android:id="@+id/textViewAmenities"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="Amenities: Amenities List"/>
+                            android:layout_marginTop="20dp"
+                            android:textStyle="bold"
+                            android:text="Amenities:"/>
+
+                        <TextView
+                            android:id="@+id/textViewAccommodationAmenities"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp" />
 
                         <!-- Host Username -->
                         <TextView
-                            android:id="@+id/textViewHostUsername"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:text="Host: HostUsername"/>
+                            android:layout_marginTop="20dp"
+                            android:textStyle="bold"
+                            android:text="Host:"/>
+
+                        <TextView
+                            android:id="@+id/textViewAccommodationHostUsername"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"/>
 
                         <!-- Button for Making a Reservation -->
                         <Button
                             android:id="@+id/buttonMakeReservation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:text="Make Reservation"/>
+                            android:layout_marginTop="20dp"
+                            android:text="Make a reservation"/>
+
+
+<!--                        REVIEWS-->
+
+                        <Button
+                            android:id="@+id/host_reviews_button"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="@string/host_reviews"
+                            android:theme="@style/Button.TealCurved"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:textStyle="bold"
+                            android:id="@+id/accommodationReviewTextView" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/reviewRecyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:listitem="@layout/item_accommodation_review" />
                 </LinearLayout>
         </LinearLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

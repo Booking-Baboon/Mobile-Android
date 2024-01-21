@@ -16,17 +16,33 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
 
         <item name="materialButtonStyle">@style/Button.CurvedEdges</item>
-
     </style>
+
     <style name="Button.CurvedEdges" parent="Widget.MaterialComponents.Button">
         <item name="android:background">@drawable/curved_buttons</item>
     </style>
 
     <style name="Button.RedCurved" parent="Widget.MaterialComponents.Button">
-        <item name="colorPrimary">#FE1A1A</item>
+        <item name="colorPrimary">#ff4a4a</item>
     </style>
 
-    <style name="Button.GreenCurved" parent="Widget.MaterialComponents.Button">
-        <item name="colorPrimary">#16D329</item>
+    <style name="Button.BrownCurved" parent="Widget.MaterialComponents.Button">
+        <item name="colorPrimary">#471C05</item>
     </style>
+
+    <style name="Button.TealCurved" parent="Widget.MaterialComponents.Button">
+        <item name="colorPrimary">#5b7c99</item>
+    </style>
+
+
+    <style name="Button.GreenCurved" parent="Widget.MaterialComponents.Button">
+        <item name="colorPrimary">#6f9c3d</item>
+    </style>
+
+    <style name="SwitchMaterial" parent="">
+        <item name="colorOnSurface">#E3A74C</item>
+        <item name="colorSecondary">#FEA31A</item>
+    </style>
+
+
 </resources>
