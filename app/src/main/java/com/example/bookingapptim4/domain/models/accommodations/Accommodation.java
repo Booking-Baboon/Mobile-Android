@@ -1,5 +1,6 @@
 package com.example.bookingapptim4.domain.models.accommodations;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -8,6 +9,7 @@ import androidx.annotation.NonNull;
 import com.example.bookingapptim4.domain.models.shared.Image;
 import com.example.bookingapptim4.domain.models.users.Host;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -202,4 +204,18 @@ public class Accommodation implements Parcelable {
             return new Accommodation[size];
         }
     };
+
+    public LocalDate getFirstAvailableDate() {
+        if (availablePeriods != null && !availablePeriods.isEmpty()) {
+            availablePeriods.sort((period1, period2) -> period1.getTimeSlot().getStartDate().compareTo(period2.getTimeSlot().getStartDate()));
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                return LocalDate.parse(availablePeriods.get(0).getTimeSlot().getStartDate());
+            }
+
+        }
+        return null;
+    }
+
+
 }

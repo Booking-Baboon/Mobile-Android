@@ -61,6 +61,7 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -87,7 +88,7 @@ public class FragmentGuestMainScreen extends Fragment implements SensorEventList
     AccommodationListAdapter accommodationListAdapter;
 
     private SensorManager sensorManager;
-    private static final int SHAKE_THRESHOLD = 800;
+    private static final int SHAKE_THRESHOLD = 300;
     private long lastUpdate;
     private float last_x;
     private float last_y;
@@ -236,11 +237,12 @@ public class FragmentGuestMainScreen extends Fragment implements SensorEventList
         }
     }
 
-    public void sortList(ArrayList<Accommodation> newList, Comparator<? super String> keyComparator){
+    public void sortList(ArrayList<Accommodation> newList, Comparator<? super LocalDate> keyComparator){
         newList.addAll(accommodations.stream()
-                .sorted(Comparator.comparing(Accommodation::getName, keyComparator))
+                .sorted(Comparator.comparing(Accommodation::getFirstAvailableDate, keyComparator))
                 .collect(Collectors.toList()));
     }
+
 
     private void searchAccommodations(AccommodationFilter filter){
 
