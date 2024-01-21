@@ -11,14 +11,12 @@ import com.example.bookingapptim4.domain.models.users.User;
 
 import java.util.Date;
 
-public class Review implements Parcelable {
+public class Review implements Parcelable{
     protected Long id;
     protected User reviewer;
     protected Date createdOn;
     protected short rating;
     protected String comment;
-    protected Accommodation reviewedAccommodation;
-    protected Host reviewedHost;
 
     public Review() {
     }
@@ -30,21 +28,32 @@ public class Review implements Parcelable {
         this.comment = comment;
     }
 
-    public Review(User reviewer, Date createdOn, short rating, String comment, Accommodation reviewedAccommodation) {
-        this.reviewer = reviewer;
-        this.createdOn = createdOn;
-        this.rating = rating;
-        this.comment = comment;
-        this.reviewedAccommodation = reviewedAccommodation;
+    public String getReviewedName(){
+        return "";
     }
 
-    public Review(User reviewer, Date createdOn, short rating, String comment, Host reviewedHost) {
-        this.reviewer = reviewer;
-        this.createdOn = createdOn;
-        this.rating = rating;
-        this.comment = comment;
-        this.reviewedHost = reviewedHost;
+    protected Review(Parcel in) {
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readLong();
+        }
+        reviewer = in.readParcelable(User.class.getClassLoader());
+        rating = (short) in.readInt();
+        comment = in.readString();
     }
+
+    public static final Creator<Review> CREATOR = new Creator<Review>() {
+        @Override
+        public Review createFromParcel(Parcel in) {
+            return new Review(in);
+        }
+
+        @Override
+        public Review[] newArray(int size) {
+            return new Review[size];
+        }
+    };
 
     public Long getId() {
         return id;
@@ -88,14 +97,6 @@ public class Review implements Parcelable {
 
     public String getCreatedOn() {
         return createdOn.toString();
-    }
-
-    public Accommodation getReviewedAccommodation() {
-        return reviewedAccommodation;
-    }
-
-    public Host getReviewedHost() {
-        return reviewedHost;
     }
 
     @Override

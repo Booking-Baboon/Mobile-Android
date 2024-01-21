@@ -2,6 +2,7 @@ package com.example.bookingapptim4.domain.models.reviews;
 
 import com.example.bookingapptim4.domain.models.accommodations.Accommodation;
 import com.example.bookingapptim4.domain.models.users.User;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
@@ -11,6 +12,11 @@ public class AccommodationReview extends Review{
 
     public Accommodation getReviewedAccommodation() {
         return reviewedAccommodation;
+    }
+
+    @Override
+    public String getReviewedName(){
+        return reviewedAccommodation.getName();
     }
 
     public AccommodationReview(Accommodation reviewedAccommodation) {

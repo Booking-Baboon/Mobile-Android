@@ -20,6 +20,9 @@ import com.example.bookingapptim4.R;
 import com.example.bookingapptim4.data_layer.repositories.users.UserUtils;
 import com.example.bookingapptim4.domain.models.reports.ReviewReport;
 import com.example.bookingapptim4.domain.models.reservations.Reservation;
+import com.example.bookingapptim4.domain.models.reviews.AccommodationReview;
+import com.example.bookingapptim4.domain.models.reviews.HostReview;
+import com.example.bookingapptim4.domain.models.reviews.Review;
 import com.example.bookingapptim4.domain.models.users.Guest;
 import com.example.bookingapptim4.domain.models.users.User;
 
@@ -106,10 +109,15 @@ public class ReportedCommentsListAdapter extends ArrayAdapter<ReviewReport> {
                 status.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
             }*/
 
-        if(reviewReport.getReportedReview().getReviewedAccommodation().equals(null)) {
-            reportedItemName.setText(reviewReport.getReportedReview().getReviewedHost().getEmail());
-        } else {
-            reportedItemName.setText(reviewReport.getReportedReview().getReviewedAccommodation().getName());
+
+        Review reportedReview = reviewReport.getReportedReview();
+
+        if (reportedReview instanceof HostReview) {
+            HostReview hostReview = (HostReview) reportedReview;
+            reportedItemName.setText(hostReview.getReviewedName());
+        } else if (reportedReview instanceof AccommodationReview) {
+            AccommodationReview accommodationReview = (AccommodationReview) reportedReview;
+            reportedItemName.setText(accommodationReview.getReviewedName());
         }
         message.setText(reviewReport.getMessage());
         reportee.setText(reviewReport.getReportee().getEmail());

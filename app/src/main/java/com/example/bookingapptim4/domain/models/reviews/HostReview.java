@@ -8,6 +8,10 @@ import java.util.Date;
 public class HostReview extends Review{
     private Host reviewedHost;
 
+    @Override
+    public String getReviewedName(){
+        return reviewedHost.getEmail();
+    }
 
     public HostReview(User reviewer, Date createdOn, short rating, String comment, Host reviewedHost) {
         super(reviewer, createdOn, rating, comment);
