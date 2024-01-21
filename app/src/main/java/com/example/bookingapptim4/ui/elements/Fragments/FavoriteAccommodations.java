@@ -51,7 +51,7 @@ public class FavoriteAccommodations extends Fragment {
         binding = FragmentFavoriteAccommodationsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        favoriteAccommodationsListView = root.findViewById(R.id.notifications_list);
+        favoriteAccommodationsListView = root.findViewById(R.id.favorite_accommodations_list);
 
         loadFavoriteAccommodations();
 
