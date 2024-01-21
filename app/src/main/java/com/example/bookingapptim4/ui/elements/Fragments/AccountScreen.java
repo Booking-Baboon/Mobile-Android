@@ -1,19 +1,29 @@
 package com.example.bookingapptim4.ui.elements.Fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.bookingapptim4.R;
@@ -43,6 +53,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Arrays;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -52,21 +64,26 @@ import retrofit2.Response;
  * Use the {@link AccountScreen#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AccountScreen extends Fragment {
+public class AccountScreen extends Fragment implements SensorEventListener {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private UserViewModel userViewModel;
     private UserService userService;
     private GuestService guestService;
     private HostService hostService;
     private User userProfile = new User();
+
+    //Compass
+    private ImageView compassImage;
+    private SensorManager sensorManager;
+    private Sensor magnetometer;
+    private Sensor accelerometer;
+    private float[] lastAccelerometer = new float[3];
+    private float[] lastMagnetometer = new float[3];
+    private boolean lastAccelerometerSet = false;
+    private boolean lastMagnetometerSet = false;
+    private float[] rotationMatrix = new float[9];
+    private float[] orientation = new float[3];
+
 
     private TextInputLayout textInputEmail, textInputPassword, textInputFirstName, textInputLastName, textInputPhone, textInputAddress, textInputCurrentPassword, textInputNewPassword, textInputConfirmPassword;
 
@@ -74,30 +91,25 @@ public class AccountScreen extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment GuestAccountScreen.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AccountScreen newInstance(String param1, String param2) {
+    public static AccountScreen newInstance() {
         AccountScreen fragment = new AccountScreen();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
+        // Initialize sensor manager and sensors
+        sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+
+
+        // Register sensor listeners
+        if (accelerometer != null && magnetometer != null) {
+            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
 
@@ -108,6 +120,8 @@ public class AccountScreen extends Fragment {
         View view = inflater.inflate(R.layout.fragment_account_screen, container, false);
 
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        compassImage = view.findViewById(R.id.compassImage);
+        compassImage.setVisibility(View.VISIBLE);
 
         userViewModel.getUserLiveData().observe(getViewLifecycleOwner(), user-> {
             if (user != null) {
@@ -220,6 +234,53 @@ public class AccountScreen extends Fragment {
 
 
         return view;
+    }
+
+
+
+    @Override
+    public void onDestroy() {
+        // Unregister sensor listeners
+        sensorManager.unregisterListener(this, accelerometer);
+        sensorManager.unregisterListener(this, magnetometer);
+        super.onDestroy();
+    }
+
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor == magnetometer) {
+            System.arraycopy(event.values, 0, lastMagnetometer, 0, event.values.length);
+            lastMagnetometerSet = true;
+        } else if (event.sensor == accelerometer) {
+            System.arraycopy(event.values, 0, lastAccelerometer, 0, event.values.length);
+            lastAccelerometerSet = true;
+        }
+
+        if (lastAccelerometerSet && lastMagnetometerSet) {
+            SensorManager.getRotationMatrix(rotationMatrix, null, lastAccelerometer, lastMagnetometer);
+            SensorManager.getOrientation(rotationMatrix, orientation);
+
+            float azimuthInRadians = orientation[0];
+            float azimuthInDegrees = (float) (Math.toDegrees(azimuthInRadians) + 360) % 360;
+
+            Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.compass);
+            Matrix matrix = new Matrix();
+            matrix.postRotate(-azimuthInDegrees);
+            Bitmap rotatedBitmap = Bitmap.createBitmap(originalBitmap, 0, 0, originalBitmap.getWidth(), originalBitmap.getHeight(), matrix, true);
+
+            compassImage.setImageBitmap(rotatedBitmap);
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    private void rotateCompassImage(float degrees) {
+        compassImage.setRotation(degrees);
+
     }
 
     private void loadNotifications(View view,Role role) {

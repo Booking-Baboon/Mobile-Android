@@ -1,8 +1,16 @@
 package com.example.bookingapptim4.ui.elements.Fragments;
 
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 
 import androidx.annotation.IdRes;
@@ -53,8 +61,11 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,7 +76,7 @@ import retrofit2.Response;
  * Use the {@link FragmentGuestMainScreen#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentGuestMainScreen extends Fragment{
+public class FragmentGuestMainScreen extends Fragment implements SensorEventListener{
 
     private ArrayList<Accommodation> accommodations = new ArrayList<>();
     private ArrayList<Amenity> allAmenities = new ArrayList<>();
@@ -73,6 +84,17 @@ public class FragmentGuestMainScreen extends Fragment{
     private AccommodationFilterViewModel accommodationFilterViewModel;
     private FragmentGuestMainScreenBinding binding;
     private Bundle dialogInstanceState;
+
+    AccommodationListAdapter accommodationListAdapter;
+
+    private SensorManager sensorManager;
+    private static final int SHAKE_THRESHOLD = 300;
+    private long lastUpdate;
+    private float last_x;
+    private float last_y;
+    private float last_z;
+
+    private boolean ascending = true;
 
     public static FragmentGuestMainScreen newInstance() {
         return new FragmentGuestMainScreen();
@@ -151,6 +173,77 @@ public class FragmentGuestMainScreen extends Fragment{
         binding = null;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
+        sensorManager.registerListener(this,
+                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
+
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+
+        if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+
+            long curTime = System.currentTimeMillis();
+            // only allow one update every 100ms.
+            if ((curTime - lastUpdate) > 200) {
+                long diffTime = (curTime - lastUpdate);
+                lastUpdate = curTime;
+
+                float[] values = sensorEvent.values;
+                float x = values[0];
+                float y = values[1];
+                float z = values[2];
+
+                float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
+
+                if (speed > SHAKE_THRESHOLD) {
+                    if (accommodations != null){
+                        ArrayList<Accommodation> newList = new ArrayList<>();
+
+                            if (ascending){
+                                sortList(newList, Comparator.naturalOrder());
+                                ascending = false;
+                            }else{
+                                sortList(newList, Comparator.reverseOrder());
+                                ascending = true;
+                            }
+
+
+
+                            Log.i("REZ", "SORT = "  );
+
+                        accommodations.clear();
+                        accommodations.addAll(newList);
+                        accommodationListAdapter.notifyDataSetChanged();
+                        Log.d("REZ", "shake detected w/ speed: " + speed);
+                    }
+                }
+                last_x = x;
+                last_y = y;
+                last_z = z;
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        if(sensor.getType() == Sensor.TYPE_ACCELEROMETER){
+            Log.i("REZ_ACCELEROMETER", String.valueOf(accuracy));
+        }
+    }
+
+    public void sortList(ArrayList<Accommodation> newList, Comparator<? super LocalDate> keyComparator){
+        newList.addAll(accommodations.stream()
+                .sorted(Comparator.comparing(Accommodation::getFirstAvailableDate, keyComparator))
+                .collect(Collectors.toList()));
+    }
+
+
     private void searchAccommodations(AccommodationFilter filter){
 
         Call<ArrayList<Accommodation>> call = AccommodationUtils.accommodationService.search( filter.getCity(),
@@ -170,7 +263,7 @@ public class FragmentGuestMainScreen extends Fragment{
                     System.out.println(response.body());
                     accommodations = response.body();
 
-                    AccommodationListAdapter accommodationListAdapter = new AccommodationListAdapter(getActivity(), accommodations);
+                    accommodationListAdapter = new AccommodationListAdapter(getActivity(), accommodations);
                     accommodationListView.setAdapter(accommodationListAdapter);
                     accommodationListAdapter.notifyDataSetChanged();
 
